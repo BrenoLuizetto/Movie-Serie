@@ -29,7 +29,13 @@ class MovieDetailsView: UIView {
         return imageView
     }()
     
-    
+    private var movieRating: UILabel = {
+        let lbl = UILabel()
+        lbl.font = UIFont(name: "Avenir-Medium", size: 18)
+        lbl.textColor = UIColor(rgb: 0x08CA49)
+        return lbl
+    }()
+
     private var moviePoster: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -42,7 +48,7 @@ class MovieDetailsView: UIView {
         label.font = UIFont(name: "Avenir-Heavy", size: 30)
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .white
-        label.numberOfLines = 2
+        label.numberOfLines = 3
         return label
     }()
     
@@ -51,12 +57,21 @@ class MovieDetailsView: UIView {
         return label
     }()
     
-    private var viewModel: MovieDetailsViewModel
+    private var releaseDate: UILabel = {
+        let lbl = UILabel()
+        lbl.font = UIFont(name: "Avenir-Medium", size: 18)
+        lbl.textColor = .white
+        return lbl
+    }()
     
-    init(_ viewModel: MovieDetailsViewModel) {
+    private var viewModel: MovieDetailsViewModel
+    private var originHeight: CGFloat
+    
+    init(_ viewModel: MovieDetailsViewModel, originHeight: CGFloat) {
         self.viewModel = viewModel
+        self.originHeight = originHeight
         super.init(frame: CGRect())
-
+    
         buildItems()
         self.buildImages()
     }
@@ -70,6 +85,12 @@ class MovieDetailsView: UIView {
             self.backgroundMovie.af_setImage(withURL: result)
         })
         self.movieTitle.text = self.viewModel.movie.title
+        let movieRating = Int(self.viewModel.movie.voteAverage * 10)
+        self.movieRating.text = String("\(movieRating)% relevante")
+        self.releaseDate.text = self.viewModel.movie.releaseDate
+        if self.releaseDate.text?.count ?? 0 > 4 {
+            self.releaseDate.text?.removeLast(6)
+        }
     }
     
 }
@@ -100,8 +121,24 @@ extension MovieDetailsView: BuildViewConfiguration {
             make.top.equalTo(self.backgroundMovie.snp.bottom).offset(5)
             make.left.equalTo(self.snp.left).offset(15)
             make.right.equalTo(self.snp.right).offset(-15)
-            make.height.equalTo(40)
+            make.height.equalTo(viewModel.validateTitleLines(originHeight)
+)
         }
+        
+        movieRating.snp.makeConstraints { make in
+            make.top.equalTo(self.movieTitle.snp.bottom).offset(5)
+            make.left.equalTo(self.snp.left).offset(15)
+            make.width.equalTo(120)
+            make.height.equalTo(30)
+        }
+        
+        releaseDate.snp.makeConstraints { make in
+            make.top.equalTo(self.movieTitle.snp.bottom).offset(5)
+            make.left.equalTo(movieRating.snp.right).offset(10)
+            make.width.equalTo(50)
+            make.height.equalTo(30)
+        }
+        
     }
     
     func buildViewHierarchy() {
@@ -109,6 +146,8 @@ extension MovieDetailsView: BuildViewConfiguration {
         self.addSubview(viewAux)
         viewAux.addSubview(backgroundMovie)
         viewAux.addSubview(movieTitle)
+        viewAux.addSubview(movieRating)
+        viewAux.addSubview(releaseDate)
     }
     
     func configElements() {

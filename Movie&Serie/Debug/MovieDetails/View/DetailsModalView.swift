@@ -47,14 +47,7 @@ class DetailsModalView: UIView {
     
     private var releaseDate: UILabel = {
         let label = UILabel()
-        label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 1
-        label.font = UIFont(name: "Avenir-Medium", size: 15)
-        label.textColor = .white
-        label.backgroundColor = UIColor(rgb: 0x3C7AFF)
-        label.textAlignment = .center
-        label.layer.cornerRadius = 5
-        label.layer.masksToBounds = true
+        label.releaseDateLabel()
         return label
     }()
     

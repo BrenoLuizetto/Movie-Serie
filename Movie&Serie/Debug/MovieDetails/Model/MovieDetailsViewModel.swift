@@ -52,6 +52,15 @@ class MovieDetailsViewModel {
         let blurredImage = UIImage(ciImage: resultImage)
         return blurredImage
       }
-
     
+    func validateTitleLines(_ width: CGFloat) -> Int {
+        let numberOfLines = Int(width/24)
+        let titleHeight = 45
+        let auxHeight = movie.title.count/numberOfLines
+        if auxHeight == 0 {
+            return 45
+        } else {
+            return titleHeight * auxHeight
+        }
+    }
 }

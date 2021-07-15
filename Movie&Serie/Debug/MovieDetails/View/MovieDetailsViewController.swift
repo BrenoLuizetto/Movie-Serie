@@ -24,10 +24,11 @@ class MovieDetailsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         configNavBar()
+        self.view = MovieDetailsView(self.viewModel, originHeight: self.view.bounds.width)
+
     }
     
     override func viewDidLoad() {
-        self.view = MovieDetailsView(self.viewModel)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

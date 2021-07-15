@@ -22,6 +22,7 @@
 		BA298ECD268AB93700C90B21 /* HomeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA298ECC268AB93700C90B21 /* HomeConstants.swift */; };
 		BA6AB22A269E81520051D84A /* PresentationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6AB229269E81520051D84A /* PresentationSettings.swift */; };
 		BA6AB22C269E8C2A0051D84A /* DetailsModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6AB22B269E8C2A0051D84A /* DetailsModalView.swift */; };
+		BA6AB232269FA8B00051D84A /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6AB231269FA8B00051D84A /* UILabel+Extension.swift */; };
 		BA79080A268A858E006DE9AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA790809268A858E006DE9AB /* AppDelegate.swift */; };
 		BA79080C268A858E006DE9AB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA79080B268A858E006DE9AB /* SceneDelegate.swift */; };
 		BA790810268A858F006DE9AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA79080F268A858F006DE9AB /* Assets.xcassets */; };
@@ -59,6 +60,7 @@
 		BA298ECC268AB93700C90B21 /* HomeConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConstants.swift; sourceTree = "<group>"; };
 		BA6AB229269E81520051D84A /* PresentationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationSettings.swift; sourceTree = "<group>"; };
 		BA6AB22B269E8C2A0051D84A /* DetailsModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsModalView.swift; sourceTree = "<group>"; };
+		BA6AB231269FA8B00051D84A /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		BA790806268A858E006DE9AB /* Movie&Serie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Movie&Serie.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA790809268A858E006DE9AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BA79080B268A858E006DE9AB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				BA87BBC72690DD4100BDBC28 /* Loader.swift */,
 				BA87BBDA26969D4C00BDBC28 /* UIColor_Extension.swift */,
 				BA6AB229269E81520051D84A /* PresentationSettings.swift */,
+				BA6AB231269FA8B00051D84A /* UILabel+Extension.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 				BA87BBE62699EADE00BDBC28 /* MovieDetailsViewController.swift in Sources */,
 				BA298EC8268AAE0600C90B21 /* HomeService.swift in Sources */,
 				BA298ECD268AB93700C90B21 /* HomeConstants.swift in Sources */,
+				BA6AB232269FA8B00051D84A /* UILabel+Extension.swift in Sources */,
 				BA790820268A8667006DE9AB /* HomeViewController.swift in Sources */,
 				BA6AB22A269E81520051D84A /* PresentationSettings.swift in Sources */,
 			);
