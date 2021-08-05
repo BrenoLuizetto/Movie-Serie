@@ -36,7 +36,7 @@ class MovieViewData {
 
 extension MovieViewData: MovieViewDataType {
     var posterPath: String {
-        let aux = model.posterPath
+        let aux = model.posterPath ?? ""
         return aux
     }
     

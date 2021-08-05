@@ -19,7 +19,7 @@ class HomeTableViewCell: UITableViewCell {
     
     private lazy var title: UILabel = {
         let title = UILabel()
-        title.font = UIFont(name: "Kailasa", size: 20)
+        title.font = UIFont(name: HomeConstats.Fonts.kailassaBold, size: 20)
         title.textAlignment = .left
         title.textColor = .white
         return title
@@ -45,10 +45,10 @@ class HomeTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func getProperties(sectionTitle: String, movie: Array<MovieViewData>, section: Int, delegate: HomeProtocol?) {
+    func getProperties(sectionTitle: String, movie: Array<MovieViewData>, section: Int, delegate: MovieCollectionProtocol?) {
         movieCollection.tag = section
         movieCollection.registerCell()
-        movieCollection.setup(movie: movie)
+        movieCollection.setup(movie: movie, collectionType: .homeMovies, viewModel: nil)
         movieCollection.collectionProtocol = delegate
         
         self.title.text = sectionTitle
@@ -73,13 +73,11 @@ extension HomeTableViewCell : BuildViewConfiguration {
             make.left.equalTo(self.snp.left).offset(15)
             make.top.equalTo(self.snp.top).offset(10)
             make.right.equalTo(self.snp.right).offset(-15)
-            make.height.equalTo(20)
         }
         
         movieCollection.snp.makeConstraints { make in
-            make.left.equalTo(self.snp.left)
+            make.left.right.equalToSuperview()
             make.top.equalTo(self.title.snp.bottom).offset(5)
-            make.right.equalTo(self.snp.right)
             make.bottom.equalTo(self.snp.bottom)
         }
     }

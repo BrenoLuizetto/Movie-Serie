@@ -14,7 +14,6 @@ class DetailsModalView: UIView {
         let button = UIButton()
         button.setImage(UIImage(named: "closeButton"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
-        button.addTarget(self, action: #selector(didTapClose(sender:)), for: .touchUpInside)
         return button
     }()
     
@@ -30,7 +29,7 @@ class DetailsModalView: UIView {
         let label = UILabel()
         label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 2
-        label.font = UIFont(name: "Avenir-Medium", size: 20)
+        label.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 20)
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .white
         return label
@@ -39,8 +38,8 @@ class DetailsModalView: UIView {
     private var movieDescription: UILabel = {
         let label = UILabel()
         label.lineBreakMode = .byTruncatingTail
-        label.numberOfLines = 3
-        label.font = UIFont(name: "Avenir-Book", size: 15)
+        label.numberOfLines = 5
+        label.font = UIFont(name: HomeConstats.Fonts.avenirBook, size: 15)
         label.textColor = .white
         return label
     }()
@@ -56,8 +55,7 @@ class DetailsModalView: UIView {
         button.backgroundColor = UIColor(rgb: 0x4A4A4A)
         button.setTitle("Mais Informações", for: .normal )
         button.setTitle("Carregando...", for: .selected)
-        button.addTarget(self, action: #selector(didTapMoreInformation(sender:)), for: .touchUpInside)
-        button.titleLabel?.font = UIFont(name: "Avenir-Medium", size: 18)
+        button.titleLabel?.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 18)
         button.layer.cornerRadius = 5
         button.layer.masksToBounds = true
         return button
@@ -69,18 +67,7 @@ class DetailsModalView: UIView {
     func buildInfo(_ viewModel: MovieDetailsViewModel, controller: MovieModalViewController) {
         self.viewModel = viewModel
         self.controller = controller
-        
-        self.viewModel?.getMoviePoster(callback: { result in
-            self.moviePoster.af_setImage(withURL: result)
-        })
-        
-        self.movieTitle.text = self.viewModel?.movie.title
-        self.movieDescription.text = self.viewModel?.movie.overview
-        self.releaseDate.text = self.viewModel?.movie.releaseDate
-        if self.releaseDate.text?.count ?? 0 > 4 {
-            self.releaseDate.text?.removeLast(6)
-        }
-        
+        setValues()
         buildItems()
     }
     
@@ -94,6 +81,21 @@ class DetailsModalView: UIView {
     @objc func didTapClose(sender: UIButton!) {
         self.viewModel?.delegate?.hiddenTabBar(hidden: false, animated: true)
         controller?.dismiss(animated: true, completion: nil)
+    }
+    
+    private func setValues() {
+        self.movieTitle.text = self.viewModel?.movie.title
+        self.movieDescription.text = self.viewModel?.movie.overview
+        self.releaseDate.text = self.viewModel?.movie.releaseDate
+        if self.releaseDate.text?.count ?? 0 > 4 {
+            self.releaseDate.text?.removeLast(6)
+        }
+        self.viewModel?.getMoviePoster(callback: { result in
+            self.moviePoster.af_setImage(withURL: result)
+        })
+
+        buttonClose.addTarget(self, action: #selector(didTapClose(sender:)), for: .touchUpInside)
+        moreInformation.addTarget(self, action: #selector(didTapMoreInformation(sender:)), for: .touchUpInside)
     }
 }
 
@@ -111,59 +113,36 @@ extension DetailsModalView: BuildViewConfiguration {
         moviePoster.snp.makeConstraints { make in
             make.left.equalTo(self.snp.left).offset(10)
             make.top.equalTo(self.snp.top).offset(15)
-            make.height.equalTo(175)
+            make.bottom.equalTo(self.moreInformation.snp.top).offset(-50)
             make.width.equalTo(125)
         }
         
         movieTitle.snp.makeConstraints { make in
             make.left.equalTo(self.moviePoster.snp.right).offset(15)
             make.top.equalTo(self.snp.top).offset(15)
-            make.right.equalTo(self.buttonClose.snp.left).offset(10)
-            make.bottom.equalTo(self.movieDescription.snp.top).offset(5)
+            make.right.equalTo(self.buttonClose.snp.left).offset(-5)
         }
         
-        if self.viewModel?.movie.overview != "" {
-            buildWithDescription()
-        } else {
-            buildWithouDescription()
+        movieDescription.snp.makeConstraints { make in
+            make.left.equalTo(self.moviePoster.snp.right).offset(15)
+            make.top.equalTo(self.movieTitle.snp.bottom)
+            make.right.equalTo(self.buttonClose.snp.left).offset(10)
+            make.bottom.equalTo(self.releaseDate.snp.top).offset(-20)
+        }
+        
+        releaseDate.snp.makeConstraints { make in
+            make.left.equalTo(self.moviePoster.snp.right).offset(15)
+            make.top.equalTo(self.movieDescription.snp.bottom)
+            make.bottom.equalTo(moreInformation.snp.bottom).offset(-90)
+            make.height.equalTo(20)
+            make.width.equalTo(50)
         }
         
         moreInformation.snp.makeConstraints { make in
-            make.top.equalTo(self.moviePoster.snp.bottom).offset(15)
             make.left.equalTo(self.snp.left).offset(15)
             make.right.equalTo(self.snp.right).offset(-15)
-            make.bottom.equalTo(self.snp.bottom).offset(-50)
+            make.bottom.equalTo(self.snp.bottom).offset(-20)
         }
-    }
-    
-    func buildWithDescription() {
-        movieDescription.snp.makeConstraints { make in
-            make.left.equalTo(self.moviePoster.snp.right).offset(15)
-            make.top.equalTo(self.movieTitle.snp.bottom).offset(5)
-            make.right.equalTo(self.buttonClose.snp.left).offset(10)
-            make.height.equalTo(80)
-        }
-        
-        releaseDate.snp.makeConstraints { make in
-            make.left.equalTo(self.moviePoster.snp.right).offset(15)
-            make.top.equalTo(self.movieDescription.snp.bottom).offset(5)
-            make.width.equalTo(50)
-            make.height.equalTo(30)
-        }
-        
-        self.addSubview(self.movieDescription)
-        self.addSubview(self.releaseDate)
-    }
-    
-    func buildWithouDescription() {
-        releaseDate.snp.makeConstraints { make in
-            make.left.equalTo(self.moviePoster.snp.right).offset(15)
-            make.top.equalTo(self.movieTitle.snp.bottom).offset(5)
-            make.height.equalTo(30)
-            make.width.equalTo(50)
-        }
-        self.addSubview(self.releaseDate)
-
     }
     
     func buildViewHierarchy() {

@@ -12,7 +12,7 @@ import SnapKit
 class HomeCollectionViewCell: UICollectionViewCell {
     private lazy var container: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = .black.withAlphaComponent(0.5)
         return view
     }()
     
@@ -21,8 +21,6 @@ class HomeCollectionViewCell: UICollectionViewCell {
         image.contentMode = .scaleAspectFit
         return image
     }()
-    
-    
     
     func setup() {
         buildItems()

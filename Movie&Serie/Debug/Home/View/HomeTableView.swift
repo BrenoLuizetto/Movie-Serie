@@ -9,55 +9,104 @@ import Foundation
 import UIKit
 import AlamofireImage
 
-class HomeTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
+enum CellType {
+    case upcoming
+    case AllMovies
+}
+
+class HomeTableView: UITableView {
     
-    private var viewModel: HomeViewModel?
+    private var viewModel: MovieViewModel?
     private var movieData: Array<Array<MovieViewData>> = []
+    private var upcomingMovieData: Array<MovieViewData> = []
     private var cellTitle: [String] = []
-    private var homeDelegate: HomeProtocol?
+    private var homeDelegate: MovieCollectionProtocol?
+    private var movieType: [MovieType] = []
+    private var cellType: CellType = .AllMovies
     
-    func buildCell(_ movieType: [MovieType], viewModel: HomeViewModel,delegate: HomeProtocol,_ callback: @escaping () -> Void) {
+    func buildCell(cellType: CellType, _ movieType: [MovieType], viewModel: MovieViewModel, delegate: MovieCollectionProtocol,_ callback: @escaping () -> Void) {
         self.homeDelegate = delegate
         self.backgroundColor = .black
+        self.cellType = cellType
         self.viewModel = viewModel
+        self.movieType = movieType
         registerCell()
-        getMovie(movieType: movieType) {
+        getMovie() {
             callback()
         }
     }
     
     func registerCell() {
-        self.register(HomeTableViewCell.self, forCellReuseIdentifier: "MovieCell")
+        switch cellType {
+        case .upcoming:
+            self.register(UpcomingViewCell.self, forCellReuseIdentifier: "MovieUpcomingCell")
+        case .AllMovies:
+            self.register(HomeTableViewCell.self, forCellReuseIdentifier: "MovieCell")
+
+        }
         self.delegate = self
         self.dataSource = self
     }
     
-    func getMovie(movieType: [MovieType],_ callback: @escaping () -> Void) {
+    func getMovie(_ callback: @escaping () -> Void) {
             movieData = []
         for type in movieType {
             viewModel?.getMovie(type: type) { movies in
                 self.cellTitle.append(type.titleOfCell)
-                self.movieData.append(movies)
+                switch self.cellType {
+                case .upcoming:
+                    self.upcomingMovieData = movies
+                case .AllMovies:
+                    self.movieData.append(movies)
+                }
+
                 self.reloadData()
                 callback()
             }
         }
     }
+}
+
+extension HomeTableView: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(300)
+        switch cellType {
+        case .upcoming:
+            return UITableView.automaticDimension
+        case .AllMovies:
+            return CGFloat(300)
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movieData.count
+        switch cellType {
+        case .upcoming:
+            return upcomingMovieData.count
+        case .AllMovies:
+            return movieData.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! HomeTableViewCell
-        let data = movieData[indexPath.row]
-        cell.getProperties(sectionTitle: cellTitle[indexPath.row], movie: data, section: indexPath.section, delegate: homeDelegate)
-        
-        return cell
+        switch cellType {
+        case .upcoming:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MovieUpcomingCell", for: indexPath) as! UpcomingViewCell
+            let data = upcomingMovieData[indexPath.row]
+            if let backdropPath = data.backdropPath {
+                let imageUrl = URL(string: "\(HomeConstats.url.imageOriginal)\(backdropPath)")
+                if let url = imageUrl {
+                    cell.movieBackground.af_setImage(withURL: url)
+                }
+            }
+            
+            cell.buildParameters(movie: data)
+            return cell
+        case .AllMovies:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! HomeTableViewCell
+            let data = movieData[indexPath.row]
+            cell.getProperties(sectionTitle: cellTitle[indexPath.row], movie: data, section: indexPath.section, delegate: homeDelegate)
+            return cell
+        }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

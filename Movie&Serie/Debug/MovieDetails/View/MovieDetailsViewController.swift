@@ -11,6 +11,7 @@ import UIKit
 class MovieDetailsViewController: UIViewController {
     
     private var viewModel: MovieDetailsViewModel
+    private var movieDetailsView: MovieDetailsView?
     
     init(viewModel: MovieDetailsViewModel) {
         self.viewModel = viewModel
@@ -22,30 +23,29 @@ class MovieDetailsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        configNavBar()
-        self.view = MovieDetailsView(self.viewModel, originHeight: self.view.bounds.width)
-
+    override func viewWillAppear(_ animated: Bool) {
+        self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height + 1000)
     }
     
     override func viewDidLoad() {
+        self.configNavBar()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.isNavigationBarHidden = true
+    override func viewDidAppear(_ animated: Bool) {
+        movieDetailsView = MovieDetailsView(self.viewModel, originWidth: self.view.bounds.width, originHeight: self.view.bounds.height)
+        self.view = movieDetailsView
+        movieDetailsView?.scrollView.contentSize = (CGSize(width: self.view.bounds.width, height: 2000))        
     }
-    
+
+}
+
+extension MovieDetailsViewController {
     private func configNavBar() {
         self.navigationController?.isNavigationBarHidden = false
-        self.navigationItem.title = "Descrição"
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Voltar", style: .plain, target: self, action: #selector(backAction(sender:)))
-        
     }
     
     @objc func backAction(sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
-
 }

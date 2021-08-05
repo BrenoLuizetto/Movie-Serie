@@ -15,6 +15,7 @@ class MovieModalViewController: UIViewController {
         let view = DetailsModalView()
         view.backgroundColor = UIColor(rgb: 0x282828)
 
+
         return view
     }()
     
@@ -22,7 +23,7 @@ class MovieModalViewController: UIViewController {
     
     init(viewModel: MovieDetailsViewModel) {
         self.viewModel = viewModel
-
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -32,13 +33,14 @@ class MovieModalViewController: UIViewController {
     
     override func viewDidLoad() {
         self.DetailsView.buildInfo(viewModel, controller: self)
-
+        
         buildItems()
         let Viewtap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.view.addGestureRecognizer(Viewtap)
         
         let Detailstap = UITapGestureRecognizer(target: self, action: #selector(self.didTapOnDetailsView(_:)))
         self.DetailsView.addGestureRecognizer(Detailstap)
+        
     }
 
 }
@@ -63,7 +65,7 @@ extension MovieModalViewController: BuildViewConfiguration {
             make.left.equalTo(self.view.snp.left)
             make.right.equalTo(self.view.snp.right)
             make.bottom.equalTo(self.view.snp.bottom)
-            make.height.equalTo(300)
+            make.height.equalTo(280)
         }
     }
     

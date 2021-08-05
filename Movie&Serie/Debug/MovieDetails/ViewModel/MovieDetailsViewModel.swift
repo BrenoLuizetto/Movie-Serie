@@ -8,14 +8,15 @@
 import Foundation
 import UIKit
 
-class MovieDetailsViewModel {
+class MovieDetailsViewModel: MovieViewModel {
     
     let movie: MovieViewData
-    weak var delegate: HomeProtocol?
+    var recommendationMovieData: Array<MovieViewData> = []
+    weak var delegate: MovieCollectionProtocol?
     private let service = MovieDetailsService()
     private var detailsData: DetailsViewData?
     
-    init(_ movie: MovieViewData, with delegate: HomeProtocol) {
+    init(_ movie: MovieViewData, with delegate: MovieCollectionProtocol) {
         self.movie = movie
         self.delegate = delegate
     }
@@ -32,14 +33,14 @@ class MovieDetailsViewModel {
     
     func getMovieBackground(callback: @escaping (URL) -> Void) {
         guard let backgroundPath = self.movie.backdropPath else {return}
-        if let imageUrl = URL(string: "https://image.tmdb.org/t/p/original\(backgroundPath)"){
+        if let imageUrl = URL(string: "\(HomeConstats.url.imageOriginal)\(backgroundPath)"){
             callback(imageUrl)
         }
     }
     
     func getMoviePoster(callback: @escaping (URL) -> Void) {
         let posterPath = self.movie.posterPath
-        if let imageUrl = URL(string: "https://image.tmdb.org/t/p/original\(posterPath)"){
+        if let imageUrl = URL(string: "\(HomeConstats.url.imageOriginal)\(posterPath)"){
             callback(imageUrl)
         }
     }
@@ -53,14 +54,18 @@ class MovieDetailsViewModel {
         return blurredImage
       }
     
-    func validateTitleLines(_ width: CGFloat) -> Int {
-        let numberOfLines = Int(width/24)
-        let titleHeight = 45
-        let auxHeight = movie.title.count/numberOfLines
-        if auxHeight == 0 {
-            return 45
-        } else {
-            return titleHeight * auxHeight
+    func getRecommendationMovies(_ callback: @escaping (Array<MovieViewData>) -> Void) {
+        let id = String(movie.id)
+        service.getrecommendationMovies(id) { recommendation in
+            if let recommendationList = recommendation.results {
+                self.recommendationMovieData = []
+                for movies in recommendationList {
+                        self.recommendationMovieData.append(MovieViewData(model: movies))
+                }
+                
+            }
+            callback(self.recommendationMovieData)
         }
     }
+
 }

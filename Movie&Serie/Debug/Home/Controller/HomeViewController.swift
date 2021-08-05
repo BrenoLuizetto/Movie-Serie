@@ -16,7 +16,7 @@ class HomeViewController: UIViewController {
     private var errorView: ErrorView?
     private var detailsView: MovieDetailsView?
 
-    private let viewModel = HomeViewModel()
+    private let viewModel = MovieViewModel()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -27,18 +27,40 @@ class HomeViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        self.navigationController?.isNavigationBarHidden = true
         self.view.showLoader()
         self.tableView = viewModel.tableView
+        configNavBar()
         buildTableView()
         getTypes()
         
+    }
+}
+
+extension HomeViewController {
+    func configNavBar() {
+        self.navigationController?.isNavigationBarHidden = false
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        
+        self.navigationController?.isNavigationBarHidden = false
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
+                                                                 target: self,
+                                                                 action: #selector(search(sender:)))
+    }
+    
+    @objc private func search(sender: UIButton) {
+        let searchVC = SearchViewController()
+        self.navigationController?.pushViewController(searchVC, animated: true)
     }
     
     private func getTypes() {
         viewModel.parametersForCell { parameters in
             if let result = parameters {
-                self.tableView?.buildCell(result, viewModel: self.viewModel, delegate: self, {
+                self.tableView?.buildCell(cellType: .AllMovies, result, viewModel: self.viewModel, delegate: MovieCollectionAction(controller: self), {
                 })
             } else {
                 self.showErrorView()
@@ -98,11 +120,7 @@ extension HomeViewController {
 
 }
 
-extension HomeViewController: HomeProtocol {
-    func buildConstraints() {
-        self.buildTableView()
-    }
-    
+extension HomeViewController: MovieCollectionProtocol {
     func finishLoad() {
         self.view.removeLoader()
     }
@@ -111,7 +129,7 @@ extension HomeViewController: HomeProtocol {
         let viewModel = MovieDetailsViewModel(movie, with: self)
         let vc = MovieModalViewController(viewModel: viewModel)
         let detailsTransitioningDelegate = InteractiveModalTransitioningDelegate(from: self, to: vc)
-        vc.modalPresentationStyle = .custom
+        vc.modalPresentationStyle = .overCurrentContext
         vc.transitioningDelegate = detailsTransitioningDelegate
         vc.definesPresentationContext = true
         self.hiddenTabBar(hidden: true, animated: true)
