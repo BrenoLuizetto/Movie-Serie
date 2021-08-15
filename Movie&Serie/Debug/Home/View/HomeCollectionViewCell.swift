@@ -19,6 +19,8 @@ class HomeCollectionViewCell: UICollectionViewCell {
     lazy var moviePoster: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
+        image.clipsToBounds = true
+        image.layer.cornerRadius = 5
         return image
     }()
     

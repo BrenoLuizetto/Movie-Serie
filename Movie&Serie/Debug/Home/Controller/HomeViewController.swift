@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
-import Loading
+import MBProgressHUD
 
 class HomeViewController: UIViewController {
     
@@ -20,6 +20,7 @@ class HomeViewController: UIViewController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
+        self.view.backgroundColor = .black
     }
     
     required init?(coder: NSCoder) {
@@ -27,12 +28,10 @@ class HomeViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        self.view.showLoader()
+        MBProgressHUD.showAdded(to: self.view!, animated: true)
         self.tableView = viewModel.tableView
         configNavBar()
-        buildTableView()
-        getTypes()
-        
+         getTypes()
     }
 }
 
@@ -61,11 +60,13 @@ extension HomeViewController {
         viewModel.parametersForCell { parameters in
             if let result = parameters {
                 self.tableView?.buildCell(cellType: .AllMovies, result, viewModel: self.viewModel, delegate: MovieCollectionAction(controller: self), {
+                    self.buildTableView()
+                    MBProgressHUD.hide(for: self.view, animated: true)
                 })
             } else {
                 self.showErrorView()
             }
-           
+
         }
     }
     
@@ -75,7 +76,7 @@ extension HomeViewController {
         })
         self.view.removeConstraints(self.view.constraints)
         self.buildErrorView()
-        self.view.removeLoader()
+        MBProgressHUD.hide(for: self.view, animated: true)
     }
 
 }
@@ -106,52 +107,6 @@ extension HomeViewController {
             self.view.addSubview(errorView ?? UIView())
         }
     }
-    
-    func buildDetailsView() {
-        detailsView?.snp.makeConstraints { make in
-            make.top.equalTo(self.view.snp.top).offset(80)
-            make.left.equalTo(self.view.snp.left)
-            make.right.equalTo(self.view.snp.right)
-            make.bottom.equalTo(self.view.snp.bottom)
-            
-            self.view.addSubview(detailsView ?? UIView())
-        }
-    }
 
-}
-
-extension HomeViewController: MovieCollectionProtocol {
-    func finishLoad() {
-        self.view.removeLoader()
-    }
-    
-    func didSelectItem(movie: MovieViewData) {
-        let viewModel = MovieDetailsViewModel(movie, with: self)
-        let vc = MovieModalViewController(viewModel: viewModel)
-        let detailsTransitioningDelegate = InteractiveModalTransitioningDelegate(from: self, to: vc)
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.transitioningDelegate = detailsTransitioningDelegate
-        vc.definesPresentationContext = true
-        self.hiddenTabBar(hidden: true, animated: true)
-        self.present(vc, animated: true, completion: nil)
-        self.view.removeLoader()
-    }
-    
-    func hiddenTabBar(hidden: Bool, animated: Bool) {
-        let tabBar = self.tabBarController?.tabBar
-        let offset = (hidden ? UIScreen.main.bounds.size.height : UIScreen.main.bounds.size.height - (tabBar?.frame.size.height)! )
-        if offset == tabBar?.frame.origin.y {return}
-        let duration:TimeInterval = (animated ? 0.5 : 0.0)
-        UIView.animate(withDuration: duration,
-                       animations: {tabBar!.frame.origin.y = offset},
-                       completion:nil)
-    }
-    
-    
-    func showDetailsScreen(movie: MovieViewData) {
-        let viewModel = MovieDetailsViewModel(movie, with: self)
-        let vc = MovieDetailsViewController(viewModel: viewModel)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
 }
 

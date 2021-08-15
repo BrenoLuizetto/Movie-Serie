@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import SnapKit
+import MBProgressHUD
 
 protocol MovieCollectionProtocol: AnyObject {
     func didSelectItem(movie: MovieViewData)
@@ -16,6 +18,7 @@ protocol MovieCollectionProtocol: AnyObject {
 }
 
 class MovieCollectionAction: NSObject, MovieCollectionProtocol {
+    
     let controller: UIViewController
     
     init(controller: UIViewController) {
@@ -27,6 +30,7 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
     }
     
     func didSelectItem(movie: MovieViewData) {
+        self.controller.view.showLoader()
         let viewModel = MovieDetailsViewModel(movie, with: self)
         let vc = MovieModalViewController(viewModel: viewModel)
         let detailsTransitioningDelegate = InteractiveModalTransitioningDelegate(from: self.controller, to: vc)
@@ -34,8 +38,8 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
         vc.transitioningDelegate = detailsTransitioningDelegate
         vc.definesPresentationContext = true
         self.hiddenTabBar(hidden: true, animated: true)
-        self.controller.present(vc, animated: true, completion: nil)
         self.controller.view.removeLoader()
+        self.controller.present(vc, animated: true, completion: nil)
     }
     
     func hiddenTabBar(hidden: Bool, animated: Bool) {

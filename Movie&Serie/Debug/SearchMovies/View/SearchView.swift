@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import MBProgressHUD
 
 class SearchView: UIView {
     
@@ -44,7 +45,7 @@ class SearchView: UIView {
         return view
     }()
     
-    lazy var searchCollection = HomeCollectionView(frame: CGRect(), collectionViewLayout: layout)
+    lazy var searchCollection = MovieCollectionView(frame: CGRect(), collectionViewLayout: layout)
     
     private var viewModel: SearchViewModel?
     weak var delegate: MovieCollectionProtocol?
@@ -119,12 +120,20 @@ extension SearchView: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         if searchText != "" {
             let formattedString = searchText.replacingOccurrences(of: " ", with: "", options: .regularExpression)
+            MBProgressHUD.showAdded(to: self, animated: true)
             self.viewModel?.getSearchMovies(query: formattedString, callback: { movies, erro  in
                 if let moviesArray = movies {
+                    self.errorView.isHidden = true
                     self.searchCollection.movie = moviesArray
                     self.searchCollection.reloadMovies()
+                    MBProgressHUD.hide(for: self, animated: true)
+                } else {
+                    self.searchCollection.movie = []
+                    self.searchCollection.reloadMovies()
+                    MBProgressHUD.hide(for: self, animated: true)
                 }
             })
         } else {

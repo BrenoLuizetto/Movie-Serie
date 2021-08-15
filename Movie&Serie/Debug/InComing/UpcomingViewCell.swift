@@ -66,7 +66,8 @@ class UpcomingViewCell: UITableViewCell {
     func buildParameters(movie: MovieViewData) {
         self.backgroundColor = .black
         self.movieTitle.text = movie.title
-        self.releaseDate.text = buildReleaseDate(with: movie.releaseDate)
+        let release = movie.releaseDate.buildReleaseDate()
+        self.releaseDate.text = release
         self.movieDescription.text = movie.overview
         self.buildItems()
     }

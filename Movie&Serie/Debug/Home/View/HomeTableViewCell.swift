@@ -33,7 +33,7 @@ class HomeTableViewCell: UITableViewCell {
         return layout
     }()
     
-    lazy var movieCollection = HomeCollectionView(frame: CGRect(), collectionViewLayout: layout)
+    lazy var movieCollection = MovieCollectionView(frame: CGRect(), collectionViewLayout: layout)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

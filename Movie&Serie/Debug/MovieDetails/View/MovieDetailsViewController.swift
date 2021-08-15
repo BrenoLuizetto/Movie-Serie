@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import MBProgressHUD
 
 class MovieDetailsViewController: UIViewController {
     
@@ -17,6 +18,8 @@ class MovieDetailsViewController: UIViewController {
         self.viewModel = viewModel
 
         super.init(nibName: nil, bundle: nil)
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+
     }
     
     required init?(coder: NSCoder) {
@@ -28,13 +31,14 @@ class MovieDetailsViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        movieDetailsView = MovieDetailsView(self.viewModel, delegate: MovieCollectionAction(controller: self))
         self.configNavBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        movieDetailsView = MovieDetailsView(self.viewModel, originWidth: self.view.bounds.width, originHeight: self.view.bounds.height)
         self.view = movieDetailsView
-        movieDetailsView?.scrollView.contentSize = (CGSize(width: self.view.bounds.width, height: 2000))        
+        movieDetailsView?.setScrollView()
+        MBProgressHUD.hide(for: self.view, animated: true)
     }
 
 }
@@ -43,9 +47,17 @@ extension MovieDetailsViewController {
     private func configNavBar() {
         self.navigationController?.isNavigationBarHidden = false
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Voltar", style: .plain, target: self, action: #selector(backAction(sender:)))
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addFavorite(sender:)))
     }
     
-    @objc func backAction(sender: UIBarButtonItem) {
+    @objc
+    func addFavorite(sender: UIBarButtonItem) {
+        
+    }
+    
+    @objc
+    func backAction(sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
 }

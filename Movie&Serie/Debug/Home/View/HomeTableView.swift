@@ -24,9 +24,18 @@ class HomeTableView: UITableView {
     private var movieType: [MovieType] = []
     private var cellType: CellType = .AllMovies
     
+    init() {
+        super.init(frame: .zero, style: .plain)
+        self.backgroundColor = .black
+
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func buildCell(cellType: CellType, _ movieType: [MovieType], viewModel: MovieViewModel, delegate: MovieCollectionProtocol,_ callback: @escaping () -> Void) {
         self.homeDelegate = delegate
-        self.backgroundColor = .black
         self.cellType = cellType
         self.viewModel = viewModel
         self.movieType = movieType
@@ -91,6 +100,7 @@ extension HomeTableView: UITableViewDataSource, UITableViewDelegate {
         switch cellType {
         case .upcoming:
             let cell = tableView.dequeueReusableCell(withIdentifier: "MovieUpcomingCell", for: indexPath) as! UpcomingViewCell
+            cell.isUserInteractionEnabled = false
             let data = upcomingMovieData[indexPath.row]
             if let backdropPath = data.backdropPath {
                 let imageUrl = URL(string: "\(HomeConstats.url.imageOriginal)\(backdropPath)")

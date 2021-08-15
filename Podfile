@@ -10,7 +10,6 @@ target 'Movie&Serie' do
   pod 'SnapKit', '~> 5.0.0'
   pod 'Alamofire', '~> 5.2'
   pod 'AlamofireImage', '~> 4.1'
-  pod 'Loading', :git => 'https://github.com/lixiang1994/Loading'
-  pod 'lottie-ios'
+  pod 'MBProgressHUD'
 
 end

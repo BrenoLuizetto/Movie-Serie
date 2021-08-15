@@ -50,6 +50,7 @@ class SearchService: NSObject {
                     print(erro)
                 }
             case .failure(let error):
+                print(error)
                 callback(nil)
             }
         }

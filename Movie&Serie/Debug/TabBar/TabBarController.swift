@@ -17,17 +17,14 @@ class TabBarController: UITabBarController {
     }
     
     func buildView() {
-        let homeVC = UINavigationController(rootViewController: HomeViewController())
+        let homeVC = configNavBar(HomeViewController())
         homeVC.navigationBar.barStyle = UIBarStyle.black
         homeVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         homeVC.navigationBar.tintColor = .white
         homeVC.tabBarItem.image = UIImage(systemName: "house.fill")
         homeVC.tabBarItem.title = "Inicio"
         
-        let inComingVC = UINavigationController(rootViewController: InComingViewController())
-        inComingVC.navigationBar.barStyle = UIBarStyle.black
-        inComingVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        inComingVC.navigationBar.tintColor = .white
+        let inComingVC = configNavBar(InComingViewController())
         inComingVC.tabBarItem.image = UIImage(systemName: "plus.rectangle.on.rectangle.fill")
         inComingVC.tabBarItem.title = "Em Breve"
         
@@ -36,6 +33,23 @@ class TabBarController: UITabBarController {
         for item in items {
             item.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -4, right: 0)
         }
+    }
+    
+    func configNavBar(_ rootViewController: UIViewController) -> UINavigationController {
+        let nav = UINavigationController(rootViewController: rootViewController)
+        nav.isNavigationBarHidden = false
+        nav.navigationBar.barStyle = .black
+        nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        nav.navigationBar.shadowImage = UIImage()
+        nav.navigationBar.isTranslucent = true
+        nav.navigationBar.tintColor = .white
+        nav.isNavigationBarHidden = false
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        nav.navigationBar.titleTextAttributes = textAttributes
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
+                                                                 target: self,
+                                                                 action: nil)
+        return nav
     }
     
 }

@@ -20,7 +20,7 @@ class InComingViewController: UIViewController {
     }
     
     func parametersForTable() {
-        var types: [MovieType] = [MovieType(typeMovie: HomeConstats.movieType.upcoming,
+        let types: [MovieType] = [MovieType(typeMovie: HomeConstats.movieType.upcoming,
                                             titleOfCell: HomeConstats.cellTitle.upcoming,
                                             genreType: nil)]
         self.tableView.buildCell(cellType: .upcoming, types, viewModel: self.viewModel, delegate: MovieCollectionAction(controller: self)) {

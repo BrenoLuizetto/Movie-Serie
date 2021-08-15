@@ -11,24 +11,24 @@ import SnapKit
 
 class MovieDetailsView: UIView, UIScrollViewDelegate {
     
-     public let scrollView: UIScrollView = {
+     public lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView(frame: .zero)
         scroll.isScrollEnabled = true
         scroll.alwaysBounceVertical = true
         return scroll
     }()
     
-    private let contentView: UIView = {
+    private lazy var contentView: UIView = {
         let view = UIView()
         return view
     }()
     
-    private let viewAux: UIView = {
+    private lazy var viewAux: UIView = {
         let view = UIView()
         return view
     }()
     
-    private var backgroundMovie: UIImageView = {
+    private lazy var backgroundMovie: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 5
@@ -36,7 +36,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         return imageView
     }()
     
-    private var movieRating: UILabel = {
+    private lazy var movieRating: UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 18)
         lbl.textColor = UIColor(rgb: 0x08CA49)
@@ -49,7 +49,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         return imageView
     }()
     
-    private var movieTitle: UILabel = {
+    private lazy var movieTitle: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
         label.font = UIFont(name: HomeConstats.Fonts.avenirHeavy, size: 30)
@@ -59,7 +59,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         return label
     }()
     
-    private let movieDescription: UILabel = {
+    private lazy var movieDescription: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 18)
         label.textColor = .white
@@ -68,7 +68,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         return label
     }()
     
-    private var releaseDate: UILabel = {
+    private lazy var releaseDate: UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 18)
         lbl.textColor = .white
@@ -76,41 +76,31 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         return lbl
     }()
     
-    private var recommendationCollection: HomeCollectionView = {
-        let layout = UICollectionViewFlowLayout()
-         layout.itemSize = CGSize(width: CGFloat(150), height: CGFloat(280))
-         layout.scrollDirection = .horizontal
-        let collection = HomeCollectionView(frame: CGRect(), collectionViewLayout: layout)
-        collection.registerCell()
-        return collection
+    private lazy var layout: UICollectionViewFlowLayout = {
+       let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: CGFloat(150), height: CGFloat(280))
+        layout.scrollDirection = .vertical
+
+        return layout
     }()
     
-    private var viewModel: MovieDetailsViewModel
-    private var originWidth: CGFloat
-    private var originHeight: CGFloat
+    lazy var recommendationCollection = MovieCollectionView(frame: CGRect(), collectionViewLayout: layout)
     
-    init(_ viewModel: MovieDetailsViewModel, originWidth: CGFloat, originHeight: CGFloat) {
+    private var viewModel: MovieDetailsViewModel    
+    weak var delegate: MovieCollectionProtocol?
+    
+    init(_ viewModel: MovieDetailsViewModel, delegate: MovieCollectionProtocol) {
         self.viewModel = viewModel
-        self.originWidth = originWidth
-        self.originHeight = originHeight
+        self.delegate = delegate
         
         super.init(frame: CGRect())
-        showLoader()
-
-        scrollView.contentSize = (CGSize(width: originWidth, height: 2000))
-        scrollView.isScrollEnabled = true
-        scrollView.bounces = false
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.automaticallyAdjustsScrollIndicatorInsets = false
-        scrollView.isScrollEnabled = true
-        scrollView.isUserInteractionEnabled = true
-        
-        
+        self.recommendationCollection.registerCell()
+        self.recommendationCollection.collectionProtocol = self.delegate
+        self.recommendationCollection.detailsProtocol = self
         self.recommendationCollection.setup(movie: nil, collectionType: .recommendation, viewModel: viewModel)
         buildItems()
         scrollView.isScrollEnabled = true
-        buildImages()
+        setItems()
         
    }
     
@@ -118,9 +108,9 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func buildImages() {
+    func setItems() {
         self.viewModel.getMovieBackground(callback: { result in
-            self.backgroundMovie.af_setImage(withURL: result)
+            self.backgroundMovie.af.setImage(withURL: result)
             self.removeLoader()
         })
         self.movieTitle.text = self.viewModel.movie.title
@@ -138,6 +128,15 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     }
     
     func setScrollView() {
+        self.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        self.scrollView.contentSize = (CGSize(width: UIScreen.main.bounds.width,
+                                              height: self.recommendationCollection.contentSize.height +
+                                                self.movieTitle.bounds.height +
+                                                self.releaseDate.bounds.height +
+                                                self.movieDescription.bounds.height))
+        self.scrollView.isScrollEnabled = true
+        self.scrollView.alwaysBounceVertical = true
+        self.scrollView.isUserInteractionEnabled = true
     }
 }
 
@@ -153,20 +152,17 @@ extension MovieDetailsView: BuildViewConfiguration {
             make.left.equalTo(self.snp.left)
             make.right.equalTo(self.snp.right)
             make.top.equalTo(self.backgroundMovie.snp.bottom)
-            make.height.equalTo(2000)
+            make.bottom.equalTo(self.snp.bottom)
+            
         }
         
         scrollView.snp.makeConstraints { make in
-            make.left.right.top.bottom.equalTo(self.viewAux)
-        }
-        
-        contentView.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview()
-            make.height.width.equalToSuperview()
+            make.left.right.top.equalTo(self.viewAux)
+            make.bottom.equalTo(self)
         }
 
         movieTitle.snp.makeConstraints { make in
-            make.top.equalTo(self.backgroundMovie.snp.bottom).offset(5)
+            make.top.equalTo(self.scrollView.snp.top).offset(5)
             make.left.equalTo(self.snp.left).offset(15)
             make.right.equalTo(self.snp.right).offset(-15)
         }
@@ -191,8 +187,8 @@ extension MovieDetailsView: BuildViewConfiguration {
         }
         
         recommendationCollection.snp.makeConstraints { make in
-            make.left.equalTo(self.snp.left).offset(15)
-            make.right.equalTo(self.snp.right).offset(-15)
+            make.left.equalTo(self.snp.left).offset(30)
+            make.right.equalTo(self.snp.right).offset(-30)
             make.top.equalTo(self.movieDescription.snp.bottom).offset(5)
             make.bottom.equalTo(self.viewAux.snp.bottom).offset(-15)
         }
@@ -203,15 +199,30 @@ extension MovieDetailsView: BuildViewConfiguration {
         self.addSubview(backgroundMovie)
         self.addSubview(viewAux)
         viewAux.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        contentView.addSubview(movieTitle)
-        contentView.addSubview(movieRating)
-        contentView.addSubview(releaseDate)
-        contentView.addSubview(movieDescription)
-        contentView.addSubview(recommendationCollection)
+        self.scrollView.addSubview(movieTitle)
+        self.scrollView.addSubview(movieRating)
+        self.scrollView.addSubview(releaseDate)
+        self.scrollView.addSubview(movieDescription)
+        self.scrollView.addSubview(recommendationCollection)
     }
     
     func configElements() {
         
+    }
+}
+
+extension MovieDetailsView: MovieDetailsProtocol {
+    func CollectionContentDidChange() {
+        self.setScrollView()
+    }
+    
+    func collectionIsEmpty() {
+        movieDescription.snp.makeConstraints { make in
+            make.left.equalTo(self.snp.left).offset(15)
+            make.right.equalTo(self.snp.right).offset(-15)
+            make.top.equalTo(self.movieRating.snp.bottom).offset(5)
+            make.bottom.equalTo(viewAux.snp.bottom).offset(-30)
+        }
+        self.setScrollView()
     }
 }

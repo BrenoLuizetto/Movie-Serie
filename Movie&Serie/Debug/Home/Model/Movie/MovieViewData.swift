@@ -76,7 +76,7 @@ extension MovieViewData: MovieViewDataType {
     }
     
     var title: String {
-        if let aux = model.title, aux != "" {
+        if let aux = model.title, aux.isEmpty {
             return aux
         }
         return model.originalTitle ?? ""
