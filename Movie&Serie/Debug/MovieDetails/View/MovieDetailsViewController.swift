@@ -18,7 +18,7 @@ class MovieDetailsViewController: UIViewController {
         self.viewModel = viewModel
 
         super.init(nibName: nil, bundle: nil)
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        self.view.showHUD()
 
     }
     
@@ -38,7 +38,7 @@ class MovieDetailsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         self.view = movieDetailsView
         movieDetailsView?.setScrollView()
-        MBProgressHUD.hide(for: self.view, animated: true)
+        self.view.removeHUD()
     }
 
 }
@@ -53,11 +53,19 @@ extension MovieDetailsViewController {
     
     @objc
     func addFavorite(sender: UIBarButtonItem) {
-        
+//        MovieUserDefaults.set(movie: self.viewModel.movie)
+        let us = UserDefaults.standard
+        do {
+//            us.setObject(viewModel.movie, forKey: "favoriteMovies")
+            try us.setObject(viewModel.movie.originalTitle, forKey: "favoriteMovies")
+            print(try us.getObject(forKey: "favoriteMovies", castTo: String.self))
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     @objc
     func backAction(sender: UIBarButtonItem) {
-        navigationController?.popViewController(animated: true)
+    navigationController?.popViewController(animated: true)
     }
 }

@@ -91,7 +91,7 @@ class DetailsModalView: UIView {
             self.releaseDate.text?.removeLast(6)
         }
         self.viewModel?.getMoviePoster(callback: { result in
-            self.moviePoster.af_setImage(withURL: result)
+            self.moviePoster.af.setImage(withURL: result)
         })
 
         buttonClose.addTarget(self, action: #selector(didTapClose(sender:)), for: .touchUpInside)

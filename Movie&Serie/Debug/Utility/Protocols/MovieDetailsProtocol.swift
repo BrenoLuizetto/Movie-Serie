@@ -9,5 +9,4 @@ import Foundation
 
 protocol MovieDetailsProtocol: AnyObject {
     func CollectionContentDidChange()
-    func collectionIsEmpty()
 }

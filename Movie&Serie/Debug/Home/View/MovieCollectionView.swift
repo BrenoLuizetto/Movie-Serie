@@ -57,19 +57,15 @@ class MovieCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     }
     
     private func getReccomendations(viewModel: MovieDetailsViewModel) {
-        viewModel.getRecommendationMovies { movies in
-            if movies.isEmpty {
-                self.detailsProtocol?.collectionIsEmpty()
-            } else {
-                self.movie = movies
-                self.itemsInSection = movies.count
-                self.reloadData()
-            }
+        viewModel.getRecommendationMovies { [weak self] movies in
+            guard let self = self else { return }
+            self.movie = movies
+            self.itemsInSection = movies.count
+            self.reloadData()
         }
     }
     
     func reloadMovies() {
-        
         self.itemsInSection = movie.count
         self.reloadData()
     }

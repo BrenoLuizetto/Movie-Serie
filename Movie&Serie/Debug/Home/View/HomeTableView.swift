@@ -105,7 +105,7 @@ extension HomeTableView: UITableViewDataSource, UITableViewDelegate {
             if let backdropPath = data.backdropPath {
                 let imageUrl = URL(string: "\(HomeConstats.url.imageOriginal)\(backdropPath)")
                 if let url = imageUrl {
-                    cell.movieBackground.af_setImage(withURL: url)
+                    cell.movieBackground.af.setImage(withURL: url)
                 }
             }
             

@@ -111,7 +111,6 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     func setItems() {
         self.viewModel.getMovieBackground(callback: { result in
             self.backgroundMovie.af.setImage(withURL: result)
-            self.removeLoader()
         })
         self.movieTitle.text = self.viewModel.movie.title
         let movieRating = Int(self.viewModel.movie.voteAverage * 10)
@@ -189,7 +188,7 @@ extension MovieDetailsView: BuildViewConfiguration {
         recommendationCollection.snp.makeConstraints { make in
             make.left.equalTo(self.snp.left).offset(30)
             make.right.equalTo(self.snp.right).offset(-30)
-            make.top.equalTo(self.movieDescription.snp.bottom).offset(5)
+//            make.top.equalTo(self.movieDescription.snp.bottom).offset(5)
             make.bottom.equalTo(self.viewAux.snp.bottom).offset(-15)
         }
         
@@ -213,16 +212,6 @@ extension MovieDetailsView: BuildViewConfiguration {
 
 extension MovieDetailsView: MovieDetailsProtocol {
     func CollectionContentDidChange() {
-        self.setScrollView()
-    }
-    
-    func collectionIsEmpty() {
-        movieDescription.snp.makeConstraints { make in
-            make.left.equalTo(self.snp.left).offset(15)
-            make.right.equalTo(self.snp.right).offset(-15)
-            make.top.equalTo(self.movieRating.snp.bottom).offset(5)
-            make.bottom.equalTo(viewAux.snp.bottom).offset(-30)
-        }
         self.setScrollView()
     }
 }

@@ -50,7 +50,7 @@ class UpcomingViewCell: UITableViewCell {
     private lazy var movieDescription: UILabel = {
         let lbl = UILabel()
          lbl.textColor = .lightText
-        lbl.font = UIFont(name: HomeConstats.Fonts.avenirBook, size: 18)
+        lbl.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 18)
          lbl.numberOfLines = 0
          return lbl
     }()
@@ -91,11 +91,10 @@ extension UpcomingViewCell: BuildViewConfiguration {
     func buildViewHierarchy() {
         self.addSubview(container)
         container.addSubview(movieBackground)
-        container.addSubview(detailsContainer)
-        detailsContainer.addSubview(movieTitle)
-        detailsContainer.addSubview(releaseDate)
-        detailsContainer.addSubview(movieDescription)
-        detailsContainer.addSubview(genre)
+        container.addSubview(movieTitle)
+        container.addSubview(releaseDate)
+        container.addSubview(movieDescription)
+        container.addSubview(genre)
     }
     
     func makeConstraints() {
@@ -109,28 +108,24 @@ extension UpcomingViewCell: BuildViewConfiguration {
             make.height.equalTo(250)
         }
         
-        detailsContainer.snp.makeConstraints { make in
-            make.top.equalTo(movieBackground.snp.bottom)
-            make.left.right.bottom.equalToSuperview()
-        }
         movieTitle.snp.makeConstraints { make in
-            make.left.equalTo(detailsContainer.snp.left).offset(15)
+            make.left.equalTo(container.snp.left).offset(15)
             make.top.equalTo(movieBackground.snp.bottom).offset(5)
-            make.right.equalTo(detailsContainer.snp.right).offset(-15)
+            make.right.equalTo(container.snp.right).offset(-15)
         }
         
         releaseDate.snp.makeConstraints { make in
-            make.left.equalTo(detailsContainer.snp.left).offset(15)
+            make.left.equalTo(container.snp.left).offset(15)
             make.top.equalTo(movieTitle.snp.bottom).offset(15)
-            make.right.equalTo(detailsContainer.snp.right).offset(-15)
+            make.right.equalTo(container.snp.right).offset(-15)
 
         }
         
         movieDescription.snp.makeConstraints { make in
-            make.left.equalTo(detailsContainer.snp.left).offset(15)
+            make.left.equalTo(container.snp.left).offset(15)
             make.top.equalTo(releaseDate.snp.bottom).offset(5)
-            make.right.equalTo(detailsContainer.snp.right).offset(-15)
-            make.bottom.equalTo(detailsContainer.snp.bottom).offset(-5)
+            make.right.equalTo(container.snp.right).offset(-15)
+            make.bottom.equalTo(container.snp.bottom).offset(-5)
         }
         
 //        genre.snp.makeConstraints { make in

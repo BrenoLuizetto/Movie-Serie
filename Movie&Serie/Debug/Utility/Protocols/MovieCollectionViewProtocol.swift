@@ -26,11 +26,10 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
     }
     
     func finishLoad() {
-        self.controller.view.removeLoader()
+        self.controller.view.removeHUD()
     }
     
     func didSelectItem(movie: MovieViewData) {
-        self.controller.view.showLoader()
         let viewModel = MovieDetailsViewModel(movie, with: self)
         let vc = MovieModalViewController(viewModel: viewModel)
         let detailsTransitioningDelegate = InteractiveModalTransitioningDelegate(from: self.controller, to: vc)
@@ -38,7 +37,6 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
         vc.transitioningDelegate = detailsTransitioningDelegate
         vc.definesPresentationContext = true
         self.hiddenTabBar(hidden: true, animated: true)
-        self.controller.view.removeLoader()
         self.controller.present(vc, animated: true, completion: nil)
     }
     

@@ -123,17 +123,18 @@ extension SearchView: UISearchBarDelegate {
         
         if searchText != "" {
             let formattedString = searchText.replacingOccurrences(of: " ", with: "", options: .regularExpression)
-            MBProgressHUD.showAdded(to: self, animated: true)
-            self.viewModel?.getSearchMovies(query: formattedString, callback: { movies, erro  in
+            showHUD()
+            self.viewModel?.getSearchMovies(query: formattedString, callback: { [weak self] (movies, erro) in
+                guard let self = self else {return}
                 if let moviesArray = movies {
                     self.errorView.isHidden = true
                     self.searchCollection.movie = moviesArray
                     self.searchCollection.reloadMovies()
-                    MBProgressHUD.hide(for: self, animated: true)
+                    self.removeHUD()
                 } else {
                     self.searchCollection.movie = []
                     self.searchCollection.reloadMovies()
-                    MBProgressHUD.hide(for: self, animated: true)
+                    self.removeHUD()
                 }
             })
         } else {

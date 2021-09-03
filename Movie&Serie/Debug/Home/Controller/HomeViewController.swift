@@ -28,7 +28,7 @@ class HomeViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        MBProgressHUD.showAdded(to: self.view!, animated: true)
+        self.view.showHUD()
         self.tableView = viewModel.tableView
         configNavBar()
          getTypes()
@@ -61,7 +61,7 @@ extension HomeViewController {
             if let result = parameters {
                 self.tableView?.buildCell(cellType: .AllMovies, result, viewModel: self.viewModel, delegate: MovieCollectionAction(controller: self), {
                     self.buildTableView()
-                    MBProgressHUD.hide(for: self.view, animated: true)
+                    self.view.removeHUD()
                 })
             } else {
                 self.showErrorView()
@@ -76,7 +76,7 @@ extension HomeViewController {
         })
         self.view.removeConstraints(self.view.constraints)
         self.buildErrorView()
-        MBProgressHUD.hide(for: self.view, animated: true)
+        self.view.removeHUD()
     }
 
 }
