@@ -37,6 +37,7 @@ class LoginViewController: BaseViewController {
         
         self.loginView?.didTapRegister = {
             self.navigationController?.pushViewController(RegisterViewController(), animated: true)
+            self.loginView?.removeHUD()
         }
     }    
 }

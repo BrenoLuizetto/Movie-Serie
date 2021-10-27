@@ -45,16 +45,20 @@ class InputView: UIView {
         case .user:
             self.inputTextField.attributedPlaceholder = NSAttributedString(string: "Email",
                                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+            self.inputTextField.keyboardType = .emailAddress
             self.inputTextField.textContentType = .emailAddress
         case .pass:
             self.inputTextField.attributedPlaceholder = NSAttributedString(string: "Senha",
                                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             self.inputTextField.textContentType = .password
+            self.inputTextField.isSecureTextEntry = true
         
         case .confirmPass:
             self.inputTextField.attributedPlaceholder = NSAttributedString(string: "Confirmar senha",
                                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             self.inputTextField.textContentType = .password
+            self.inputTextField.isSecureTextEntry = true
+
         }
     }
     

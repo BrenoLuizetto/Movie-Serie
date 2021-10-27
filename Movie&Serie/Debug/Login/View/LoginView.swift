@@ -157,6 +157,7 @@ class LoginView: UIView {
     
     @objc
     private func register() {
+        self.showHUD()
         didTapRegister?()
     }
 }
