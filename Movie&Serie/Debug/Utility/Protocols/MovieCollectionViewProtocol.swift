@@ -41,13 +41,13 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
     }
     
     func hiddenTabBar(hidden: Bool, animated: Bool) {
-        let tabBar = self.controller.tabBarController?.tabBar
-        let offset = (hidden ? UIScreen.main.bounds.size.height : UIScreen.main.bounds.size.height - (tabBar?.frame.size.height)! )
-        if offset == tabBar?.frame.origin.y {return}
-        let duration:TimeInterval = (animated ? 0.5 : 0.0)
-        UIView.animate(withDuration: duration,
-                       animations: {tabBar!.frame.origin.y = offset},
-                       completion:nil)
+//        let tabBar = self.controller.tabBarController?.tabBar
+//        let offset = (hidden ? UIScreen.main.bounds.size.height : UIScreen.main.bounds.size.height - (tabBar?.frame.size.height)! )
+//        if offset == tabBar?.frame.origin.y {return}
+//        let duration:TimeInterval = (animated ? 0.5 : 0.0)
+//        UIView.animate(withDuration: duration,
+//                       animations: {tabBar!.frame.origin.y = offset},
+//                       completion:nil)
     }
     
     

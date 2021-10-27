@@ -18,15 +18,12 @@ class TabBarController: UITabBarController {
     
     func buildView() {
         let homeVC = configNavBar(HomeViewController())
-        homeVC.navigationBar.barStyle = UIBarStyle.black
-        homeVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        homeVC.navigationBar.tintColor = .white
         homeVC.tabBarItem.image = UIImage(systemName: "house.fill")
         homeVC.tabBarItem.title = "Inicio"
         
         let inComingVC = configNavBar(InComingViewController())
         inComingVC.tabBarItem.image = UIImage(systemName: "plus.rectangle.on.rectangle.fill")
-        inComingVC.tabBarItem.title = "Em Breve"
+        inComingVC.tabBarItem.title = "Lançamentos"
         
         viewControllers = [homeVC, inComingVC]
         guard let items = tabBar.items else {return }

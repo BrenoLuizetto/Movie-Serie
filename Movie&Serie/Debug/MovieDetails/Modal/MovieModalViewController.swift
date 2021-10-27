@@ -34,7 +34,7 @@ class MovieModalViewController: UIViewController {
     override func viewDidLoad() {
         self.DetailsView.buildInfo(viewModel, controller: self)
         
-        buildItems()
+        buildItens()
         let Viewtap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.view.addGestureRecognizer(Viewtap)
         

@@ -25,7 +25,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
     }()
     
     func setup() {
-        buildItems()
+        buildItens()
     }
     
 }

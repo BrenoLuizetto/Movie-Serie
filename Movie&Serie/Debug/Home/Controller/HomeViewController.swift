@@ -9,8 +9,9 @@ import Foundation
 import UIKit
 import SnapKit
 import MBProgressHUD
+import FirebaseAuth
 
-class HomeViewController: UIViewController {
+class HomeViewController: BaseViewController {
     
     private var tableView: HomeTableView?
     private var errorView: ErrorView?
@@ -26,12 +27,15 @@ class HomeViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    override func viewWillAppear(_ animated: Bool) {
+      
+    }
     
     override func viewDidLoad() {
         self.view.showHUD()
         self.tableView = viewModel.tableView
         configNavBar()
-         getTypes()
+        getTypes()
     }
 }
 

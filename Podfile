@@ -11,5 +11,9 @@ target 'Movie&Serie' do
   pod 'Alamofire', '~> 5.2'
   pod 'AlamofireImage', '~> 4.1'
   pod 'MBProgressHUD'
-
+  pod 'youtube-ios-player-helper'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  pod 'Gifu'
+  pod 'KeychainSwift', '~> 19.0'
 end

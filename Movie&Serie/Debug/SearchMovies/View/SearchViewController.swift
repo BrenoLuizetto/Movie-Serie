@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: BaseViewController {
     
     private let viewModel = SearchViewModel()
     
@@ -24,7 +24,7 @@ extension SearchViewController {
         self.navigationController?.isNavigationBarHidden = false
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: HomeConstats.labels.back, style: .plain, target: self, action: #selector(backAction(sender:)))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: MovieConstants.labels.back, style: .plain, target: self, action: #selector(backAction(sender:)))
         
     }
     

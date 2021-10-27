@@ -10,6 +10,12 @@ import UIKit
 import SnapKit
 import MBProgressHUD
 
+enum ContentState {
+    case empty
+    case search
+    case popMovies
+}
+
 class SearchView: UIView {
     
     private lazy var container: UIView = {
@@ -30,6 +36,11 @@ class SearchView: UIView {
         return search
     }()
     
+    private lazy var contentView: UIView = {
+        let view = UIView(frame: .zero)
+        return view
+    }()
+    
     private lazy var layout: UICollectionViewFlowLayout = {
        let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: CGFloat(150), height: CGFloat(280))
@@ -38,27 +49,22 @@ class SearchView: UIView {
         return layout
     }()
     
-    private lazy var errorView: UIView = {
-        let view = ErrorView {
-            
-        }
-        return view
-    }()
+    private lazy var emptyView = EmptyView()
     
     lazy var searchCollection = MovieCollectionView(frame: CGRect(), collectionViewLayout: layout)
     
     private var viewModel: SearchViewModel?
     weak var delegate: MovieCollectionProtocol?
+    var currentState: ContentState = .popMovies
     
     init(viewModel: SearchViewModel, delegate: MovieCollectionProtocol) {
         self.viewModel = viewModel
         self.delegate = delegate
         super.init(frame: .zero)
-        
+        self.showHUD()
         searchCollection.registerCell()
         searchCollection.collectionProtocol = delegate
-        errorView.isHidden = true
-        buildItems()
+        self.setContetState(state: .popMovies)
     }
 
     required init?(coder: NSCoder) {
@@ -67,15 +73,11 @@ class SearchView: UIView {
     
 }
 
-
-
 extension SearchView: BuildViewConfiguration {
     func buildViewHierarchy() {
         self.addSubview(container)
         container.addSubview(searchBar)
-        container.addSubview(searchCollection)
-        container.addSubview(errorView)
-
+        container.addSubview(contentView)
     }
     
     func makeConstraints() {
@@ -91,16 +93,9 @@ extension SearchView: BuildViewConfiguration {
             make.height.equalTo(50)
         }
         
-        searchCollection.snp.makeConstraints { make in
+        contentView.snp.makeConstraints { make in
             make.left.equalTo(container.snp.left).offset(30)
             make.right.equalTo(container.snp.right).offset(-30)
-            make.top.equalTo(searchBar.snp.bottom).offset(5)
-            make.bottom.equalTo(container.snp.bottom).offset(-15)
-        }
-        
-        errorView.snp.makeConstraints { make in
-            make.left.equalTo(container.snp.left).offset(15)
-            make.right.equalTo(container.snp.right).offset(-15)
             make.top.equalTo(searchBar.snp.bottom).offset(5)
             make.bottom.equalTo(container.snp.bottom).offset(-15)
         }
@@ -110,8 +105,6 @@ extension SearchView: BuildViewConfiguration {
     func configElements() {
         searchCollection.collectionProtocol = delegate
     }
-    
-    
 }
 
 extension SearchView: UISearchBarDelegate {
@@ -124,22 +117,64 @@ extension SearchView: UISearchBarDelegate {
         if searchText != "" {
             let formattedString = searchText.replacingOccurrences(of: " ", with: "", options: .regularExpression)
             showHUD()
-            self.viewModel?.getSearchMovies(query: formattedString, callback: { [weak self] (movies, erro) in
-                guard let self = self else {return}
-                if let moviesArray = movies {
-                    self.errorView.isHidden = true
-                    self.searchCollection.movie = moviesArray
+            self.viewModel?.movieData = []
+            self.viewModel?.getSearchMovies(query: formattedString, callback: {(movies, erro) in
+                if let moviesArray = movies, !moviesArray.isEmpty {
+                    self.searchCollection.setup(movie: moviesArray,
+                                                collectionType: .searchMovies,
+                                                viewModel: nil)
                     self.searchCollection.reloadMovies()
-                    self.removeHUD()
+
+                    self.setContetState(state: .search)
                 } else {
-                    self.searchCollection.movie = []
-                    self.searchCollection.reloadMovies()
-                    self.removeHUD()
+                    self.setContetState(state: .empty)
                 }
             })
         } else {
+            self.setContetState(state: .popMovies)
+        }
+    }
+}
+
+extension SearchView {
+    func setContetState(state: ContentState) {
+        
+        switch state {
+        case .empty:
+            if self.currentState != .empty {
+                self.currentState = state
+                self.searchCollection.setup(movie: [],
+                                            collectionType: .searchMovies,
+                                            viewModel: nil)
+                self.searchCollection.reloadMovies()
+                self.contentView = self.emptyView
+                self.buildItens()
+            }
+            self.removeHUD()
+
+   
+        case .search:
+            if self.currentState != .search {
+                self.currentState = state
+                self.contentView = self.searchCollection
+                self.buildItens()
+            }
+            self.removeHUD()
+
+        case .popMovies:
             self.searchCollection.movie = []
-            self.searchCollection.reloadMovies()
+            self.viewModel?.getPopularMovies(callback: { result, error in
+                if let movie = result {
+                    self.searchCollection.setup(movie: movie,
+                                                collectionType: .searchMovies,
+                                                viewModel: nil)
+                    self.searchCollection.reloadMovies()
+                    self.contentView = self.searchCollection
+                    self.buildItens()
+                    self.removeHUD()
+                }
+            })
+            break
         }
     }
 }

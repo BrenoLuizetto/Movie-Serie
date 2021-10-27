@@ -30,10 +30,6 @@ class MovieCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
             if let movies = movie {
                 self.movie = movies
                 self.itemsInSection = Int(movies.count * 5000)
-                let midIndexPath = IndexPath(row: Int(itemsInSection) / 2, section: 0)
-                  self.scrollToItem(at: midIndexPath,
-                                                   at: .centeredHorizontally,
-                                             animated: false)
             }
             self.reloadData()
         case .recommendation:
@@ -45,13 +41,16 @@ class MovieCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
             }
             break
         case .searchMovies:
-            break
+            guard let movies = movie else { return }
+            self.movie = movies
+            self.reloadMovies()
         }
         
     }
     
     func registerCell() {
-        self.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeConstats.cellIdentifier.movieCollection)
+        self.backgroundColor = .black
+        self.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: MovieConstants.cellIdentifier.movieCollection)
         self.delegate = self
         self.dataSource = self
     }
@@ -81,10 +80,10 @@ class MovieCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     
         
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeConstats.cellIdentifier.movieCollection, for: indexPath) as! HomeCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieConstants.cellIdentifier.movieCollection, for: indexPath) as! HomeCollectionViewCell
         let movies = movie[indexPath.row % movie.count]
         let moviePoster = movies.posterPath
-        let imageUrl = URL(string: "\(HomeConstats.url.imageOriginal)\(moviePoster)")
+        let imageUrl = URL(string: "\(MovieConstants.url.imageOriginal)\(moviePoster)")
         if let url = imageUrl {
             cell.moviePoster.af.setImage(withURL: url)
         }

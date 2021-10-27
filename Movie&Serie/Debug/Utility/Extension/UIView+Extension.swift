@@ -16,4 +16,10 @@ extension UIView {
     func removeHUD() {
         MBProgressHUD.hide(for: self, animated: true)
     }
+    
+    func removeAllViews() {
+        for view in subviews {
+            view.removeFromSuperview()
+        }
+    }
 }

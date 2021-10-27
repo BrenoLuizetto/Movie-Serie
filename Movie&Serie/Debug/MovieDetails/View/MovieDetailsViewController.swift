@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import MBProgressHUD
 
-class MovieDetailsViewController: UIViewController {
+class MovieDetailsViewController: BaseViewController {
     
     private var viewModel: MovieDetailsViewModel
     private var movieDetailsView: MovieDetailsView?
@@ -47,21 +47,6 @@ extension MovieDetailsViewController {
     private func configNavBar() {
         self.navigationController?.isNavigationBarHidden = false
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Voltar", style: .plain, target: self, action: #selector(backAction(sender:)))
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addFavorite(sender:)))
-    }
-    
-    @objc
-    func addFavorite(sender: UIBarButtonItem) {
-//        MovieUserDefaults.set(movie: self.viewModel.movie)
-        let us = UserDefaults.standard
-        do {
-//            us.setObject(viewModel.movie, forKey: "favoriteMovies")
-            try us.setObject(viewModel.movie.originalTitle, forKey: "favoriteMovies")
-            print(try us.getObject(forKey: "favoriteMovies", castTo: String.self))
-        } catch {
-            print(error.localizedDescription)
-        }
     }
     
     @objc

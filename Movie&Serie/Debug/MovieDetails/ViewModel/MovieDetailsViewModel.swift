@@ -13,7 +13,7 @@ class MovieDetailsViewModel: MovieViewModel {
     let movie: MovieViewData
     var recommendationMovieData: Array<MovieViewData> = []
     weak var delegate: MovieCollectionProtocol?
-    private let service = MovieDetailsService()
+    private let service = MovieService()
     private var detailsData: DetailsViewData?
     
     init(_ movie: MovieViewData, with delegate: MovieCollectionProtocol) {
@@ -21,27 +21,25 @@ class MovieDetailsViewModel: MovieViewModel {
         self.delegate = delegate
     }
     
-    func getMovieDetails(_ callback: @escaping (DetailsViewData?) -> Void) {
-        if let type =  movie.mediaType {
-            service.getDetails(type: type, id: String(self.movie.id)) { result in
-                self.detailsData = DetailsViewData(model: result)
-                callback(self.detailsData)
-            }
-        }
-       callback(nil)
-    }
-    
     func getMovieBackground(callback: @escaping (URL) -> Void) {
         guard let backgroundPath = self.movie.backdropPath else {return}
-        if let imageUrl = URL(string: "\(HomeConstats.url.imageOriginal)\(backgroundPath)"){
+        if let imageUrl = URL(string: "\(MovieConstants.url.imageOriginal)\(backgroundPath)"){
             callback(imageUrl)
         }
     }
     
     func getMoviePoster(callback: @escaping (URL) -> Void) {
         let posterPath = self.movie.posterPath
-        if let imageUrl = URL(string: "\(HomeConstats.url.imageOriginal)\(posterPath)"){
+        if let imageUrl = URL(string: "\(MovieConstants.url.imageOriginal)\(posterPath)"){
             callback(imageUrl)
+        }
+    }
+    
+    func getTrailer(callback: @escaping (MovieTrailer) -> Void) {
+        guard let url = URL(string: "\(MovieConstants.url.movieHeader)\(movie.mediaType.rawValue)/\(movie.id)" + "/videos?\(MovieConstants.OPKeys().movieOPKey)\(MovieConstants.url.language)") else {return}
+        
+        service.getMovieTrailers(url) { result in
+            callback(result)
         }
     }
     
@@ -56,8 +54,10 @@ class MovieDetailsViewModel: MovieViewModel {
     
     func getRecommendationMovies(_ callback: @escaping (Array<MovieViewData>) -> Void) {
         let id = String(movie.id)
-        service.getrecommendationMovies(id) { recommendation in
-            if let recommendationList = recommendation.results {
+        guard let url = URL(string:"\(MovieConstants.url.movieHeader)\(movie.mediaType.rawValue)/\(id)/recommendations?" +
+                "\(MovieConstants.OPKeys().movieOPKey)\(MovieConstants.url.language)") else {return}
+        service.getMovie(url) { recommendation, error  in
+            if let recommendationList = recommendation?.results {
                 self.recommendationMovieData = []
                 for movies in recommendationList {
                         self.recommendationMovieData.append(MovieViewData(model: movies))
@@ -67,5 +67,51 @@ class MovieDetailsViewModel: MovieViewModel {
             callback(self.recommendationMovieData)
         }
     }
-
+    
+    func addFavorite(with callback: @escaping () -> Void) {
+        let us = UserDefaults.standard
+        do {
+            do {
+                var movieArray = try us.getObject(forKey: MovieConstants.userDefaults.favoriteMovies, castTo: Array<MovieViewData>.self)
+                if !validateUserDefault(movieArray: movieArray) {
+                    movieArray.append(self.movie)
+                    try us.setObject(movieArray, forKey: MovieConstants.userDefaults.favoriteMovies)
+                    callback()
+                } else {
+                    movieArray.removeAll(where: {$0.id == movie.id})
+                    try? us.setObject(movieArray, forKey: MovieConstants.userDefaults.favoriteMovies)
+                    callback()
+                }
+            } catch {
+                let movieArray = [self.movie]
+                try us.setObject(movieArray, forKey: MovieConstants.userDefaults.favoriteMovies)
+                callback()
+            }
+        } catch {
+            print(error.localizedDescription)
+            callback()
+        }
+    }
+    
+    private func validateUserDefault(movieArray: [MovieViewData]) -> Bool {
+        let hasMovie = movieArray.contains(where: {
+             $0.id == movie.id
+        })
+        
+        return hasMovie
+    }
+    
+    func validateFavoriteList() -> Bool {
+        let us = UserDefaults.standard
+        do {
+            let movieArray =  try us.getObject(forKey: MovieConstants.userDefaults.favoriteMovies, castTo: Array<MovieViewData>.self)
+            if validateUserDefault(movieArray: movieArray) {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
+    }
 }

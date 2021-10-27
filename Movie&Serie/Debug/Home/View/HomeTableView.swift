@@ -103,7 +103,7 @@ extension HomeTableView: UITableViewDataSource, UITableViewDelegate {
             cell.isUserInteractionEnabled = false
             let data = upcomingMovieData[indexPath.row]
             if let backdropPath = data.backdropPath {
-                let imageUrl = URL(string: "\(HomeConstats.url.imageOriginal)\(backdropPath)")
+                let imageUrl = URL(string: "\(MovieConstants.url.imageOriginal)\(backdropPath)")
                 if let url = imageUrl {
                     cell.movieBackground.af.setImage(withURL: url)
                 }

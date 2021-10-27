@@ -19,7 +19,7 @@ class HomeTableViewCell: UITableViewCell {
     
     private lazy var title: UILabel = {
         let title = UILabel()
-        title.font = UIFont(name: HomeConstats.Fonts.kailassaBold, size: 20)
+        title.font = UIFont(name: MovieConstants.Fonts.kailassaBold, size: 20)
         title.textAlignment = .left
         title.textColor = .white
         return title
@@ -27,7 +27,7 @@ class HomeTableViewCell: UITableViewCell {
     
     private lazy var layout: UICollectionViewFlowLayout = {
        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: CGFloat(150), height: CGFloat(280))
+        layout.itemSize = CGSize(width: CGFloat(150), height: CGFloat(250))
         layout.scrollDirection = .horizontal
 
         return layout
@@ -38,7 +38,7 @@ class HomeTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = UITableViewCell.SelectionStyle.none
-        buildItems()
+        buildItens()
     }
     
     required init?(coder: NSCoder) {
@@ -53,7 +53,7 @@ class HomeTableViewCell: UITableViewCell {
         
         self.title.text = sectionTitle
         self.backgroundColor = .black
-        buildItems()
+        buildItens()
         
     }    
 }
@@ -76,9 +76,8 @@ extension HomeTableViewCell : BuildViewConfiguration {
         }
         
         movieCollection.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
             make.top.equalTo(self.title.snp.bottom).offset(5)
-            make.bottom.equalTo(self.snp.bottom)
         }
     }
     

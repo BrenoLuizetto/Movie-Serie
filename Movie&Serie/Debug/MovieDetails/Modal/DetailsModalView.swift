@@ -29,7 +29,7 @@ class DetailsModalView: UIView {
         let label = UILabel()
         label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 2
-        label.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 20)
+        label.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 20)
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .white
         return label
@@ -39,7 +39,7 @@ class DetailsModalView: UIView {
         let label = UILabel()
         label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 5
-        label.font = UIFont(name: HomeConstats.Fonts.avenirBook, size: 15)
+        label.font = UIFont(name: MovieConstants.Fonts.avenirBook, size: 15)
         label.textColor = .white
         return label
     }()
@@ -55,7 +55,7 @@ class DetailsModalView: UIView {
         button.backgroundColor = UIColor(rgb: 0x4A4A4A)
         button.setTitle("Mais Informações", for: .normal )
         button.setTitle("Carregando...", for: .selected)
-        button.titleLabel?.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 18)
+        button.titleLabel?.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
         button.layer.cornerRadius = 5
         button.layer.masksToBounds = true
         return button
@@ -68,7 +68,7 @@ class DetailsModalView: UIView {
         self.viewModel = viewModel
         self.controller = controller
         setValues()
-        buildItems()
+        buildItens()
     }
     
     @objc func didTapMoreInformation(sender: UIButton!) {
@@ -84,9 +84,15 @@ class DetailsModalView: UIView {
     }
     
     private func setValues() {
-        self.movieTitle.text = self.viewModel?.movie.title
-        self.movieDescription.text = self.viewModel?.movie.overview
-        self.releaseDate.text = self.viewModel?.movie.releaseDate
+        guard let movie = viewModel?.movie else {return}
+        
+        self.movieTitle.text = movie.title
+        self.movieDescription.text = movie.overview
+        if movie.releaseDate.isEmpty {
+            self.releaseDate.isHidden = true
+        } else {
+            self.releaseDate.text = movie.releaseDate
+        }
         if self.releaseDate.text?.count ?? 0 > 4 {
             self.releaseDate.text?.removeLast(6)
         }
@@ -127,12 +133,11 @@ extension DetailsModalView: BuildViewConfiguration {
             make.left.equalTo(self.moviePoster.snp.right).offset(15)
             make.top.equalTo(self.movieTitle.snp.bottom)
             make.right.equalTo(self.buttonClose.snp.left).offset(10)
-            make.bottom.equalTo(self.releaseDate.snp.top).offset(-20)
         }
         
         releaseDate.snp.makeConstraints { make in
             make.left.equalTo(self.moviePoster.snp.right).offset(15)
-            make.top.equalTo(self.movieDescription.snp.bottom)
+            make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
             make.bottom.equalTo(moreInformation.snp.bottom).offset(-90)
             make.height.equalTo(20)
             make.width.equalTo(50)

@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import youtube_ios_player_helper
 
 class MovieDetailsView: UIView, UIScrollViewDelegate {
     
@@ -23,9 +24,22 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         return view
     }()
     
-    private lazy var viewAux: UIView = {
+    private lazy var mainContainer: UIView = {
         let view = UIView()
         return view
+    }()
+    
+    private lazy var detailsContainer: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
+    private lazy var movieTrailer: YTPlayerView = {
+        let movieTrailer = YTPlayerView()
+        movieTrailer.contentMode = .scaleAspectFit
+        movieTrailer.layer.cornerRadius = 5
+        movieTrailer.layer.masksToBounds = true
+        return movieTrailer
     }()
     
     private lazy var backgroundMovie: UIImageView = {
@@ -38,7 +52,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     
     private lazy var movieRating: UILabel = {
         let lbl = UILabel()
-        lbl.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 18)
+        lbl.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
         lbl.textColor = UIColor(rgb: 0x08CA49)
         return lbl
     }()
@@ -52,7 +66,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     private lazy var movieTitle: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = UIFont(name: HomeConstats.Fonts.avenirHeavy, size: 30)
+        label.font = UIFont(name: MovieConstants.Fonts.avenirHeavy, size: 30)
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .white
         label.numberOfLines = 0
@@ -61,7 +75,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     
     private lazy var movieDescription: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 18)
+        label.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
         label.textColor = .white
         label.numberOfLines = 0
         label.fitTextToBounds()
@@ -70,9 +84,48 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     
     private lazy var releaseDate: UILabel = {
         let lbl = UILabel()
-        lbl.font = UIFont(name: HomeConstats.Fonts.avenirMedium, size: 18)
+        lbl.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
         lbl.textColor = .white
         lbl.textAlignment = .left
+        return lbl
+    }()
+    
+    private lazy var favoriteButton: UIButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "plus"), for: .normal)
+        btn.setTitle("Minha Lista", for: .normal)
+        btn.backgroundColor = .clear
+        btn.imageView?.tintColor = .white
+        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 60, bottom: 10, right: 0)
+        btn.titleEdgeInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0.0, right: 0)
+        btn.addTarget(self, action: #selector(addFavorite(sender:)), for: .touchUpInside)
+        return btn
+    }()
+    
+    private lazy var playButton: UIButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "play"), for: .normal)
+        btn.setTitle("Assistir", for: .normal)
+        btn.backgroundColor = .clear
+        btn.imageView?.tintColor = .white
+        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 60, bottom: 10, right: 0)
+        btn.titleEdgeInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0.0, right: 0)
+        return btn
+    }()
+    
+    private lazy var separator: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        return view
+    }()
+    
+    private lazy var recommendationTitle: UILabel = {
+       let lbl = UILabel()
+        lbl.text = "Recomendações"
+        lbl.font = UIFont(name: MovieConstants.Fonts.avenirHeavy, size: 18)
+        lbl.textColor = .white
+        lbl.textAlignment = .left
+        
         return lbl
     }()
     
@@ -94,28 +147,56 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         self.delegate = delegate
         
         super.init(frame: CGRect())
-        self.recommendationCollection.registerCell()
-        self.recommendationCollection.collectionProtocol = self.delegate
-        self.recommendationCollection.detailsProtocol = self
-        self.recommendationCollection.setup(movie: nil, collectionType: .recommendation, viewModel: viewModel)
-        buildItems()
-        scrollView.isScrollEnabled = true
-        setItems()
-        
+        setItens()
    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setItems() {
-        self.viewModel.getMovieBackground(callback: { result in
-            self.backgroundMovie.af.setImage(withURL: result)
-        })
+    private func configRecommendationCollection() {
+        self.recommendationCollection.registerCell()
+        self.recommendationCollection.collectionProtocol = self.delegate
+        self.recommendationCollection.detailsProtocol = self
+        self.recommendationCollection.setup(movie: nil, collectionType: .recommendation, viewModel: viewModel)
+    }
+    func getTrailer() {
+        self.viewModel.getTrailer { [weak self] result in
+            guard let self = self else {return}
+            if let trailer = result.results.first {
+                self.movieTrailer.load(withVideoId: trailer.key)
+                self.movieTrailer.playVideo()
+                
+                self.movieTrailer.removeHUD()
+                self.backgroundMovie.removeHUD()
+            } else {
+                self.viewModel.getMovieBackground(callback: { result in
+                    self.buildEmptyTrailer()
+                    self.backgroundMovie.af.setImage(withURL: result)
+                    self.movieTrailer.removeHUD()
+                    self.backgroundMovie.removeHUD()
+                })
+                
+            }
+        }
+    }
+    
+    func setItens() {
+        self.backgroundMovie.showHUD()
+        self.movieTrailer.showHUD()
+        configRecommendationCollection()
+        buildItens()
+        verifyFavoriteList()
+        getTrailer()
+        verifyCollectionItens()
+        getValues()
+    }
+    
+    private func getValues() {
         self.movieTitle.text = self.viewModel.movie.title
         let movieRating = Int(self.viewModel.movie.voteAverage * 10)
         if movieRating == 0 {
-            self.movieRating.text = HomeConstats.labels.inComing
+            self.movieRating.text = MovieConstants.labels.inComing
         } else {
             self.movieRating.text = String("\(movieRating)% relevante")
         }
@@ -126,42 +207,85 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         }
     }
     
-    func setScrollView() {
-        self.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        self.scrollView.contentSize = (CGSize(width: UIScreen.main.bounds.width,
-                                              height: self.recommendationCollection.contentSize.height +
-                                                self.movieTitle.bounds.height +
-                                                self.releaseDate.bounds.height +
-                                                self.movieDescription.bounds.height))
-        self.scrollView.isScrollEnabled = true
-        self.scrollView.alwaysBounceVertical = true
-        self.scrollView.isUserInteractionEnabled = true
+    private func verifyCollectionItens() {
+        if recommendationCollection.movie.isEmpty {
+            self.separator.isHidden = true
+            self.recommendationTitle.isHidden = true
+        } else {
+            self.separator.isHidden = false
+            self.recommendationTitle.isHidden = false
+        }
     }
-}
-
-extension MovieDetailsView: BuildViewConfiguration {
-    func makeConstraints() {
+    
+    private func buildEmptyTrailer() {
+        movieTrailer.isHidden = true
+        
+        self.addSubview(backgroundMovie)
         backgroundMovie.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(80)
             make.left.right.equalToSuperview()
             make.height.equalTo(250)
         }
+    }
+    
+    func setScrollView() {
+        self.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        self.scrollView.contentSize = (CGSize(width: UIScreen.main.bounds.width,
+                                              height: self.recommendationCollection.contentSize.height +
+                                                self.detailsContainer.bounds.height))
+        self.scrollView.isScrollEnabled = true
+        self.scrollView.alwaysBounceVertical = true
+        self.scrollView.isUserInteractionEnabled = true
+        verifyCollectionItens()
+    }
+    
+    private func verifyFavoriteList() {
+        if viewModel.validateFavoriteList() {
+            self.favoriteButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        } else {
+            self.favoriteButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        }
+    }
+    
+    @objc
+    private func addFavorite(sender: UIBarButtonItem) {
+        self.viewModel.addFavorite {
+            self.verifyFavoriteList()
+        }
+    }
+}
+
+extension MovieDetailsView: BuildViewConfiguration {
+    func makeConstraints() {
+        movieTrailer.snp.makeConstraints { make in
+            make.top.equalTo(self.snp.top).offset(80)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(250)
+        }
         
-        viewAux.snp.makeConstraints { make in
+        mainContainer.snp.makeConstraints { make in
             make.left.equalTo(self.snp.left)
             make.right.equalTo(self.snp.right)
-            make.top.equalTo(self.backgroundMovie.snp.bottom)
+            make.top.equalTo(self.movieTrailer.snp.bottom)
             make.bottom.equalTo(self.snp.bottom)
             
         }
         
         scrollView.snp.makeConstraints { make in
-            make.left.right.top.equalTo(self.viewAux)
+            make.left.right.top.equalTo(self.mainContainer)
             make.bottom.equalTo(self)
+        }
+        
+        detailsContainer.snp.makeConstraints { make in
+            make.left.equalTo(self.snp.left)
+            make.right.equalTo(self.snp.right)
+            make.top.equalTo(self.scrollView.snp.top)
+            make.bottom.equalTo(self.recommendationCollection.snp.top)
+            
         }
 
         movieTitle.snp.makeConstraints { make in
-            make.top.equalTo(self.scrollView.snp.top).offset(5)
+            make.top.equalTo(self.detailsContainer.snp.top).offset(5)
             make.left.equalTo(self.snp.left).offset(15)
             make.right.equalTo(self.snp.right).offset(-15)
         }
@@ -182,26 +306,57 @@ extension MovieDetailsView: BuildViewConfiguration {
             make.left.equalTo(self.snp.left).offset(15)
             make.right.equalTo(self.snp.right).offset(-15)
             make.top.equalTo(self.movieRating.snp.bottom).offset(5)
-            make.bottom.equalTo(recommendationCollection.snp.top).offset(-15)
+        }
+        
+        favoriteButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview().offset(-90)
+            make.width.equalTo(120)
+            make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
+        }
+        
+        playButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview().offset(75)
+            make.width.equalTo(120)
+            make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
+        }
+
+        
+        separator.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.right.equalTo(self.detailsContainer.snp.right).offset(-16)
+            make.top.equalTo(favoriteButton.snp.bottom).offset(40)
+            make.height.equalTo(1)
+        }
+        
+        recommendationTitle.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
+            make.top.equalTo(separator.snp.bottom).offset(10)
+            make.bottom.equalTo(detailsContainer.snp.bottom).offset(-5)
         }
         
         recommendationCollection.snp.makeConstraints { make in
             make.left.equalTo(self.snp.left).offset(30)
             make.right.equalTo(self.snp.right).offset(-30)
-//            make.top.equalTo(self.movieDescription.snp.bottom).offset(5)
-            make.bottom.equalTo(self.viewAux.snp.bottom).offset(-15)
+            make.bottom.equalTo(self.mainContainer.snp.bottom).offset(-15)
         }
         
     }
     
     func buildViewHierarchy() {
-        self.addSubview(backgroundMovie)
-        self.addSubview(viewAux)
-        viewAux.addSubview(scrollView)
-        self.scrollView.addSubview(movieTitle)
-        self.scrollView.addSubview(movieRating)
-        self.scrollView.addSubview(releaseDate)
-        self.scrollView.addSubview(movieDescription)
+        self.addSubview(movieTrailer)
+        self.addSubview(mainContainer)
+        mainContainer.addSubview(scrollView)
+        scrollView.addSubview(detailsContainer)
+        self.detailsContainer.addSubview(movieTitle)
+        self.detailsContainer.addSubview(movieRating)
+        self.detailsContainer.addSubview(releaseDate)
+        self.detailsContainer.addSubview(movieDescription)
+        self.detailsContainer.addSubview(favoriteButton)
+        self.detailsContainer.addSubview(playButton)
+        self.detailsContainer.addSubview(separator)
+        self.scrollView.addSubview(recommendationTitle
+        )
         self.scrollView.addSubview(recommendationCollection)
     }
     

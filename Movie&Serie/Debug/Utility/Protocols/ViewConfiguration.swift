@@ -12,11 +12,11 @@ protocol BuildViewConfiguration: AnyObject {
     func buildViewHierarchy()
     func makeConstraints()
     func configElements()
-    func buildItems()
+    func buildItens()
 }
 
 extension BuildViewConfiguration {
-    func buildItems() {
+    func buildItens() {
         buildViewHierarchy()
         makeConstraints()
         configElements()

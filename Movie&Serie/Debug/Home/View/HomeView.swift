@@ -28,7 +28,7 @@ class HomeView: UIView {
     
     init() {
         super.init(frame: CGRect())
-        buildItems()
+        buildItens()
     }
     
     required init?(coder: NSCoder) {
