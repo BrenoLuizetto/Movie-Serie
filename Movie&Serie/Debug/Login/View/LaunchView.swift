@@ -32,7 +32,8 @@ class LaunchView: UIView {
     }
     
     func showGif() {
-        guard let url = URL(string:"https://media.giphy.com/media/ycfHiJV6WZnQDFjSWH/giphy.gif?cid=ecf05e47wgkkdawhwjtjws7dapk76gukdy1occh1tghm1gd7&rid=giphy.gif&ct=g") else { return }
+        guard let url = URL(string: "https://media.giphy.com/media/ycfHiJV6WZnQDFjSWH/giphy.gif?" +
+                            "cid=ecf05e47wgkkdawhwjtjws7dapk76gukdy1occh1tghm1gd7&rid=giphy.gif&ct=g") else { return }
         gif.animate(withGIFURL: url)
     }
 }

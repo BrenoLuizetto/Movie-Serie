@@ -19,7 +19,7 @@ class HomeTableViewCell: UITableViewCell {
     
     private lazy var title: UILabel = {
         let title = UILabel()
-        title.font = UIFont(name: MovieConstants.Fonts.kailassaBold, size: 20)
+        title.font = UIFont(name: Constants.Fonts.kailassaBold, size: 20)
         title.textAlignment = .left
         title.textColor = .white
         return title
@@ -45,7 +45,10 @@ class HomeTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func getProperties(sectionTitle: String, movie: Array<MovieViewData>, section: Int, delegate: MovieCollectionProtocol?) {
+    func getProperties(sectionTitle: String,
+                       movie: [MovieViewData],
+                       section: Int,
+                       delegate: MovieCollectionProtocol?) {
         movieCollection.tag = section
         movieCollection.registerCell()
         movieCollection.setup(movie: movie, collectionType: .homeMovies, viewModel: nil)
@@ -58,7 +61,7 @@ class HomeTableViewCell: UITableViewCell {
     }    
 }
 
-extension HomeTableViewCell : BuildViewConfiguration {
+extension HomeTableViewCell: BuildViewConfiguration {
     func buildViewHierarchy() {
         self.addSubview(self.title)
         self.addSubview(self.movieCollection)

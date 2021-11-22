@@ -48,7 +48,7 @@ extension HomeViewController {
         navigationController?.navigationBar.isTranslucent = true
         
         self.navigationController?.isNavigationBarHidden = false
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
                                                                  target: self,
@@ -63,7 +63,9 @@ extension HomeViewController {
     private func getTypes() {
         viewModel.parametersForCell { parameters in
             if let result = parameters {
-                self.tableView?.buildCell(cellType: .AllMovies, result, viewModel: self.viewModel, delegate: MovieCollectionAction(controller: self), {
+                self.tableView?.buildCell(cellType: .allmovies, result,
+                                          viewModel: self.viewModel,
+                                          delegate: MovieCollectionAction(controller: self), {
                     self.buildTableView()
                     self.view.removeHUD()
                 })
@@ -113,4 +115,3 @@ extension HomeViewController {
     }
 
 }
-

@@ -24,7 +24,9 @@ extension UILabel {
     func fitTextToBounds() {
             guard let text = text, let currentFont = font else { return }
         
-        let bestFittingFont = UIFont.bestFittingFont(for: text, in: bounds, fontDescriptor: currentFont.fontDescriptor, additionalAttributes: basicStringAttributes)
+        let bestFittingFont = UIFont.bestFittingFont(for: text, in: bounds,
+                                                        fontDescriptor: currentFont.fontDescriptor,
+                                                        additionalAttributes: basicStringAttributes)
             font = bestFittingFont
         }
         

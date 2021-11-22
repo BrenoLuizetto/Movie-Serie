@@ -41,7 +41,7 @@ class TabBarController: UITabBarController {
         nav.navigationBar.isTranslucent = true
         nav.navigationBar.tintColor = .white
         nav.isNavigationBarHidden = false
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         nav.navigationBar.titleTextAttributes = textAttributes
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
                                                                  target: self,
@@ -50,4 +50,3 @@ class TabBarController: UITabBarController {
     }
     
 }
-

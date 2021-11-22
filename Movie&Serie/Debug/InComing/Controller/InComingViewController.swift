@@ -21,10 +21,13 @@ class InComingViewController: BaseViewController {
     }
     
     func parametersForTable() {
-        let types: [MovieType] = [MovieType(typeMovie: MovieConstants.movieType.upcoming,
-                                            titleOfCell: MovieConstants.cellTitle.upcoming,
+        let types: [MovieType] = [MovieType(typeMovie: Constants.MovieType.upcoming,
+                                            titleOfCell: Constants.CellTitle.upcoming,
                                             genreType: nil)]
-        self.tableView.buildCell(cellType: .upcoming, types, viewModel: self.viewModel, delegate: MovieCollectionAction(controller: self)) {
+        self.tableView.buildCell(cellType: .upcoming,
+                                 types,
+                                 viewModel: self.viewModel,
+                                 delegate: MovieCollectionAction(controller: self)) {
 
         }
     }

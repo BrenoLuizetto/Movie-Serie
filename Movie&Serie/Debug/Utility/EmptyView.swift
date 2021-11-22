@@ -19,7 +19,7 @@ class EmptyView: UIView {
     
     private lazy var title: UILabel = {
         let lbl = UILabel(frame: .zero)
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirHeavy, size: 18)
+        lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 18)
         lbl.textColor = .white
         lbl.text = "Opss"
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -29,7 +29,7 @@ class EmptyView: UIView {
     
     private lazy var message: UILabel = {
         let lbl = UILabel(frame: .zero)
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirHeavy, size: 14)
+        lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 14)
         lbl.textColor = .white
         lbl.text = "Não encotramos nenhum resultado para sua pesquisa"
         lbl.translatesAutoresizingMaskIntoConstraints = false

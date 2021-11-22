@@ -20,7 +20,7 @@ class PreLoginViewController: BaseViewController {
     }
     
     private func saveUserDefault() {
-        try? UserDefaults.standard.setObject(true, forKey: MovieConstants.userDefaults.advertisingPreLogin)
+        try? UserDefaults.standard.setObject(true, forKey: Constants.UserDefaults.advertisingPreLogin)
     }
     
     private func bindContentView() {

@@ -169,6 +169,5 @@ extension DetailsViewData: DetailsViewDataType {
         let aux = model.voteCount
         return aux
     }
-    
-    
+        
 }

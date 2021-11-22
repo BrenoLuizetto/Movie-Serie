@@ -33,7 +33,4 @@ extension RegisterViewController: RegisterDelegate {
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
-    
 }
-
-

@@ -10,7 +10,7 @@ import FirebaseAuth
 
 final class RegisterViewModel {
     
-    var delegate: RegisterDelegate?
+    weak var delegate: RegisterDelegate?
     
     func registerUser(_ mail: String,
                       pass: String,
@@ -21,6 +21,8 @@ final class RegisterViewModel {
                 print(erro)
                 completion()
             } else {
+                print("@@@\(result?.user.displayName)")
+                print("@@@\(result?.user.email)")
                 self.delegate?.pushTo(TabBarController())
                 completion()
             }

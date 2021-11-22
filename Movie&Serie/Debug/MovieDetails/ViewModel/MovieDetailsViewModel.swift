@@ -23,20 +23,20 @@ class MovieDetailsViewModel: MovieViewModel {
     
     func getMovieBackground(callback: @escaping (URL) -> Void) {
         guard let backgroundPath = self.movie.backdropPath else {return}
-        if let imageUrl = URL(string: "\(MovieConstants.url.imageOriginal)\(backgroundPath)"){
+        if let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(backgroundPath)") {
             callback(imageUrl)
         }
     }
     
     func getMoviePoster(callback: @escaping (URL) -> Void) {
         let posterPath = self.movie.posterPath
-        if let imageUrl = URL(string: "\(MovieConstants.url.imageOriginal)\(posterPath)"){
+        if let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(posterPath)") {
             callback(imageUrl)
         }
     }
     
     func getTrailer(callback: @escaping (MovieTrailer) -> Void) {
-        guard let url = URL(string: "\(MovieConstants.url.movieHeader)\(movie.mediaType.rawValue)/\(movie.id)" + "/videos?\(MovieConstants.OPKeys().movieOPKey)\(MovieConstants.url.language)") else {return}
+        guard let url = URL(string: "\(Constants.Url.movieHeader)\(movie.mediaType.rawValue)/\(movie.id)" + "/videos?\(Constants.OPKeys().movieOPKey)\(Constants.Url.language)") else {return}
         
         service.getMovieTrailers(url) { result in
             callback(result)
@@ -52,10 +52,11 @@ class MovieDetailsViewModel: MovieViewModel {
         return blurredImage
       }
     
-    func getRecommendationMovies(_ callback: @escaping (Array<MovieViewData>) -> Void) {
+    func getRecommendationMovies(_ callback: @escaping ([MovieViewData]) -> Void) {
         let id = String(movie.id)
-        guard let url = URL(string:"\(MovieConstants.url.movieHeader)\(movie.mediaType.rawValue)/\(id)/recommendations?" +
-                "\(MovieConstants.OPKeys().movieOPKey)\(MovieConstants.url.language)") else {return}
+        guard let url = URL(string: "\(Constants.Url.movieHeader)\(movie.mediaType.rawValue)/" +
+                            "\(id)/recommendations?\(Constants.OPKeys().movieOPKey)" +
+                            "\(Constants.Url.language)") else {return}
         service.getMovie(url) { recommendation, error  in
             if let recommendationList = recommendation?.results {
                 self.recommendationMovieData = []
@@ -72,19 +73,20 @@ class MovieDetailsViewModel: MovieViewModel {
         let us = UserDefaults.standard
         do {
             do {
-                var movieArray = try us.getObject(forKey: MovieConstants.userDefaults.favoriteMovies, castTo: Array<MovieViewData>.self)
+                var movieArray = try us.getObject(forKey: Constants.UserDefaults.favoriteMovies,
+                                                  castTo: [MovieViewData].self)
                 if !validateUserDefault(movieArray: movieArray) {
                     movieArray.append(self.movie)
-                    try us.setObject(movieArray, forKey: MovieConstants.userDefaults.favoriteMovies)
+                    try us.setObject(movieArray, forKey: Constants.UserDefaults.favoriteMovies)
                     callback()
                 } else {
                     movieArray.removeAll(where: {$0.id == movie.id})
-                    try? us.setObject(movieArray, forKey: MovieConstants.userDefaults.favoriteMovies)
+                    try? us.setObject(movieArray, forKey: Constants.UserDefaults.favoriteMovies)
                     callback()
                 }
             } catch {
                 let movieArray = [self.movie]
-                try us.setObject(movieArray, forKey: MovieConstants.userDefaults.favoriteMovies)
+                try us.setObject(movieArray, forKey: Constants.UserDefaults.favoriteMovies)
                 callback()
             }
         } catch {
@@ -104,7 +106,8 @@ class MovieDetailsViewModel: MovieViewModel {
     func validateFavoriteList() -> Bool {
         let us = UserDefaults.standard
         do {
-            let movieArray =  try us.getObject(forKey: MovieConstants.userDefaults.favoriteMovies, castTo: Array<MovieViewData>.self)
+            let movieArray =  try us.getObject(forKey: Constants.UserDefaults.favoriteMovies,
+                                               castTo: [MovieViewData].self)
             if validateUserDefault(movieArray: movieArray) {
                 return true
             } else {

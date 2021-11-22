@@ -152,7 +152,6 @@ extension SearchView {
             }
             self.removeHUD()
 
-   
         case .search:
             if self.currentState != .search {
                 self.currentState = state
@@ -174,7 +173,6 @@ extension SearchView {
                     self.removeHUD()
                 }
             })
-            break
         }
     }
 }

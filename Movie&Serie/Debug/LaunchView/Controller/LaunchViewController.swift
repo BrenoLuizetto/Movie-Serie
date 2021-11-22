@@ -24,7 +24,7 @@ final class LaunchViewController: BaseViewController {
             if doLogin {
                 self.navigationController?.pushViewController(TabBarController(), animated: true)
             } else {
-                if let advertising = try? UserDefaults.standard.getObject(forKey: MovieConstants.userDefaults.advertisingPreLogin,
+                if let advertising = try? UserDefaults.standard.getObject(forKey: Constants.UserDefaults.advertisingPreLogin,
                                                                           castTo: Bool.self), advertising {
                     self.navigationController?.pushViewController(LoginViewController(), animated: true)
                 } else {

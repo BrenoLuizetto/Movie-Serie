@@ -28,34 +28,36 @@ class InputView: UIView {
     private lazy var errorLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "insira um email válido."
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirBook, size: 12)
+        lbl.font = UIFont(name: Constants.Fonts.avenirBook, size: 12)
         lbl.textColor = .red
         return lbl
     }()
     
-    private var type: inputType = .user
+    private var type: InputType = .user
     private var hasError = false
     
     var callback: ((_ isInput: Bool) -> Void)?
     
-    func setInputType(_ type: inputType) {
+    func setInputType(_ type: InputType) {
         buildItens()
         self.type = type
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.gray]
+        
         switch type {
         case .user:
             self.inputTextField.attributedPlaceholder = NSAttributedString(string: "Email",
-                                                                            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+                                                                            attributes: attributes)
             self.inputTextField.keyboardType = .emailAddress
             self.inputTextField.textContentType = .emailAddress
         case .pass:
             self.inputTextField.attributedPlaceholder = NSAttributedString(string: "Senha",
-                                                                            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+                                                                            attributes: attributes)
             self.inputTextField.textContentType = .password
             self.inputTextField.isSecureTextEntry = true
         
         case .confirmPass:
             self.inputTextField.attributedPlaceholder = NSAttributedString(string: "Confirmar senha",
-                                                                            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+                                                                            attributes: attributes)
             self.inputTextField.textContentType = .password
             self.inputTextField.isSecureTextEntry = true
 
@@ -99,9 +101,8 @@ extension InputView: BuildViewConfiguration {
     }
     
     func configElements() {
-        //not implemented
+        // Not implemented
     }
-    
     
 }
 
@@ -112,7 +113,7 @@ extension InputView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if self.type == .user {
-            let charSet = CharacterSet(["@","."])
+            let charSet = CharacterSet(["@", "."])
             if textField.text?.rangeOfCharacter(from: charSet) != nil {
                 self.hasError = false
                 self.removeAllViews()

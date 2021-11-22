@@ -34,7 +34,7 @@ class UpcomingViewCell: UITableViewCell {
     private lazy var movieTitle: UILabel = {
        let lbl = UILabel()
         lbl.textColor = .white
-        lbl.font = UIFont(name: MovieConstants.Fonts.kailassaBold, size: 30)
+        lbl.font = UIFont(name: Constants.Fonts.kailassaBold, size: 30)
         lbl.numberOfLines = 0
         return lbl
     }()
@@ -42,7 +42,7 @@ class UpcomingViewCell: UITableViewCell {
     private lazy var releaseDate: UILabel = {
         let lbl = UILabel()
          lbl.textColor = .white
-         lbl.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
+         lbl.font = UIFont(name: Constants.Fonts.avenirMedium, size: 18)
          lbl.numberOfLines = 0
          return lbl
     }()
@@ -50,7 +50,7 @@ class UpcomingViewCell: UITableViewCell {
     private lazy var movieDescription: UILabel = {
         let lbl = UILabel()
          lbl.textColor = .lightText
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
+        lbl.font = UIFont(name: Constants.Fonts.avenirMedium, size: 18)
          lbl.numberOfLines = 0
          return lbl
     }()
@@ -58,7 +58,7 @@ class UpcomingViewCell: UITableViewCell {
     private lazy var genre: UILabel = {
         let lbl = UILabel()
          lbl.textColor = .white
-         lbl.font = UIFont(name: MovieConstants.Fonts.kailassaBold, size: 18)
+         lbl.font = UIFont(name: Constants.Fonts.kailassaBold, size: 18)
          lbl.numberOfLines = 0
          return lbl
     }()
@@ -136,6 +136,6 @@ extension UpcomingViewCell: BuildViewConfiguration {
     }
     
     func configElements() {
-        //not implemented
+        // Not implemented
     }
 }

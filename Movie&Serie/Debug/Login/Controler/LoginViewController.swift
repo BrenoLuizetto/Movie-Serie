@@ -24,7 +24,7 @@ class LoginViewController: BaseViewController {
     
     func showLogin() {
         self.loginView?.didTapLogin = { userName, pass in
-            self.viewModel.ShowLogin(username: userName, pass: pass, { result in
+            self.viewModel.showLogin(username: userName, pass: pass, { result in
                 self.view.showHUD()
                 if result != nil {
                     self.loginView?.buildWithError()

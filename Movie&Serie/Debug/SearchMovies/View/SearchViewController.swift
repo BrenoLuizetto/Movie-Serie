@@ -22,9 +22,11 @@ class SearchViewController: BaseViewController {
 extension SearchViewController {
     private func configNavBar() {
         self.navigationController?.isNavigationBarHidden = false
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: MovieConstants.labels.back, style: .plain, target: self, action: #selector(backAction(sender:)))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Constants.Labels.back,
+                                                                style: .plain,
+                                                                target: self, action: #selector(backAction(sender:)))
         
     }
     

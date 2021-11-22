@@ -52,7 +52,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     
     private lazy var movieRating: UILabel = {
         let lbl = UILabel()
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
+        lbl.font = UIFont(name: Constants.Fonts.avenirMedium, size: 18)
         lbl.textColor = UIColor(rgb: 0x08CA49)
         return lbl
     }()
@@ -66,7 +66,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     private lazy var movieTitle: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = UIFont(name: MovieConstants.Fonts.avenirHeavy, size: 30)
+        label.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 30)
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .white
         label.numberOfLines = 0
@@ -75,7 +75,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     
     private lazy var movieDescription: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
+        label.font = UIFont(name: Constants.Fonts.avenirMedium, size: 18)
         label.textColor = .white
         label.numberOfLines = 0
         label.fitTextToBounds()
@@ -84,7 +84,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     
     private lazy var releaseDate: UILabel = {
         let lbl = UILabel()
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
+        lbl.font = UIFont(name: Constants.Fonts.avenirMedium, size: 18)
         lbl.textColor = .white
         lbl.textAlignment = .left
         return lbl
@@ -122,7 +122,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     private lazy var recommendationTitle: UILabel = {
        let lbl = UILabel()
         lbl.text = "Recomendações"
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirHeavy, size: 18)
+        lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 18)
         lbl.textColor = .white
         lbl.textAlignment = .left
         
@@ -196,7 +196,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         self.movieTitle.text = self.viewModel.movie.title
         let movieRating = Int(self.viewModel.movie.voteAverage * 10)
         if movieRating == 0 {
-            self.movieRating.text = MovieConstants.labels.inComing
+            self.movieRating.text = Constants.Labels.inComing
         } else {
             self.movieRating.text = String("\(movieRating)% relevante")
         }
@@ -320,7 +320,6 @@ extension MovieDetailsView: BuildViewConfiguration {
             make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
         }
 
-        
         separator.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(16)
             make.right.equalTo(self.detailsContainer.snp.right).offset(-16)

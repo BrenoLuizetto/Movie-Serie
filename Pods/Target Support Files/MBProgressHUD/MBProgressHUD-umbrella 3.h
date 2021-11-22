@@ -10,7 +10,6 @@
 #endif
 #endif
 
-#import "MBProgressHUD 2.h"
 #import "MBProgressHUD.h"
 
 FOUNDATION_EXPORT double MBProgressHUDVersionNumber;

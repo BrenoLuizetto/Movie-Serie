@@ -46,7 +46,7 @@ final class PreLoginView: UIView {
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Filmes, séries\n e muito mais,\n sem limites"
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirHeavy, size: 50)
+        lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 50)
         lbl.textColor = .white
         lbl.numberOfLines = 0
         lbl.contentMode = .center
@@ -57,7 +57,7 @@ final class PreLoginView: UIView {
     private lazy var messageLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Assita onde quiser. Cancele\n quando quiser"
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 20)
+        lbl.font = UIFont(name: Constants.Fonts.avenirMedium, size: 20)
         lbl.textColor = .white
         lbl.numberOfLines = 0
         lbl.contentMode = .center
@@ -76,8 +76,7 @@ final class PreLoginView: UIView {
                       for: .touchUpInside)
         return btn
     }()
-    
-    
+        
     init() {
         super.init(frame: .zero)
         buildItens()
@@ -150,6 +149,5 @@ extension PreLoginView: BuildViewConfiguration {
     func configElements() {
         
     }
-    
-    
+        
 }

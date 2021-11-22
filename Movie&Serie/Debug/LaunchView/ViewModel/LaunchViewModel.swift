@@ -15,14 +15,14 @@ class LaunchViewModel {
     private let keychain = KeychainSwift()
     
     func validateLogin(_ completion: @escaping ((Bool?) -> Void)) {
-        guard let access = try? userdefault.getObject(forKey: MovieConstants.userDefaults.rememberAccess,
+        guard let access = try? userdefault.getObject(forKey: Constants.UserDefaults.rememberAccess,
                                                       castTo: Bool.self)
         else { completion(false)
             return
         }
         if access {
-            guard let username = keychain.get(MovieConstants.userDefaults.username),
-                  let pass = keychain.get(MovieConstants.userDefaults.pass)
+            guard let username = keychain.get(Constants.UserDefaults.username),
+                  let pass = keychain.get(Constants.UserDefaults.pass)
             else { completion(false)
                 return
             }

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-enum inputType {
+enum InputType {
     case user
     case pass
     case confirmPass
@@ -28,7 +28,7 @@ class LoginView: UIView {
     private lazy var header: UILabel = {
         let lbl = UILabel()
         lbl.text = "BRCine"
-        lbl.font = UIFont(name: MovieConstants.Fonts.kailassaBold, size: 40)
+        lbl.font = UIFont(name: Constants.Fonts.kailassaBold, size: 40)
         lbl.textColor = .white
         return lbl
     }()
@@ -50,7 +50,7 @@ class LoginView: UIView {
     private lazy var rememberMessage: UILabel = {
         let lbl = UILabel()
         lbl.text = "Lembrar acesso"
-        lbl.font = UIFont(name: MovieConstants.Fonts.kailassaBold, size: 12)
+        lbl.font = UIFont(name: Constants.Fonts.kailassaBold, size: 12)
         lbl.textColor = .white
         return lbl
     }()
@@ -78,7 +78,7 @@ class LoginView: UIView {
     private lazy var registerLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Não possui conta? Cadastre-se"
-        lbl.font = UIFont(name: MovieConstants.Fonts.kailassaBold, size: 12)
+        lbl.font = UIFont(name: Constants.Fonts.kailassaBold, size: 12)
         lbl.textColor = .white
         lbl.textAlignment = .center
         let tap = UITapGestureRecognizer(target: self, action: #selector(register))

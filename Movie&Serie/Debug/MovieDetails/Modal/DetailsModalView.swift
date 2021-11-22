@@ -29,7 +29,7 @@ class DetailsModalView: UIView {
         let label = UILabel()
         label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 2
-        label.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 20)
+        label.font = UIFont(name: Constants.Fonts.avenirMedium, size: 20)
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .white
         return label
@@ -39,7 +39,7 @@ class DetailsModalView: UIView {
         let label = UILabel()
         label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 5
-        label.font = UIFont(name: MovieConstants.Fonts.avenirBook, size: 15)
+        label.font = UIFont(name: Constants.Fonts.avenirBook, size: 15)
         label.textColor = .white
         return label
     }()
@@ -55,7 +55,7 @@ class DetailsModalView: UIView {
         button.backgroundColor = UIColor(rgb: 0x4A4A4A)
         button.setTitle("Mais Informações", for: .normal )
         button.setTitle("Carregando...", for: .selected)
-        button.titleLabel?.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 18)
+        button.titleLabel?.font = UIFont(name: Constants.Fonts.avenirMedium, size: 18)
         button.layer.cornerRadius = 5
         button.layer.masksToBounds = true
         return button
@@ -104,7 +104,6 @@ class DetailsModalView: UIView {
         moreInformation.addTarget(self, action: #selector(didTapMoreInformation(sender:)), for: .touchUpInside)
     }
 }
-
 
 extension DetailsModalView: BuildViewConfiguration {
     func makeConstraints() {
@@ -160,6 +159,6 @@ extension DetailsModalView: BuildViewConfiguration {
     }
     
     func configElements() {
-        //Not Implemented
+        // Not Implemented
     }
 }

@@ -96,6 +96,7 @@ PODS:
   - nanopb/encode (2.30908.0)
   - PromisesObjC (1.2.12)
   - SnapKit (5.0.1)
+  - SwiftLint (0.43.1)
   - youtube-ios-player-helper (1.0.3)
 
 DEPENDENCIES:
@@ -107,6 +108,7 @@ DEPENDENCIES:
   - KeychainSwift (~> 19.0)
   - MBProgressHUD
   - SnapKit (~> 5.0.0)
+  - SwiftLint
   - youtube-ios-player-helper
 
 SPEC REPOS:
@@ -129,6 +131,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SnapKit
+    - SwiftLint
     - youtube-ios-player-helper
 
 SPEC CHECKSUMS:
@@ -150,8 +153,9 @@ SPEC CHECKSUMS:
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SwiftLint: 99f82d07b837b942dd563c668de129a03fc3fb52
   youtube-ios-player-helper: 0185c57db23c80d63d6ca11251d110abb8a4ca61
 
-PODFILE CHECKSUM: d95db74dfdbdca46ab325b8bfd89a6240657f103
+PODFILE CHECKSUM: 30ffd4238bfcb3d17e7abb0afc3f4e4c81f4ec98
 
 COCOAPODS: 1.10.1

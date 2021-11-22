@@ -29,7 +29,7 @@ final class RegisterView: UIView {
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Insira os dados abaixo para prosseguir"
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirHeavy, size: 30)
+        lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 30)
         lbl.textColor = .white
         lbl.numberOfLines = 0
         return lbl
@@ -38,7 +38,7 @@ final class RegisterView: UIView {
     private lazy var subtitleLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Crie sua conta"
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirMedium, size: 20)
+        lbl.font = UIFont(name: Constants.Fonts.avenirMedium, size: 20)
         lbl.textColor = .white
         return lbl
     }()
@@ -107,7 +107,6 @@ final class RegisterView: UIView {
     private func closeAction() {
         close?()
     }
-
     
     private func validateFields() {
         emailField.callback = { result in
@@ -201,6 +200,5 @@ extension RegisterView: BuildViewConfiguration {
     func configElements() {
         
     }
-    
     
 }

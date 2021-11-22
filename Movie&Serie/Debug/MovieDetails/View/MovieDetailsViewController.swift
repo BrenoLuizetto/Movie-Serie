@@ -27,7 +27,9 @@ class MovieDetailsViewController: BaseViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height + 1000)
+        self.view.frame = CGRect(x: 0, y: 0,
+                                 width: self.view.frame.size.width,
+                                 height: self.view.frame.size.height + 1000)
     }
     
     override func viewDidLoad() {
@@ -46,7 +48,10 @@ class MovieDetailsViewController: BaseViewController {
 extension MovieDetailsViewController {
     private func configNavBar() {
         self.navigationController?.isNavigationBarHidden = false
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Voltar", style: .plain, target: self, action: #selector(backAction(sender:)))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Voltar",
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(backAction(sender:)))
     }
     
     @objc

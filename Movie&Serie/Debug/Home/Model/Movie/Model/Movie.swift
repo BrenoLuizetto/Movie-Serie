@@ -71,9 +71,8 @@ struct Result: Codable {
 }
 
 enum MediaType: String, Codable {
-    case movie = "movie"
-    case tv = "tv"
-    case person = "person"
+    case movie
+    case tv
+    case person
     case none
 }
-

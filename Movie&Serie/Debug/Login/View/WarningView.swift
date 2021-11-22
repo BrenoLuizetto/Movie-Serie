@@ -22,7 +22,7 @@ class WarningView: UIView {
     private lazy var message: UILabel = {
         let lbl = UILabel()
         lbl.text = "Ops! Ocorreu um erro, verifique suas credenciais e tente novamente"
-        lbl.font = UIFont(name: MovieConstants.Fonts.avenirHeavy, size: 18)
+        lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 18)
         lbl.textColor = .white
         lbl.numberOfLines = 0
         return lbl
@@ -83,6 +83,5 @@ extension WarningView: BuildViewConfiguration {
     func configElements() {
         
     }
-    
     
 }

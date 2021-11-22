@@ -14,8 +14,6 @@ class MovieModalViewController: UIViewController {
     private var DetailsView: DetailsModalView = {
         let view = DetailsModalView()
         view.backgroundColor = UIColor(rgb: 0x282828)
-
-
         return view
     }()
     
@@ -74,6 +72,6 @@ extension MovieModalViewController: BuildViewConfiguration {
     }
     
     func configElements() {
-        //Not Implemented
+        // Not Implemented
     }
 }

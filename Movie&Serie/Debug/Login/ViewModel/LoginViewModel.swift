@@ -17,11 +17,13 @@ class LoginViewModel {
     private var user: User?
     private var keychain = KeychainSwift()
     func rememberAccess() {
-        try? userdefault.setObject(true, forKey: MovieConstants.userDefaults.rememberAccess)
+        try? userdefault.setObject(true, forKey: Constants.UserDefaults.rememberAccess)
         rememberAcess = true
     }
     
-    func ShowLogin(username: String, pass: String, _ completion: @escaping ((Error?) -> Void)) {
+    func showLogin(username: String,
+                   pass: String,
+                   _ completion: @escaping ((Error?) -> Void)) {
         Auth.auth().addStateDidChangeListener { auth, user in
             self.auth = auth
             self.user = user
@@ -37,9 +39,9 @@ class LoginViewModel {
                 guard let self = self else {return}
                 if authResult != nil {
                     if self.rememberAcess {
-                        self.keychain.set(username, forKey: MovieConstants.userDefaults.username,
+                        self.keychain.set(username, forKey: Constants.UserDefaults.username,
                                           withAccess: KeychainSwiftAccessOptions.accessibleWhenUnlockedThisDeviceOnly)
-                        self.keychain.set(pass, forKey: MovieConstants.userDefaults.pass,
+                        self.keychain.set(pass, forKey: Constants.UserDefaults.pass,
                                           withAccess: KeychainSwiftAccessOptions.accessibleWhenUnlockedThisDeviceOnly)
                     }
                     completion(nil)

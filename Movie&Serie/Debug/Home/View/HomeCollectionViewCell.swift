@@ -30,7 +30,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
 }
 
-extension HomeCollectionViewCell : BuildViewConfiguration {
+extension HomeCollectionViewCell: BuildViewConfiguration {
     func buildViewHierarchy() {
         self.addSubview(self.moviePoster)
         

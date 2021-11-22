@@ -11,7 +11,7 @@ import SnapKit
 
 class ErrorView: UIView {
     
-    private var callback: (()->(Void))?
+    private var callback: (() -> Void)?
         
     private lazy var errorTitle: UILabel = {
         let title = UILabel()
@@ -72,7 +72,10 @@ class ErrorView: UIView {
         }
         
         let rect = CGSize(width: label.bounds.width, height: maxHeight)
-        let labelSize = labelText.boundingRect(with: rect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: label.font!], context: nil)
+        let labelSize = labelText.boundingRect(with: rect,
+                                               options: .usesLineFragmentOrigin,
+                                               attributes: [NSAttributedString.Key.font: label.font!],
+                                               context: nil)
         
         let lines = Int(ceil(CGFloat(labelSize.height) / label.font.lineHeight))
         return labelText.contains("\n") && lines == 1 ? lines + 1 : lines
@@ -80,7 +83,7 @@ class ErrorView: UIView {
     
 }
 
-extension ErrorView : BuildViewConfiguration {
+extension ErrorView: BuildViewConfiguration {
     func buildViewHierarchy() {
         self.addSubview(self.errorTitle)
         self.addSubview(self.errorMessage)

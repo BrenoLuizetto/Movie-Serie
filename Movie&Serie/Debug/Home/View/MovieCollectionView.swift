@@ -8,22 +8,27 @@
 import Foundation
 import UIKit
 
-enum collectionType {
+enum CollectionType {
     case recommendation
     case homeMovies
     case searchMovies
 }
 
-class MovieCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    var movie: Array<MovieViewData> = []
-    private var images: Array<UIImage> = []
+class MovieCollectionView: UICollectionView,
+                           UICollectionViewDataSource,
+                           UICollectionViewDelegate,
+                           UICollectionViewDelegateFlowLayout {
+    var movie: [MovieViewData] = []
+    private var images: [UIImage] = []
     private var itemsInSection = 0
-    private var collectionType: collectionType?
+    private var collectionType: CollectionType?
     private var viewModel: MovieDetailsViewModel?
     public var collectionProtocol: MovieCollectionProtocol?
     public weak var detailsProtocol: MovieDetailsProtocol?
     
-    func setup(movie: Array<MovieViewData>?, collectionType: collectionType, viewModel: MovieDetailsViewModel?) {
+    func setup(movie: [MovieViewData]?,
+               collectionType: CollectionType,
+               viewModel: MovieDetailsViewModel?) {
         self.collectionType = collectionType
         switch collectionType {
         case .homeMovies:
@@ -39,7 +44,6 @@ class MovieCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
                 self.isScrollEnabled = false
                 
             }
-            break
         case .searchMovies:
             guard let movies = movie else { return }
             self.movie = movies
@@ -50,7 +54,8 @@ class MovieCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     
     func registerCell() {
         self.backgroundColor = .black
-        self.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: MovieConstants.cellIdentifier.movieCollection)
+        self.register(HomeCollectionViewCell.self,
+                      forCellWithReuseIdentifier: Constants.CellIdentifier.movieCollection)
         self.delegate = self
         self.dataSource = self
     }
@@ -69,21 +74,25 @@ class MovieCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         self.reloadData()
     }
     
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         return itemsInSection
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 5
     }
     
-        
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieConstants.cellIdentifier.movieCollection, for: indexPath) as! HomeCollectionViewCell
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellIdentifier.movieCollection,
+                                                            for: indexPath) as? HomeCollectionViewCell
+        else { return UICollectionViewCell() }
         let movies = movie[indexPath.row % movie.count]
         let moviePoster = movies.posterPath
-        let imageUrl = URL(string: "\(MovieConstants.url.imageOriginal)\(moviePoster)")
+        let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(moviePoster)")
         if let url = imageUrl {
             cell.moviePoster.af.setImage(withURL: url)
         }
@@ -94,10 +103,6 @@ class MovieCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         }
         
         return cell
-    }
-    
-    override class func didChange(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, forKey key: String) {
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

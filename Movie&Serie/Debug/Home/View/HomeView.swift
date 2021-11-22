@@ -37,13 +37,13 @@ class HomeView: UIView {
     
 }
 
-extension HomeView : BuildViewConfiguration {
+extension HomeView: BuildViewConfiguration {
     func buildViewHierarchy() {
         self.addSubview(self.title)
     }
 
     func configElements() {
-       //Not Implemented
+       // Not Implemented
     }
 
     func makeConstraints() {

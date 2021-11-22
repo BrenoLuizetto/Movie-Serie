@@ -9,11 +9,11 @@ import Foundation
 
 struct MovieTrailer: Codable {
     let id: Int
-    let results: [movieTrailerResult]
+    let results: [MovieTrailerResult]
 }
 
 // MARK: - Result
-struct movieTrailerResult: Codable {
+struct MovieTrailerResult: Codable {
     let iso639_1: String
     let iso3166_1: String
     let name, key: String
@@ -31,4 +31,3 @@ struct movieTrailerResult: Codable {
         case id
     }
 }
-

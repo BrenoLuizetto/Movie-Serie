@@ -16,4 +16,5 @@ target 'Movie&Serie' do
   pod 'Firebase/Auth'
   pod 'Gifu'
   pod 'KeychainSwift', '~> 19.0'
+  pod 'SwiftLint'
 end
