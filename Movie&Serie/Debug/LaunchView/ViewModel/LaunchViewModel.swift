@@ -31,6 +31,7 @@ class LaunchViewModel {
                 if user != nil {
                     Auth.auth().signIn(withEmail: username, password: pass) { authResult, error in
                         if authResult != nil {
+                            LoggedUser.shared.setUser(user: authResult?.user)
                             completion(true)
                         } else {
                             completion(false)

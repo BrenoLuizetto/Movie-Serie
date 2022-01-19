@@ -18,7 +18,7 @@ final class RegisterView: UIView {
         return view
     }()
     
-    private let closeButton: UIButton = {
+    private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "closeButton"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
@@ -99,6 +99,7 @@ final class RegisterView: UIView {
 
         self.viewModel?.registerUser(emailField.getInputValue(),
                                      pass: passField.getInputValue(), completion: {
+            
             self.removeHUD()
         })
     }

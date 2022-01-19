@@ -19,7 +19,6 @@ class CustomTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
 }
 
-
 class SectionDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     let sections: [Sections]
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -29,6 +28,5 @@ class SectionDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         <#code#>
     }
-    
     
 }

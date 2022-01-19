@@ -11,12 +11,12 @@ class MovieViewModel {
     
     private var movieModel: Movie?
     private var service =  MovieService()
-    private var genreData: Array<GenreViewData> = []
+    private var genreData: [GenreViewData] = []
 
-    open var movieData: Array<MovieViewData> = []
+    open var movieData: [MovieViewData] = []
     var tableView = HomeTableView()
 
-    func getMovie(type: MovieType, _ callback: @escaping (Array<MovieViewData>) -> Void) {
+    func getMovie(type: MovieType, _ callback: @escaping ([MovieViewData]) -> Void) {
         
         let link = "\(Constants.Url.movieHeader)\(type.typeOfMovie)\(Constants.OPKeys().movieOPKey)" +
             "\(type.genreType ?? "")\(Constants.Url.language)"
@@ -25,7 +25,7 @@ class MovieViewModel {
         service.getMovie(url) { movie, error  in
             if let results = movie?.results {
                     self.movieData = []
-                    for movies in results{
+                    for movies in results {
                             self.movieData.append(MovieViewData(model: movies))
                     }
                 }

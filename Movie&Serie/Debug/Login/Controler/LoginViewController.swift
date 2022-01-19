@@ -29,15 +29,24 @@ class LoginViewController: BaseViewController {
                 if result != nil {
                     self.loginView?.buildWithError()
                 } else {
-                    self.view.removeHUD()
-                    self.navigationController?.pushViewController(TabBarController(), animated: true)
+                    self.pushTabBar()
                 }
             })
         }
         
         self.loginView?.didTapRegister = {
-            self.navigationController?.pushViewController(RegisterViewController(), animated: true)
+            let registerVC = RegisterViewController {
+                self.pushTabBar()
+            }
+            self.navigationController?.present(registerVC, animated: true)
             self.loginView?.removeHUD()
         }
-    }    
+    }
+    
+    func pushTabBar() {
+        self.view.removeHUD()
+        self.navigationController?.pushViewController(TabBarController(), animated: true)
+    }
 }
+
+

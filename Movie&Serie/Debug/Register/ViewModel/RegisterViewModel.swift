@@ -21,8 +21,7 @@ final class RegisterViewModel {
                 print(erro)
                 completion()
             } else {
-                print("@@@\(result?.user.displayName)")
-                print("@@@\(result?.user.email)")
+                LoggedUser.shared.setUser(user: result?.user)
                 self.delegate?.pushTo(TabBarController())
                 completion()
             }

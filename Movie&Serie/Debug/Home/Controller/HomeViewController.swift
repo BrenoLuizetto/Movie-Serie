@@ -27,9 +27,6 @@ class HomeViewController: BaseViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    override func viewWillAppear(_ animated: Bool) {
-      
-    }
     
     override func viewDidLoad() {
         self.view.showHUD()
@@ -52,18 +49,33 @@ extension HomeViewController {
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
                                                                  target: self,
-                                                                 action: #selector(search(sender:)))
+                                                                 action: #selector(search))
+        let a = UIBarButtonItem(image: UIImage(named: "pngTests"),
+                                style: .plain,
+                                target: self,
+                                action: #selector(userMenu))
+        
+        a.imageInsets = UIEdgeInsets(top: 0, left: -100, bottom: 0, right: 0)
+        self.navigationItem.leftBarButtonItem = a
     }
     
-    @objc private func search(sender: UIButton) {
+    @objc
+    private func search() {
         let searchVC = SearchViewController()
         self.navigationController?.pushViewController(searchVC, animated: true)
+    }
+    
+    @objc
+    private func userMenu() {
+        let menuVC = UserMenuViewController()
+        self.navigationController?.pushViewController(menuVC, animated: true)
     }
     
     private func getTypes() {
         viewModel.parametersForCell { parameters in
             if let result = parameters {
-                self.tableView?.buildCell(cellType: .allmovies, result,
+                self.tableView?.buildCell(cellType: .allmovies,
+                                          result,
                                           viewModel: self.viewModel,
                                           delegate: MovieCollectionAction(controller: self), {
                     self.buildTableView()

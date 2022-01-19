@@ -38,6 +38,7 @@ class LoginViewModel {
             Auth.auth().signIn(withEmail: username, password: pass) { [weak self] authResult, error in
                 guard let self = self else {return}
                 if authResult != nil {
+                    LoggedUser.shared.setUser(user: authResult?.user)
                     if self.rememberAcess {
                         self.keychain.set(username, forKey: Constants.UserDefaults.username,
                                           withAccess: KeychainSwiftAccessOptions.accessibleWhenUnlockedThisDeviceOnly)
