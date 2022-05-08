@@ -90,26 +90,38 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         return lbl
     }()
     
+    private lazy var genresContainer: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 20
+        stack.alignment = .center
+        stack.distribution = .fill
+        return stack
+    }()
+    
     private lazy var favoriteButton: UIButton = {
-        let btn = UIButton()
-        btn.setImage(UIImage(systemName: "plus"), for: .normal)
-        btn.setTitle("Minha Lista", for: .normal)
-        btn.backgroundColor = .clear
-        btn.imageView?.tintColor = .white
-        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 60, bottom: 10, right: 0)
-        btn.titleEdgeInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0.0, right: 0)
+        var filled = UIButton.Configuration.filled()
+        filled.title = Constants.Labels.myList
+        filled.buttonSize = .small
+        filled.image = UIImage(systemName: Constants.Images.plus)
+        filled.imagePlacement = .top
+        filled.imagePadding = 5
+        filled.baseBackgroundColor = .clear
+        let btn = UIButton(configuration: filled, primaryAction: nil)
         btn.addTarget(self, action: #selector(addFavorite(sender:)), for: .touchUpInside)
         return btn
     }()
     
     private lazy var playButton: UIButton = {
-        let btn = UIButton()
-        btn.setImage(UIImage(systemName: "play"), for: .normal)
-        btn.setTitle("Assistir", for: .normal)
-        btn.backgroundColor = .clear
-        btn.imageView?.tintColor = .white
-        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 60, bottom: 10, right: 0)
-        btn.titleEdgeInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0.0, right: 0)
+        var filled = UIButton.Configuration.filled()
+        filled.title = Constants.Labels.watch
+        filled.buttonSize = .small
+        filled.image = UIImage(systemName: Constants.Images.play)
+        filled.imagePlacement = .top
+        filled.imagePadding = 5
+        filled.baseBackgroundColor = .clear
+        let btn = UIButton(configuration: filled, primaryAction: nil)
+        btn.addTarget(self, action: #selector(streamMovie(sender:)), for: .touchUpInside)
         return btn
     }()
     
@@ -121,7 +133,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     
     private lazy var recommendationTitle: UILabel = {
        let lbl = UILabel()
-        lbl.text = "Recomendações"
+        lbl.text = Constants.Labels.recommendations
         lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 18)
         lbl.textColor = .white
         lbl.textAlignment = .left
@@ -138,6 +150,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     }()
     
     lazy var recommendationCollection = MovieCollectionView(frame: CGRect(), collectionViewLayout: layout)
+    private var hasGenre: Bool = false
     
     private var viewModel: MovieDetailsViewModel    
     weak var delegate: MovieCollectionProtocol?
@@ -190,6 +203,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         getTrailer()
         verifyCollectionItens()
         getValues()
+        setGenres()
     }
     
     private func getValues() {
@@ -241,9 +255,36 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     
     private func verifyFavoriteList() {
         if viewModel.validateFavoriteList() {
-            self.favoriteButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            self.favoriteButton.setImage(UIImage(systemName: Constants.Images.checkmark), for: .normal)
         } else {
-            self.favoriteButton.setImage(UIImage(systemName: "plus"), for: .normal)
+            self.favoriteButton.setImage(UIImage(systemName: Constants.Images.plus), for: .normal)
+        }
+    }
+    
+    private func setGenres() {
+        viewModel.getDetailsMovie {
+            guard let genres = self.viewModel.movieDetails?.genres else {
+                self.hasGenre = false
+                self.genresContainer.removeFromSuperview()
+                return
+            }
+            self.genresContainer.removeAllViews()
+            var count = 0
+            for genre in genres {
+                if count > 3 {
+                    return
+                }
+                let lbl = UILabel()
+                lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 16)
+                lbl.textColor = .lightGray
+                lbl.text = genre.name
+                lbl.lineBreakMode = .byTruncatingTail
+                self.genresContainer.addArrangedSubview(lbl)
+                count += count + 1
+            }
+            self.hasGenre = true
+            self.removeAllViews()
+            self.buildItens()
         }
     }
     
@@ -251,6 +292,15 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     private func addFavorite(sender: UIBarButtonItem) {
         self.viewModel.addFavorite {
             self.verifyFavoriteList()
+        }
+    }
+    
+    @objc
+    private func streamMovie(sender: UIButton) {
+        self.showHUD()
+        self.viewModel.getDetailsMovie {
+            self.viewModel.openMovieStream()
+            self.removeHUD()
         }
     }
 }
@@ -308,16 +358,31 @@ extension MovieDetailsView: BuildViewConfiguration {
             make.top.equalTo(self.movieRating.snp.bottom).offset(5)
         }
         
+        if hasGenre {
+            genresContainer.snp.makeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
+            }
+        }
+
         favoriteButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(-90)
+            make.centerX.equalToSuperview().offset(-75)
             make.width.equalTo(120)
-            make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
+            if hasGenre {
+                make.top.equalTo(self.genresContainer.snp.bottom).offset(15)
+            } else {
+                make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
+            }
         }
         
         playButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview().offset(75)
             make.width.equalTo(120)
-            make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
+            if hasGenre {
+                make.top.equalTo(self.genresContainer.snp.bottom).offset(15)
+            } else {
+                make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
+            }
         }
 
         separator.snp.makeConstraints { make in
@@ -351,6 +416,7 @@ extension MovieDetailsView: BuildViewConfiguration {
         self.detailsContainer.addSubview(movieRating)
         self.detailsContainer.addSubview(releaseDate)
         self.detailsContainer.addSubview(movieDescription)
+        self.detailsContainer.addSubview(genresContainer)
         self.detailsContainer.addSubview(favoriteButton)
         self.detailsContainer.addSubview(playButton)
         self.detailsContainer.addSubview(separator)
@@ -360,7 +426,7 @@ extension MovieDetailsView: BuildViewConfiguration {
     }
     
     func configElements() {
-        
+        self.setScrollView()
     }
 }
 

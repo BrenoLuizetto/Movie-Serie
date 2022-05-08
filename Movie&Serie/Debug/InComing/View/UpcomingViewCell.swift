@@ -127,12 +127,6 @@ extension UpcomingViewCell: BuildViewConfiguration {
             make.right.equalTo(container.snp.right).offset(-15)
             make.bottom.equalTo(container.snp.bottom).offset(-5)
         }
-        
-//        genre.snp.makeConstraints { make in
-//            make.left.equalTo(detailsContainer.snp.left).offset(15)
-//            make.top.equalTo(releaseDate.snp.bottom).offset(5)
-//            make.bottom.equalTo(detailsContainer.snp.bottom)
-//        }
     }
     
     func configElements() {

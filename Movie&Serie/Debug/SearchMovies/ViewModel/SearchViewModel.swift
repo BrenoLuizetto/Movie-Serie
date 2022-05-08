@@ -15,7 +15,7 @@ class SearchViewModel: MovieViewModel {
     func getSearchMovies(query: String, callback: @escaping ([MovieViewData]?, Error?) -> Void) {
         
         let link = "\(Constants.Url.movieHeader)search/multi?" +
-            "\(Constants.OPKeys().movieOPKey)&query=\(query)\(Constants.Url.language)"
+            "\(Constants.OPKeys.movieOPKey)&query=\(query)\(Constants.Url.language)"
         
         guard let url = URL(string: link) else {return}
         service.getMovie(url) { movie, erro  in
@@ -37,7 +37,7 @@ class SearchViewModel: MovieViewModel {
     func getPopularMovies(callback: @escaping ([MovieViewData]?, Error?) -> Void) {
         
         let link = "\(Constants.Url.movieHeader)movie/popular?" +
-            "\(Constants.OPKeys().movieOPKey)\(Constants.Url.language)"
+            "\(Constants.OPKeys.movieOPKey)\(Constants.Url.language)"
         
         guard let url = URL(string: link) else {return}
         service.getMovie(url) { movie, erro  in

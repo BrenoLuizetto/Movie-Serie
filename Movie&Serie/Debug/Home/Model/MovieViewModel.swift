@@ -16,34 +16,52 @@ class MovieViewModel {
     open var movieData: [MovieViewData] = []
     var tableView = HomeTableView()
 
-    func getMovie(type: MovieType, _ callback: @escaping ([MovieViewData]) -> Void) {
+    func getMovie(type: MovieSettings, _ callback: @escaping ([MovieViewData]) -> Void) {
         
-        let link = "\(Constants.Url.movieHeader)\(type.typeOfMovie)\(Constants.OPKeys().movieOPKey)" +
+        let link = "\(Constants.Url.movieHeader)\(type.typeOfMovie)\(Constants.OPKeys.movieOPKey)" +
             "\(type.genreType ?? "")\(Constants.Url.language)"
         
-        guard let url = URL(string: link) else {return}
-        service.getMovie(url) { movie, error  in
-            if let results = movie?.results {
-                    self.movieData = []
-                    for movies in results {
-                            self.movieData.append(MovieViewData(model: movies))
+        if type.typeOfMovie == Constants.MovieType.favoriteMovies,
+            let favoriteData = getFavoriteMovies() {
+            self.movieData = []
+            self.movieData = favoriteData
+            callback(self.movieData)
+        } else {
+            guard let url = URL(string: link) else {return}
+            service.getMovie(url) { movie, error  in
+                if let results = movie?.results {
+                        self.movieData = []
+                        for movies in results {
+                            self.movieData.append(MovieViewData(model: movies,
+                                                                movieType: type.typeOfMovie))
+                        }
                     }
+                    callback(self.movieData)
                 }
-                callback(self.movieData)
-            }
+        }
     }
     
-    func parametersForCell(_ callback: @escaping ([MovieType]?) -> Void) {
-        var types: [MovieType] = [MovieType(typeMovie: Constants.MovieType.topWeek,
-                                            titleOfCell: Constants.CellTitle.topWeek,
-                                            genreType: nil)]
+    func parametersForCell(_ callback: @escaping ([MovieSettings]?) -> Void) {
+        genreData = []
+        var types: [MovieSettings] = [MovieSettings(typeMovie: Constants.MovieType.topWeek,
+                                                    titleOfCell: Constants.CellTitle.topMovie,
+                                                    genreType: nil),
+                                      MovieSettings(typeMovie: Constants.MovieType.topWeek,
+                                                    titleOfCell: Constants.CellTitle.topWeek,
+                                                    genreType: nil)]
+        
+        if !(getFavoriteMovies()?.isEmpty ?? true) {
+            types.insert(MovieSettings(typeMovie: Constants.MovieType.favoriteMovies,
+                                       titleOfCell: Constants.CellTitle.myList,
+                                       genreType: nil), at: 1)
+        }
         
         getGenres { result in
             if result == 0 {
                 callback(nil)
             }
             for genre in self.genreData {
-                types.append(MovieType(typeMovie: Constants.MovieType.genres,
+                types.append(MovieSettings(typeMovie: Constants.MovieType.genres,
                                        titleOfCell: genre.name ,
                                        genreType: String("&with_genres=\(genre.id)")))
             }
@@ -54,7 +72,7 @@ class MovieViewModel {
     
     private func getGenres(_ callback: @escaping (Int) -> Void) {
        let link = "\(Constants.Url.movieHeader)\(Constants.MovieType.genreList)" +
-                    "\(Constants.OPKeys().movieOPKey)\(Constants.Url.language)"
+                    "\(Constants.OPKeys.movieOPKey)\(Constants.Url.language)"
         guard let url = URL(string: link) else {return}
         service.getGenres(url) { result in
             guard let genreResult = result?.genres else {
@@ -65,6 +83,17 @@ class MovieViewModel {
                     self.genreData.append(GenreViewData(model: genre))
                 }
             callback(1)
+        }
+    }
+    
+    private func getFavoriteMovies() -> [MovieViewData]? {
+        let us = UserDefaults.standard
+        do {
+            let movieArray =  try? us.getObject(forKey: Constants.UserDefaults.favoriteMovies,
+                                               castTo: [MovieViewData].self)
+            return movieArray
+        } catch {
+            return nil
         }
     }
 }

@@ -45,7 +45,7 @@ final class PreLoginView: UIView {
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Filmes, séries\n e muito mais,\n sem limites"
+        lbl.text = Constants.Labels.preLoginTitle
         lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 50)
         lbl.textColor = .white
         lbl.numberOfLines = 0
@@ -56,7 +56,7 @@ final class PreLoginView: UIView {
     
     private lazy var messageLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Assita onde quiser. Cancele\n quando quiser"
+        lbl.text = Constants.Labels.preLoginSubTitle
         lbl.font = UIFont(name: Constants.Fonts.avenirMedium, size: 20)
         lbl.textColor = .white
         lbl.numberOfLines = 0
@@ -67,7 +67,7 @@ final class PreLoginView: UIView {
     
     private lazy var startButton: UIButton = {
         let btn = UIButton()
-        btn.setTitle("Começar", for: .normal)
+        btn.setTitle(Constants.Labels.begin, for: .normal)
         btn.setButtonState(isEnabled: true)
         btn.layer.cornerRadius = 5
         btn.layer.borderWidth = 1

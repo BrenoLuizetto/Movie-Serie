@@ -27,7 +27,7 @@ class LoginView: UIView {
     
     private lazy var header: UILabel = {
         let lbl = UILabel()
-        lbl.text = "BRCine"
+        lbl.text = Constants.Labels.appName
         lbl.font = UIFont(name: Constants.Fonts.kailassaBold, size: 40)
         lbl.textColor = .white
         return lbl
@@ -49,7 +49,7 @@ class LoginView: UIView {
     
     private lazy var rememberMessage: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Lembrar acesso"
+        lbl.text = Constants.Labels.rememberAccess
         lbl.font = UIFont(name: Constants.Fonts.kailassaBold, size: 12)
         lbl.textColor = .white
         return lbl
@@ -66,7 +66,7 @@ class LoginView: UIView {
     private lazy var continueButton: UIButton = {
        let button = UIButton()
         button.backgroundColor = .white
-        button.setTitle("Entrar", for: .normal)
+        button.setTitle(Constants.Labels.enter, for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(doLogin), for: .touchUpInside)
         button.layer.cornerRadius = 5
@@ -77,7 +77,7 @@ class LoginView: UIView {
     
     private lazy var registerLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Não possui conta? Cadastre-se"
+        lbl.text = Constants.Labels.createAccount2
         lbl.font = UIFont(name: Constants.Fonts.kailassaBold, size: 12)
         lbl.textColor = .white
         lbl.textAlignment = .center

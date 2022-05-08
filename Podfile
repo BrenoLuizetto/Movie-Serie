@@ -13,7 +13,7 @@ target 'Movie&Serie' do
   pod 'MBProgressHUD'
   pod 'youtube-ios-player-helper'
   pod 'Firebase/Analytics'
-  pod 'Firebase/Auth'
+  pod 'Firebase/Auth' 
   pod 'Gifu'
   pod 'KeychainSwift', '~> 19.0'
   pod 'SwiftLint'

@@ -1,0 +1,22 @@
+{
+    "result": [
+            {
+                "name": "Configurações",
+                "icon": "gearshape.2.fill",
+                "destination_key": "settings"
+            },
+            
+            {
+                "name": "Sobre",
+                "icon": "info.circle.fill",
+                "destination_key": "aboutUs"
+            },
+
+            
+            {
+                "name": "Sair",
+                "icon": "arrowshape.turn.up.left.2.circle.fill",
+                "destination_key": "logout"
+            }
+        ]
+}

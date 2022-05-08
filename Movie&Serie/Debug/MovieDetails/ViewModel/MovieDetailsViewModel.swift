@@ -11,6 +11,7 @@ import UIKit
 class MovieDetailsViewModel: MovieViewModel {
     
     let movie: MovieViewData
+    var movieDetails: MovieDetails?
     var recommendationMovieData: Array<MovieViewData> = []
     weak var delegate: MovieCollectionProtocol?
     private let service = MovieService()
@@ -36,36 +37,50 @@ class MovieDetailsViewModel: MovieViewModel {
     }
     
     func getTrailer(callback: @escaping (MovieTrailer) -> Void) {
-        guard let url = URL(string: "\(Constants.Url.movieHeader)\(movie.mediaType.rawValue)/\(movie.id)" + "/videos?\(Constants.OPKeys().movieOPKey)\(Constants.Url.language)") else {return}
+        guard let url = URL(string: "\(Constants.Url.movieHeader)\(movie.mediaType.rawValue)/\(movie.id)" + "/videos?\(Constants.OPKeys.movieOPKey)\(Constants.Url.language)") else {return}
         
         service.getMovieTrailers(url) { result in
             callback(result)
         }
     }
     
-    func applyBlurEffect(image: UIImage) -> UIImage {
-        let imageToBlur = CIImage(image: image)
-        let blurfilter = CIFilter(name: "CIGaussianBlur")
-        blurfilter?.setValue(imageToBlur, forKey: "inputImage")
-        guard let resultImage = blurfilter?.value(forKey: "outputImage") as? CIImage else { return UIImage() }
-        let blurredImage = UIImage(ciImage: resultImage)
-        return blurredImage
-      }
-    
     func getRecommendationMovies(_ callback: @escaping ([MovieViewData]) -> Void) {
         let id = String(movie.id)
         guard let url = URL(string: "\(Constants.Url.movieHeader)\(movie.mediaType.rawValue)/" +
-                            "\(id)/recommendations?\(Constants.OPKeys().movieOPKey)" +
+                            "\(id)/recommendations?\(Constants.OPKeys.movieOPKey)" +
                             "\(Constants.Url.language)") else {return}
         service.getMovie(url) { recommendation, error  in
             if let recommendationList = recommendation?.results {
                 self.recommendationMovieData = []
                 for movies in recommendationList {
-                        self.recommendationMovieData.append(MovieViewData(model: movies))
+                    self.recommendationMovieData.append(MovieViewData(model: movies))
                 }
                 
             }
             callback(self.recommendationMovieData)
+        }
+    }
+    
+    func getDetailsMovie(_ callback: @escaping () -> Void) {
+        if movieDetails == nil {
+            guard let url = URL(string: "\(Constants.Url.movieHeader)\(movie.mediaType)/" +
+                                "\(movie.id)?\(Constants.OPKeys.movieOPKey)\(Constants.Url.language)") else { return }
+            service.getDetails(url) { MovieDetails in
+                if MovieDetails != nil {
+                    self.movieDetails = MovieDetails
+                }
+                callback()
+            }
+        } else {
+            callback()
+        }
+    }
+    
+    func openMovieStream() {
+        if let url = URL(string: self.movieDetails?.homepage ?? "") {
+            UIApplication.shared.open(url)
+        } else {
+            delegate?.showErrorMessage("erro", "Não foi possível abrir a página")
         }
     }
     

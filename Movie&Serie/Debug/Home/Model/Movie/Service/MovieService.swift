@@ -10,7 +10,7 @@ import Alamofire
 
 class MovieService: NSObject {
     let headerMovie = "https://api.themoviedb.org/3/"
-    let opkey = Constants.OPKeys().movieOPKey
+    let opkey = Constants.OPKeys.movieOPKey
     
     func getMovie(_ url: URL, with callback: @escaping (Movie?, Error?) -> Void) {
         let request = AF.request(url, method: .get)
@@ -68,6 +68,28 @@ class MovieService: NSObject {
                     print(erro)
                 }
             case .failure:
+            print(response.error!)
+            }
+        }
+    }
+    
+    func getDetails(_ url: URL, with callback: @escaping (MovieDetails?) -> Void) {
+        let request = AF.request(url, method: .get)
+        
+        request.responseJSON { response in
+            switch response.result {
+                
+            case .success:
+                do {
+                    guard let data = response.data else {return}
+                    let movieObject = try JSONDecoder().decode(MovieDetails.self, from: data)
+                    callback(movieObject)
+                } catch let erro {
+                    callback(nil)
+                    print(erro)
+                }
+            case .failure:
+            callback(nil)
             print(response.error!)
             }
         }

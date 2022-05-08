@@ -34,7 +34,7 @@ class MovieCollectionView: UICollectionView,
         case .homeMovies:
             if let movies = movie {
                 self.movie = movies
-                self.itemsInSection = Int(movies.count * 5000)
+                self.itemsInSection = movies.count
             }
             self.reloadData()
         case .recommendation:
@@ -54,6 +54,9 @@ class MovieCollectionView: UICollectionView,
     
     func registerCell() {
         self.backgroundColor = .black
+        self.showsVerticalScrollIndicator = false
+        self.showsHorizontalScrollIndicator = false
+        self.alwaysBounceVertical = true
         self.register(HomeCollectionViewCell.self,
                       forCellWithReuseIdentifier: Constants.CellIdentifier.movieCollection)
         self.delegate = self
@@ -71,7 +74,9 @@ class MovieCollectionView: UICollectionView,
     
     func reloadMovies() {
         self.itemsInSection = movie.count
-        self.reloadData()
+        self.performBatchUpdates({
+            self.reloadSections(IndexSet(integer: 0))
+        }, completion: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -94,7 +99,9 @@ class MovieCollectionView: UICollectionView,
         let moviePoster = movies.posterPath
         let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(moviePoster)")
         if let url = imageUrl {
-            cell.moviePoster.af.setImage(withURL: url)
+            UIView.animate(withDuration: 0.5,
+                           animations: {cell.moviePoster.af.setImage(withURL: url)},
+                           completion: nil)
         }
         cell.setup()
         

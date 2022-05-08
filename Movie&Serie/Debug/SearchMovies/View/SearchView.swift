@@ -29,7 +29,7 @@ class SearchView: UIView {
         search.barStyle = .black
         search.isUserInteractionEnabled = true
         search.backgroundColor = .clear
-        search.placeholder = "Oque você procura"
+        search.placeholder = Constants.Labels.searchBarText
         search.isTranslucent = true
         search.searchBarStyle = .minimal
         search.delegate = self

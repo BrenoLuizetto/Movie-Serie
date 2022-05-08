@@ -15,6 +15,8 @@ protocol MovieCollectionProtocol: AnyObject {
     func finishLoad()
     func hiddenTabBar(hidden: Bool, animated: Bool)
     func showDetailsScreen(movie: MovieViewData)
+    func showErrorMessage(_ title: String,
+                          _ message: String)
 }
 
 class MovieCollectionAction: NSObject, MovieCollectionProtocol {
@@ -55,5 +57,13 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
         let viewModel = MovieDetailsViewModel(movie, with: self)
         let vc = MovieDetailsViewController(viewModel: viewModel)
         self.controller.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showErrorMessage(_ title: String, _ message: String) {
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive, handler: nil))
+        controller.navigationController?.present(alert, animated: true, completion: nil)
     }
 }

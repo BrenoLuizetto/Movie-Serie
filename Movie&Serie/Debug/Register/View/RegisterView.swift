@@ -20,7 +20,7 @@ final class RegisterView: UIView {
     
     private lazy var closeButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "closeButton"), for: .normal)
+        button.setImage(UIImage(named: Constants.Images.closeButton), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         return button
@@ -28,7 +28,7 @@ final class RegisterView: UIView {
     
     private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Insira os dados abaixo para prosseguir"
+        lbl.text = Constants.Labels.insertData
         lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 30)
         lbl.textColor = .white
         lbl.numberOfLines = 0
@@ -37,7 +37,7 @@ final class RegisterView: UIView {
     
     private lazy var subtitleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Crie sua conta"
+        lbl.text = Constants.Labels.createAccount
         lbl.font = UIFont(name: Constants.Fonts.avenirMedium, size: 20)
         lbl.textColor = .white
         return lbl

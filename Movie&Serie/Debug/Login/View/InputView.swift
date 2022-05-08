@@ -27,7 +27,7 @@ class InputView: UIView {
     
     private lazy var errorLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "insira um email válido."
+        lbl.text = Constants.Labels.mailError
         lbl.font = UIFont(name: Constants.Fonts.avenirBook, size: 12)
         lbl.textColor = .red
         return lbl
@@ -45,18 +45,18 @@ class InputView: UIView {
         
         switch type {
         case .user:
-            self.inputTextField.attributedPlaceholder = NSAttributedString(string: "Email",
+            self.inputTextField.attributedPlaceholder = NSAttributedString(string: Constants.Labels.mail,
                                                                             attributes: attributes)
             self.inputTextField.keyboardType = .emailAddress
             self.inputTextField.textContentType = .emailAddress
         case .pass:
-            self.inputTextField.attributedPlaceholder = NSAttributedString(string: "Senha",
+            self.inputTextField.attributedPlaceholder = NSAttributedString(string: Constants.Labels.password,
                                                                             attributes: attributes)
             self.inputTextField.textContentType = .password
             self.inputTextField.isSecureTextEntry = true
         
         case .confirmPass:
-            self.inputTextField.attributedPlaceholder = NSAttributedString(string: "Confirmar senha",
+            self.inputTextField.attributedPlaceholder = NSAttributedString(string: Constants.Labels.confirmPassword,
                                                                             attributes: attributes)
             self.inputTextField.textContentType = .password
             self.inputTextField.isSecureTextEntry = true

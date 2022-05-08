@@ -21,7 +21,7 @@ class WarningView: UIView {
     
     private lazy var message: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Ops! Ocorreu um erro, verifique suas credenciais e tente novamente"
+        lbl.text = Constants.Labels.loginErrorMessage
         lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 18)
         lbl.textColor = .white
         lbl.numberOfLines = 0
@@ -30,7 +30,7 @@ class WarningView: UIView {
     
     private lazy var closeButton: UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(named: "closeButton"), for: .normal)
+        btn.setImage(UIImage(named: Constants.Images.closeButton), for: .normal)
         btn.imageView?.tintColor = .white
         btn.imageView?.contentMode = .scaleAspectFit
         btn.addTarget(self, action: #selector(close), for: .touchUpInside)

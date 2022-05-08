@@ -16,6 +16,7 @@ class HomeViewController: BaseViewController {
     private var tableView: HomeTableView?
     private var errorView: ErrorView?
     private var detailsView: MovieDetailsView?
+    private let refreshControl = UIRefreshControl()
 
     private let viewModel = MovieViewModel()
     
@@ -32,6 +33,12 @@ class HomeViewController: BaseViewController {
         self.view.showHUD()
         self.tableView = viewModel.tableView
         configNavBar()
+//        getTypes()
+        setRefreshControl()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.view.showHUD()
         getTypes()
     }
 }
@@ -50,13 +57,23 @@ extension HomeViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
                                                                  target: self,
                                                                  action: #selector(search))
-        let a = UIBarButtonItem(image: UIImage(named: "pngTests"),
+        let barButton = UIBarButtonItem(image: UIImage(systemName: "line.3.horizontal"),
                                 style: .plain,
                                 target: self,
                                 action: #selector(userMenu))
         
-        a.imageInsets = UIEdgeInsets(top: 0, left: -100, bottom: 0, right: 0)
-        self.navigationItem.leftBarButtonItem = a
+        self.navigationItem.leftBarButtonItem = barButton
+        self.title = "InfoCine"
+    }
+    
+    private func setRefreshControl() {
+        if #available(iOS 10.0, *) {
+            tableView?.refreshControl = refreshControl
+        } else {
+            tableView?.addSubview(refreshControl)
+        }
+        refreshControl.addTarget(self, action: #selector(refreshWeatherData(_:)), for: .valueChanged)
+
     }
     
     @objc
@@ -71,6 +88,12 @@ extension HomeViewController {
         self.navigationController?.pushViewController(menuVC, animated: true)
     }
     
+    @objc
+    private func refreshWeatherData(_ sender: Any) {
+        getTypes()
+        self.refreshControl.endRefreshing()
+    }
+    
     private func getTypes() {
         viewModel.parametersForCell { parameters in
             if let result = parameters {
@@ -79,7 +102,6 @@ extension HomeViewController {
                                           viewModel: self.viewModel,
                                           delegate: MovieCollectionAction(controller: self), {
                     self.buildTableView()
-                    self.view.removeHUD()
                 })
             } else {
                 self.showErrorView()

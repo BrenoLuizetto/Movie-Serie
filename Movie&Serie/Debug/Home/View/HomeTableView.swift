@@ -21,9 +21,11 @@ class HomeTableView: UITableView {
     private var upcomingMovieData: [MovieViewData] = []
     private var cellTitle: [String] = []
     private var homeDelegate: MovieCollectionProtocol?
-    private var movieType: [MovieType] = []
+    private var movieType: [MovieSettings] = []
     private var cellType: CellType = .allmovies
-    
+        
+    private var finishedLoadingInitialTableCells = false
+
     init() {
         super.init(frame: .zero, style: .plain)
         self.backgroundColor = .black
@@ -35,7 +37,7 @@ class HomeTableView: UITableView {
     }
     
     func buildCell(cellType: CellType,
-                   _ movieType: [MovieType],
+                   _ movieType: [MovieSettings],
                    viewModel: MovieViewModel,
                    delegate: MovieCollectionProtocol,
                    _ callback: @escaping () -> Void) {
@@ -52,28 +54,40 @@ class HomeTableView: UITableView {
     func registerCell() {
         switch cellType {
         case .upcoming:
-            self.register(UpcomingViewCell.self, forCellReuseIdentifier: "MovieUpcomingCell")
+            self.register(UpcomingViewCell.self, forCellReuseIdentifier: Constants.CellIdentifier.movieUpcoming)
         case .allmovies:
-            self.register(HomeTableViewCell.self, forCellReuseIdentifier: "MovieCell")
+            self.register(HomeTableViewCell.self, forCellReuseIdentifier: Constants.CellIdentifier.movieCell)
+            self.register(TopMovieViewCell.self, forCellReuseIdentifier: Constants.CellIdentifier.topMovie)
 
         }
+        self.showsVerticalScrollIndicator = false
+        self.showsHorizontalScrollIndicator = false
         self.delegate = self
         self.dataSource = self
     }
     
     func getMovie(_ callback: @escaping () -> Void) {
+            cellTitle = []
             movieData = []
         for type in movieType {
             viewModel?.getMovie(type: type) { movies in
-                self.cellTitle.append(type.titleOfCell)
-                switch self.cellType {
-                case .upcoming:
-                    self.upcomingMovieData = movies
-                case .allmovies:
-                    self.movieData.append(movies)
+                if type.titleOfCell == Constants.CellTitle.topMovie,
+                   self.cellTitle.first != Constants.CellTitle.topMovie {
+                    self.cellTitle.insert(type.titleOfCell, at: 0)
+                    self.movieData.insert(movies, at: 0)
+                    
+                } else {
+                    self.cellTitle.append(type.titleOfCell)
+                    switch self.cellType {
+                    case .upcoming:
+                        self.upcomingMovieData = movies
+                    case .allmovies:
+                        self.movieData.append(movies)
+                    }
                 }
-
+               
                 self.reloadData()
+//                self.perform(#selector(self.testFornow), with: nil, afterDelay: 5)
                 callback()
             }
         }
@@ -87,6 +101,9 @@ extension HomeTableView: UITableViewDataSource, UITableViewDelegate {
         case .upcoming:
             return UITableView.automaticDimension
         case .allmovies:
+            if cellTitle[indexPath.row] == Constants.CellTitle.topMovie {
+                return CGFloat(400)
+            }
             return CGFloat(300)
         }
     }
@@ -103,38 +120,109 @@ extension HomeTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch cellType {
         case .upcoming:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieUpcomingCell",
-                                                           for: indexPath) as? UpcomingViewCell
-            else { return UITableViewCell() }
-            cell.isUserInteractionEnabled = false
-            let data = upcomingMovieData[indexPath.row]
-            if let backdropPath = data.backdropPath {
-                let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(backdropPath)")
-                if let url = imageUrl {
-                    cell.movieBackground.af.setImage(withURL: url)
-                }
-            }
-            
-            cell.buildParameters(movie: data)
-            return cell
+            return buildUpcomingCell(tableView,
+                              indexPath)
         case .allmovies:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell",
-                                                     for: indexPath) as? HomeTableViewCell
-            else { return UITableViewCell() }
-            let data = movieData[indexPath.row]
-            cell.getProperties(sectionTitle: cellTitle[indexPath.row],
-                               movie: data,
-                               section: indexPath.section,
-                               delegate: homeDelegate)
-            return cell
+            if cellTitle[indexPath.row] == Constants.CellTitle.topMovie {
+                return buildTopCell(tableView,
+                             indexPath)
+            }
+            return buildGenericCell(tableView,
+                                    indexPath)
         }
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+
+        var lastInitialDisplayableCell = false
+
+        if movieData.count > 0 && !finishedLoadingInitialTableCells {
+            if let indexPathsForVisibleRows = tableView.indexPathsForVisibleRows,
+                let lastIndexPath = indexPathsForVisibleRows.last, lastIndexPath.row == indexPath.row {
+                lastInitialDisplayableCell = true
+            }
+        }
+
+        if !finishedLoadingInitialTableCells {
+
+            if lastInitialDisplayableCell {
+                finishedLoadingInitialTableCells = true
+            }
+
+            cell.transform = CGAffineTransform(translationX: 0, y: self.rowHeight/2)
+            cell.alpha = 0
+
+            UIView.animate(withDuration: 0.5, delay: 0.05 * Double(indexPath.row),
+                           options: [.curveEaseInOut],
+                           animations: {
+                cell.transform = CGAffineTransform(translationX: 0, y: 0)
+                cell.alpha = 1
+            }, completion: nil)
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0 {
             self.homeDelegate?.hiddenTabBar(hidden: true, animated: true)
         } else {
             self.homeDelegate?.hiddenTabBar(hidden: false, animated: true)
         }
+    }
+}
+
+extension HomeTableView {
+    
+    func buildTopCell(_ tableView: UITableView,
+                      _ indexPath: IndexPath ) -> UITableViewCell {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellIdentifier.topMovie,
+                                                     for: indexPath) as? TopMovieViewCell,
+                  let movie = movieData[indexPath.row].first,
+                  let delegate = homeDelegate
+            else { return UITableViewCell() }
+            
+            let backdropPath = movie.backdropPath
+            let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(backdropPath ?? "")")
+            if let url = imageUrl {
+                UIView.animate(withDuration: 0.5,
+                               animations: {cell.moviePoster.af.setImage(withURL: url)},
+                               completion: nil)
+            }
+            cell.setup(viewModel: MovieDetailsViewModel(movie,
+                                                        with: delegate))
+            return cell
+    }
+    
+    func buildUpcomingCell(_ tableView: UITableView,
+                           _ indexPath: IndexPath ) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellIdentifier.movieUpcoming,
+                                                       for: indexPath) as? UpcomingViewCell
+        else { return UITableViewCell() }
+        cell.isUserInteractionEnabled = false
+        let data = upcomingMovieData[indexPath.row]
+        if let backdropPath = data.backdropPath {
+            let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(backdropPath)")
+            if let url = imageUrl {
+                UIView.animate(withDuration: 0.5,
+                               animations: {cell.movieBackground.af.setImage(withURL: url)},
+                               completion: nil)
+            }
+        }
+        
+        cell.buildParameters(movie: data)
+        return cell
+    }
+    
+    func buildGenericCell(_ tableView: UITableView,
+                          _ indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellIdentifier.movieCell,
+                                                 for: indexPath) as? HomeTableViewCell
+        else { return UITableViewCell() }
+        let data = movieData[indexPath.row]
+        cell.getProperties(sectionTitle: cellTitle[indexPath.row],
+                           movie: data,
+                           section: indexPath.section,
+                           delegate: homeDelegate)
+        return cell
     }
 }

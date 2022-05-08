@@ -28,9 +28,12 @@ protocol MovieViewDataType {
 class MovieViewData: Decodable, Encodable {
     
     private let model: Result
+    let movieType: String?
     
-    init(model: Result) {
+    init(model: Result,
+         movieType: String = "") {
         self.model = model
+        self.movieType = movieType
     }
 }
 
@@ -79,7 +82,7 @@ extension MovieViewData: MovieViewDataType {
         if let aux = model.title, aux.isEmpty {
             return aux
         }
-        return model.originalTitle ?? model.originalName!
+        return model.originalTitle ?? model.originalName ?? ""
     }
     
     var backdropPath: String? {
