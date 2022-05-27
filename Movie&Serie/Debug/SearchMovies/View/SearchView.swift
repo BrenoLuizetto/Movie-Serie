@@ -108,9 +108,6 @@ extension SearchView: BuildViewConfiguration {
 }
 
 extension SearchView: UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-
-    }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
@@ -134,6 +131,7 @@ extension SearchView: UISearchBarDelegate {
             self.setContetState(state: .popMovies)
         }
     }
+    
 }
 
 extension SearchView {

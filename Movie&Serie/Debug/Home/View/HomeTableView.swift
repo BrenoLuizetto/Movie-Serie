@@ -21,7 +21,6 @@ class HomeTableView: UITableView {
     private var upcomingMovieData: [MovieViewData] = []
     private var cellTitle: [String] = []
     private var homeDelegate: MovieCollectionProtocol?
-    private var movieType: [MovieSettings] = []
     private var cellType: CellType = .allmovies
         
     private var finishedLoadingInitialTableCells = false
@@ -37,16 +36,14 @@ class HomeTableView: UITableView {
     }
     
     func buildCell(cellType: CellType,
-                   _ movieType: [MovieSettings],
                    viewModel: MovieViewModel,
                    delegate: MovieCollectionProtocol,
                    _ callback: @escaping () -> Void) {
         self.homeDelegate = delegate
         self.cellType = cellType
         self.viewModel = viewModel
-        self.movieType = movieType
         registerCell()
-        getMovie {
+        refreshData {
             callback()
         }
     }
@@ -66,11 +63,27 @@ class HomeTableView: UITableView {
         self.dataSource = self
     }
     
-    func getMovie(_ callback: @escaping () -> Void) {
-            cellTitle = []
-            movieData = []
-        for type in movieType {
-            viewModel?.getMovie(type: type) { movies in
+    func refreshData(_ callback: @escaping () -> Void) {
+        switch cellType {
+        case .upcoming:
+                self.setData {
+                    callback()
+                }
+        case .allmovies:
+            self.viewModel?.parametersForCell {
+                self.setData {
+                    callback()
+                }
+            }
+        }
+    }
+    
+    private func setData(_ callback: @escaping () -> Void) {
+        self.cellTitle = []
+        self.movieData = []
+        guard let types = self.viewModel?.types else { return }
+        for type in types {
+            self.viewModel?.getMovie(type: type) { movies in
                 if type.titleOfCell == Constants.CellTitle.topMovie,
                    self.cellTitle.first != Constants.CellTitle.topMovie {
                     self.cellTitle.insert(type.titleOfCell, at: 0)
@@ -85,9 +98,7 @@ class HomeTableView: UITableView {
                         self.movieData.append(movies)
                     }
                 }
-               
-                self.reloadData()
-//                self.perform(#selector(self.testFornow), with: nil, afterDelay: 5)
+                self.reloadWithTransition()
                 callback()
             }
         }

@@ -62,7 +62,7 @@ class Constants {
         static let preLoginSubTitle = "Assita onde quiser. Cancele\n quando quiser"
         static let begin = "Começar"
         static let start = "Inicio"
-        static let appName = "BRCine"
+        static let appName = "InfoCine"
         static let rememberAccess = "Lembrar acesso"
         static let enter = "Entrar"
         static let createAccount2 = "Não possui conta? Cadastre-se"

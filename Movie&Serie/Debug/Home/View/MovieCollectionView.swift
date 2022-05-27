@@ -36,7 +36,7 @@ class MovieCollectionView: UICollectionView,
                 self.movie = movies
                 self.itemsInSection = movies.count
             }
-            self.reloadData()
+            reloadWithTransition()
         case .recommendation:
             if let model = viewModel {
                 self.viewModel = model
@@ -56,7 +56,6 @@ class MovieCollectionView: UICollectionView,
         self.backgroundColor = .black
         self.showsVerticalScrollIndicator = false
         self.showsHorizontalScrollIndicator = false
-        self.alwaysBounceVertical = true
         self.register(HomeCollectionViewCell.self,
                       forCellWithReuseIdentifier: Constants.CellIdentifier.movieCollection)
         self.delegate = self
@@ -68,16 +67,16 @@ class MovieCollectionView: UICollectionView,
             guard let self = self else { return }
             self.movie = movies
             self.itemsInSection = movies.count
-            self.reloadData()
+            self.reloadWithTransition()
         }
     }
     
     func reloadMovies() {
         self.itemsInSection = movie.count
-        self.performBatchUpdates({
-            self.reloadSections(IndexSet(integer: 0))
-        }, completion: nil)
+        reloadWithTransition()
     }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -99,9 +98,7 @@ class MovieCollectionView: UICollectionView,
         let moviePoster = movies.posterPath
         let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(moviePoster)")
         if let url = imageUrl {
-            UIView.animate(withDuration: 0.5,
-                           animations: {cell.moviePoster.af.setImage(withURL: url)},
-                           completion: nil)
+            cell.moviePoster.af.setImage(withURL: url)
         }
         cell.setup()
         
@@ -116,5 +113,9 @@ class MovieCollectionView: UICollectionView,
         let movieTapped = movie[indexPath.row % movie.count]
         self.collectionProtocol?.didSelectItem(movie: movieTapped)
         
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.collectionProtocol?.didScroll()
     }
 }

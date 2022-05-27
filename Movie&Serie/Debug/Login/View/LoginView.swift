@@ -131,17 +131,32 @@ class LoginView: UIView {
     
     func buildWithError() {
         self.hasError = true
-        self.removeAllViews()
-        self.buildItens()
-        self.warningView.callback = {
+        self.warningView = WarningView()
+        self.addSubview(warningView)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             self.buildWithouError()
         }
+        
+        warningView.snp.makeConstraints { make in
+            make.top.equalTo(container.snp.top).offset(50)
+            make.left.equalToSuperview().offset(15)
+            make.right.equalToSuperview().offset(-15)
+            make.height.equalTo(80)
+        }
+        
+        UIView.animate(withDuration: 1,
+                       delay: 0.5,
+                       options: .transitionCrossDissolve,
+                       animations: {self.layoutIfNeeded()},
+                       completion: nil)
     }
     
     func buildWithouError() {
         self.hasError = false
-        self.removeAllViews()
-        self.buildItens()
+        self.warningView.removeFromSuperview()
+        self.layoutIfNeeded()
+
     }
     
     @objc
@@ -160,14 +175,12 @@ class LoginView: UIView {
         self.showHUD()
         didTapRegister?()
     }
+    
 }
 
 extension LoginView: BuildViewConfiguration {
     func buildViewHierarchy() {
         self.addSubview(container)
-        if hasError {
-            self.addSubview(warningView)
-        }
         self.addSubview(header)
         self.addSubview(userView)
         self.addSubview(passView)
@@ -180,14 +193,6 @@ extension LoginView: BuildViewConfiguration {
     func makeConstraints() {
         container.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-        
-        if hasError {
-            warningView.snp.makeConstraints { make in
-                make.top.equalTo(container.snp.top).offset(50)
-                make.left.equalToSuperview().offset(15)
-                make.right.equalToSuperview().offset(-15)
-            }
         }
         
         header.snp.makeConstraints { make in

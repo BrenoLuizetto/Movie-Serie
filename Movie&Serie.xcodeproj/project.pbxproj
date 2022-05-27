@@ -66,6 +66,8 @@
 		BA8DC49F26E1A30600FF9759 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8DC49E26E1A30600FF9759 /* UIView+Extension.swift */; };
 		BA8DC4A126E26D9100FF9759 /* MovieTrailer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8DC4A026E26D9100FF9759 /* MovieTrailer.swift */; };
 		BA8DC4A326E2F8BB00FF9759 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BA8DC4A226E2F8BB00FF9759 /* GoogleService-Info.plist */; };
+		BA8FE0D4282B60BF0022AEFC /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8FE0D3282B60BF0022AEFC /* UITableView+Extension.swift */; };
+		BA8FE0D6282B610F0022AEFC /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8FE0D5282B610F0022AEFC /* UICollectionView+Extension.swift */; };
 		BA93918E2721EBE9004F2F85 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA93918D2721EBE9004F2F85 /* EmptyView.swift */; };
 		BAC2DE6726A6530B003FAE2E /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC2DE6626A6530B003FAE2E /* UIFont+Extension.swift */; };
 		BAC52AA627234BFE004C946D /* PreLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC52AA527234BFE004C946D /* PreLoginViewController.swift */; };
@@ -167,6 +169,8 @@
 		BA8DC4A026E26D9100FF9759 /* MovieTrailer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTrailer.swift; sourceTree = "<group>"; };
 		BA8DC4A226E2F8BB00FF9759 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BA8DC4A426E2F8D100FF9759 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BA8FE0D3282B60BF0022AEFC /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
+		BA8FE0D5282B610F0022AEFC /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
 		BA93918D2721EBE9004F2F85 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		BAC2DE6626A6530B003FAE2E /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		BAC52AA527234BFE004C946D /* PreLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreLoginViewController.swift; sourceTree = "<group>"; };
@@ -310,6 +314,8 @@
 				BA8DC49E26E1A30600FF9759 /* UIView+Extension.swift */,
 				BAC8864726FB7F2200312830 /* UIButton+Extension.swift */,
 				BA7454FC2770F0EB00D2793C /* UIImageVIew+Extension.swift */,
+				BA8FE0D3282B60BF0022AEFC /* UITableView+Extension.swift */,
+				BA8FE0D5282B610F0022AEFC /* UICollectionView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -939,10 +945,12 @@
 				BA0EA13226AF353C00DCBA5A /* MovieService.swift in Sources */,
 				BA13C6D1268C12B400043F79 /* MovieViewData.swift in Sources */,
 				BAF308EC26E594E400418AB5 /* LoginView.swift in Sources */,
+				BA8FE0D6282B610F0022AEFC /* UICollectionView+Extension.swift in Sources */,
 				BA87BBD62691172A00BDBC28 /* MovieDetailsView.swift in Sources */,
 				BA79080A268A858E006DE9AB /* AppDelegate.swift in Sources */,
 				BAC8864C26FD423A00312830 /* LaunchViewController.swift in Sources */,
 				BA7455092770F84100D2793C /* Itens.swift in Sources */,
+				BA8FE0D4282B60BF0022AEFC /* UITableView+Extension.swift in Sources */,
 				BA5E84A027035FB200F751A1 /* LaunchViewModel.swift in Sources */,
 				BA249263268D22A100565245 /* HomeTableViewCell.swift in Sources */,
 				BAC52AA827234C8A004C946D /* PreLoginView.swift in Sources */,

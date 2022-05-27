@@ -24,7 +24,7 @@ class InComingViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.view.showHUD()
-        self.tableView.getMovie {
+        self.tableView.refreshData {
             self.view.removeHUD()
         }
     }
@@ -33,8 +33,8 @@ class InComingViewController: BaseViewController {
         let types: [MovieSettings] = [MovieSettings(typeMovie: Constants.MovieType.upcoming,
                                             titleOfCell: Constants.CellTitle.upcoming,
                                             genreType: nil)]
+        viewModel.types = types
         self.tableView.buildCell(cellType: .upcoming,
-                                 types,
                                  viewModel: self.viewModel,
                                  delegate: MovieCollectionAction(controller: self)) {
 
@@ -62,7 +62,7 @@ class InComingViewController: BaseViewController {
     @objc
     private func refreshWeatherData(_ sender: Any) {
         self.view.showHUD()
-        self.tableView.getMovie {
+        self.tableView.refreshData {
             self.refreshControl.endRefreshing()
             self.view.removeHUD()
         }

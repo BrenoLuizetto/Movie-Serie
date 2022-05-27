@@ -25,8 +25,9 @@ class LoginViewController: BaseViewController {
     func showLogin() {
         self.loginView?.didTapLogin = { userName, pass in
             self.viewModel.showLogin(username: userName, pass: pass, { result in
-                self.view.showHUD()
+//                self.view.showHUD()
                 if result != nil {
+                    self.view.removeHUD()
                     self.loginView?.buildWithError()
                 } else {
                     self.pushTabBar()
@@ -48,5 +49,3 @@ class LoginViewController: BaseViewController {
         self.navigationController?.pushViewController(TabBarController(), animated: true)
     }
 }
-
-

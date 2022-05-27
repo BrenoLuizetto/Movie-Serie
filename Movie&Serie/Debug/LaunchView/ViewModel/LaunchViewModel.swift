@@ -17,13 +17,15 @@ class LaunchViewModel {
     func validateLogin(_ completion: @escaping ((Bool?) -> Void)) {
         guard let access = try? userdefault.getObject(forKey: Constants.UserDefaults.rememberAccess,
                                                       castTo: Bool.self)
-        else { completion(false)
+        else {
+            completion(false)
             return
         }
         if access {
             guard let username = keychain.get(Constants.UserDefaults.username),
                   let pass = keychain.get(Constants.UserDefaults.pass)
-            else { completion(false)
+            else {
+                completion(false)
                 return
             }
             

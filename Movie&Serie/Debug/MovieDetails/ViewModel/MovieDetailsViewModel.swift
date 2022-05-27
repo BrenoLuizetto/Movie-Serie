@@ -123,6 +123,7 @@ class MovieDetailsViewModel: MovieViewModel {
         do {
             let movieArray =  try us.getObject(forKey: Constants.UserDefaults.favoriteMovies,
                                                castTo: [MovieViewData].self)
+
             if validateUserDefault(movieArray: movieArray) {
                 return true
             } else {
@@ -131,5 +132,10 @@ class MovieDetailsViewModel: MovieViewModel {
         } catch {
             return false
         }
+    }
+    
+    func DidListChange() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateFavoriteMovies"),
+                                        object: nil)
     }
 }

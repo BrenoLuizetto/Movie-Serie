@@ -68,15 +68,7 @@ extension WarningView: BuildViewConfiguration {
         
         message.snp.makeConstraints { make in
             make.left.top.equalToSuperview().offset(15)
-            make.bottom.equalToSuperview().offset(-15)
-        }
-        
-        closeButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-15)
-            make.top.equalToSuperview().offset(15)
-            make.left.equalTo(message.snp.right).offset(10)
-            make.height.equalTo(20)
-//            make.bottom.equalToSuperview().offset(-15)
+            make.bottom.right.equalToSuperview().offset(-15)
         }
     }
     

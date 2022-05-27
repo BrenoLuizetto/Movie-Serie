@@ -12,8 +12,8 @@ class MovieViewModel {
     private var movieModel: Movie?
     private var service =  MovieService()
     private var genreData: [GenreViewData] = []
-
     open var movieData: [MovieViewData] = []
+    var types: [MovieSettings] = []
     var tableView = HomeTableView()
 
     func getMovie(type: MovieSettings, _ callback: @escaping ([MovieViewData]) -> Void) {
@@ -41,9 +41,10 @@ class MovieViewModel {
         }
     }
     
-    func parametersForCell(_ callback: @escaping ([MovieSettings]?) -> Void) {
+    func parametersForCell(_ callback: @escaping () -> Void) {
         genreData = []
-        var types: [MovieSettings] = [MovieSettings(typeMovie: Constants.MovieType.topWeek,
+        types.removeAll()
+        types = [MovieSettings(typeMovie: Constants.MovieType.topWeek,
                                                     titleOfCell: Constants.CellTitle.topMovie,
                                                     genreType: nil),
                                       MovieSettings(typeMovie: Constants.MovieType.topWeek,
@@ -58,16 +59,15 @@ class MovieViewModel {
         
         getGenres { result in
             if result == 0 {
-                callback(nil)
+                callback()
             }
             for genre in self.genreData {
-                types.append(MovieSettings(typeMovie: Constants.MovieType.genres,
+                self.types.append(MovieSettings(typeMovie: Constants.MovieType.genres,
                                        titleOfCell: genre.name ,
                                        genreType: String("&with_genres=\(genre.id)")))
             }
-            callback(types)
+            callback()
         }
-       
     }
     
     private func getGenres(_ callback: @escaping (Int) -> Void) {
@@ -89,10 +89,11 @@ class MovieViewModel {
     private func getFavoriteMovies() -> [MovieViewData]? {
         let us = UserDefaults.standard
         do {
-            let movieArray =  try? us.getObject(forKey: Constants.UserDefaults.favoriteMovies,
-                                               castTo: [MovieViewData].self)
+            guard let movieArray =  try? us.getObject(forKey: Constants.UserDefaults.favoriteMovies,
+                                                      castTo: [MovieViewData].self) else { return nil }
             return movieArray
         } catch {
+            
             return nil
         }
     }

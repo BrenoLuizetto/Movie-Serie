@@ -243,6 +243,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     }
     
     func setScrollView() {
+        self.layoutIfNeeded()
         self.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         self.scrollView.contentSize = (CGSize(width: UIScreen.main.bounds.width,
                                               height: self.recommendationCollection.contentSize.height +

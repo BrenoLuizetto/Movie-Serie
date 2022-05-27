@@ -140,6 +140,7 @@ class TopMovieViewCell: UITableViewCell {
     func addToMyList(sender: UIButton) {
         viewModel?.addFavorite(with: {
             self.verifyFavoriteList()
+            self.viewModel?.DidListChange()
         })
     }
     

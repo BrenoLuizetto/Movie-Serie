@@ -17,6 +17,7 @@ protocol MovieCollectionProtocol: AnyObject {
     func showDetailsScreen(movie: MovieViewData)
     func showErrorMessage(_ title: String,
                           _ message: String)
+    func didScroll()
 }
 
 class MovieCollectionAction: NSObject, MovieCollectionProtocol {
@@ -65,5 +66,9 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive, handler: nil))
         controller.navigationController?.present(alert, animated: true, completion: nil)
+    }
+    
+    func didScroll() {
+        self.controller.view.endEditing(true)
     }
 }

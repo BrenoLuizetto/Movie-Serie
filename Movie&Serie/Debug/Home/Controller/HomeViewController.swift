@@ -17,7 +17,7 @@ class HomeViewController: BaseViewController {
     private var errorView: ErrorView?
     private var detailsView: MovieDetailsView?
     private let refreshControl = UIRefreshControl()
-
+    
     private let viewModel = MovieViewModel()
     
     init() {
@@ -30,17 +30,17 @@ class HomeViewController: BaseViewController {
     }
     
     override func viewDidLoad() {
-        self.view.showHUD()
-        self.tableView = viewModel.tableView
         configNavBar()
-//        getTypes()
+        self.tableView = viewModel.tableView
+        self.tableView?.buildCell(cellType: .allmovies,
+                                  viewModel: self.viewModel,
+                                  delegate: MovieCollectionAction(controller: self), {
+            self.buildTableView()
+        })
         setRefreshControl()
+        addObservers()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.view.showHUD()
-        getTypes()
-    }
 }
 
 extension HomeViewController {
@@ -58,9 +58,9 @@ extension HomeViewController {
                                                                  target: self,
                                                                  action: #selector(search))
         let barButton = UIBarButtonItem(image: UIImage(systemName: "line.3.horizontal"),
-                                style: .plain,
-                                target: self,
-                                action: #selector(userMenu))
+                                        style: .plain,
+                                        target: self,
+                                        action: #selector(userMenu))
         
         self.navigationItem.leftBarButtonItem = barButton
         self.title = "InfoCine"
@@ -73,7 +73,7 @@ extension HomeViewController {
             tableView?.addSubview(refreshControl)
         }
         refreshControl.addTarget(self, action: #selector(refreshWeatherData(_:)), for: .valueChanged)
-
+        
     }
     
     @objc
@@ -90,23 +90,14 @@ extension HomeViewController {
     
     @objc
     private func refreshWeatherData(_ sender: Any) {
-        getTypes()
+        refreshData()
         self.refreshControl.endRefreshing()
     }
     
-    private func getTypes() {
-        viewModel.parametersForCell { parameters in
-            if let result = parameters {
-                self.tableView?.buildCell(cellType: .allmovies,
-                                          result,
-                                          viewModel: self.viewModel,
-                                          delegate: MovieCollectionAction(controller: self), {
-                    self.buildTableView()
-                })
-            } else {
-                self.showErrorView()
-            }
-
+    private func refreshData() {
+        self.tableView?.refreshData {
+            self.view.layoutIfNeeded()
+            self.view.removeHUD()
         }
     }
     
@@ -118,7 +109,18 @@ extension HomeViewController {
         self.buildErrorView()
         self.view.removeHUD()
     }
-
+    
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didReceiveUpdate),
+                                               name: NSNotification.Name(rawValue: "updateFavoriteMovies"),
+                                               object: nil)
+    }
+    
+    @objc
+    private func didReceiveUpdate() {
+        self.refreshData()
+    }
 }
 
 extension HomeViewController {
@@ -147,5 +149,5 @@ extension HomeViewController {
             self.view.addSubview(errorView ?? UIView())
         }
     }
-
+    
 }
