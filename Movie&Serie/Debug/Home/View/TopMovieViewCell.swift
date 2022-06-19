@@ -182,6 +182,7 @@ extension TopMovieViewCell: BuildViewConfiguration {
         
         moviePoster.snp.makeConstraints { make in
             make.edges.equalTo(self)
+            make.height.equalTo(400)
         }
         
         gradientView.snp.makeConstraints { make in
@@ -217,7 +218,7 @@ extension TopMovieViewCell: BuildViewConfiguration {
     }
     
     func configElements() {
-        
+        self.backgroundColor = .black
     }
 
 }

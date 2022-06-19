@@ -74,14 +74,14 @@ class UserMenuView: UIView {
     private func setProfileImage() {
         if let profileImage = viewModel?.getProfilePicture() {
             self.perfilImage.image = profileImage
-        } else {
-            setDefaultImage()
+        } else if let userPhoto = viewModel?.userShared.userLogado?.photoURL {
+            self.perfilImage.af.setImage(withURL: userPhoto)
         }
     }
     
     private func setText() {
-        self.usernameLabel.text = viewModel?.userLogado?.displayName
-        self.mailLabel.text = viewModel?.userLogado?.email
+        self.usernameLabel.text = viewModel?.userShared.userLogado?.displayName
+        self.mailLabel.text = viewModel?.userShared.userLogado?.email
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(showCamera(tapGestureRecognizer:)))
         perfilImage.addGestureRecognizer(gesture)

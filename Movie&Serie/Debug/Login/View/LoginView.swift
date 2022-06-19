@@ -17,6 +17,7 @@ enum InputType {
 class LoginView: UIView {
     
     var didTapLogin: ((String, String) -> Void)?
+    var didTapGoogleLogin: (() -> Void)?
     var didTapRegister: (() -> Void)?
     
     private lazy var container: UIView = {
@@ -72,6 +73,18 @@ class LoginView: UIView {
         button.layer.cornerRadius = 5
         button.layer.borderWidth = 1
         button.setButtonState(isEnabled: false)
+        return button
+    }()
+    
+    private lazy var googleButton: UIButton = {
+       let button = UIButton()
+        button.backgroundColor = .white
+        button.setTitle("entrar com google", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(doGoogleLogin), for: .touchUpInside)
+        button.layer.cornerRadius = 5
+        button.layer.borderWidth = 1
+        button.setButtonState(isEnabled: true)
         return button
     }()
     
@@ -166,6 +179,11 @@ class LoginView: UIView {
     }
     
     @objc
+    func doGoogleLogin() {
+        didTapGoogleLogin?()
+    }
+    
+    @objc
     func rememberAcess() {
         viewModel?.rememberAccess()
     }
@@ -181,13 +199,14 @@ class LoginView: UIView {
 extension LoginView: BuildViewConfiguration {
     func buildViewHierarchy() {
         self.addSubview(container)
-        self.addSubview(header)
-        self.addSubview(userView)
-        self.addSubview(passView)
-        self.addSubview(rememberMessage)
-        self.addSubview(rememberCheck)
-        self.addSubview(continueButton)
-        self.addSubview(registerLabel)
+        container.addSubview(header)
+        container.addSubview(userView)
+        container.addSubview(passView)
+        container.addSubview(rememberMessage)
+        container.addSubview(rememberCheck)
+        container.addSubview(continueButton)
+        container.addSubview(googleButton)
+        container.addSubview(registerLabel)
     }
     
     func makeConstraints() {
@@ -228,17 +247,25 @@ extension LoginView: BuildViewConfiguration {
             make.centerY.equalTo(rememberCheck.snp.centerY)
         }
         
-        registerLabel.snp.makeConstraints { make in
-            make.left.equalTo(container.snp.left).offset(15)
-            make.right.equalTo(container.snp.right).offset(-15)
-            make.top.equalTo(continueButton.snp.bottom).offset(10)
-        }
-        
         continueButton.snp.makeConstraints { make in
             make.top.equalTo(rememberCheck.snp.bottom).offset(50)
             make.left.equalTo(container.snp.left).offset(15)
             make.right.equalTo(container.snp.right).offset(-15)
             make.height.equalTo(50)
+        }
+        
+        googleButton.snp.makeConstraints { make in
+            make.top.equalTo(continueButton.snp.bottom).offset(15)
+            make.left.equalTo(container.snp.left).offset(15)
+            make.right.equalTo(container.snp.right).offset(-15)
+            make.height.equalTo(50)
+        }
+        
+        
+        registerLabel.snp.makeConstraints { make in
+            make.left.equalTo(container.snp.left).offset(15)
+            make.right.equalTo(container.snp.right).offset(-15)
+            make.top.equalTo(googleButton.snp.bottom).offset(10)
         }
     }
     

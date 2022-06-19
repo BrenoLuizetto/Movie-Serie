@@ -22,11 +22,10 @@ class MovieDetailsViewModel: MovieViewModel {
         self.delegate = delegate
     }
     
-    func getMovieBackground(callback: @escaping (URL) -> Void) {
-        guard let backgroundPath = self.movie.backdropPath else {return}
-        if let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(backgroundPath)") {
-            callback(imageUrl)
-        }
+    func getMovieBackground() -> URL? {
+        guard let backgroundPath = self.movie.backdropPath,
+              let url = URL(string: "\(Constants.Url.imageOriginal)\(backgroundPath)") else { return nil }
+        return url
     }
     
     func getMoviePoster(callback: @escaping (URL) -> Void) {

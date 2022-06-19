@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 enum CollectionType {
     case recommendation
@@ -60,6 +61,7 @@ class MovieCollectionView: UICollectionView,
                       forCellWithReuseIdentifier: Constants.CellIdentifier.movieCollection)
         self.delegate = self
         self.dataSource = self
+
     }
     
     private func getReccomendations(viewModel: MovieDetailsViewModel) {
@@ -101,7 +103,10 @@ class MovieCollectionView: UICollectionView,
             cell.moviePoster.af.setImage(withURL: url)
         }
         cell.setup()
-        
+        cell.isAccessibilityElement = true
+        cell.accessibilityValue = movies.title
+        cell.accessibilityTraits = .adjustable
+
         if collectionType == .recommendation {
             detailsProtocol?.CollectionContentDidChange()
         }
@@ -118,4 +123,5 @@ class MovieCollectionView: UICollectionView,
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.collectionProtocol?.didScroll()
     }
+
 }

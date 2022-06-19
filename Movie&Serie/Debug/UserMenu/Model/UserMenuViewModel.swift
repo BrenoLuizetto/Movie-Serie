@@ -7,11 +7,13 @@
 
 import Foundation
 import KeychainSwift
+import FirebaseAuth
+import GoogleSignIn
 
 class UserMenuViewModel {
     
     private let client = UserMenuRequest()
-    let userLogado = LoggedUser.shared.userLogado
+    let userShared = LoggedUser.shared
     
     func getMenuItens(callback: @escaping (ItensMenu) -> Void) {
         client.getItens { result in
@@ -25,6 +27,13 @@ class UserMenuViewModel {
     }
     
     func doLogout() {
+        let firebaseAuth = Auth.auth()
+        do {
+          try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+          print("Error signing out: %@", signOutError)
+        }
+        GIDSignIn.sharedInstance.signOut()
         KeychainSwift().delete(Constants.UserDefaults.username)
         KeychainSwift().delete(Constants.UserDefaults.pass)
         LoggedUser.shared.clearUser()

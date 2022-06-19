@@ -43,9 +43,6 @@ class HomeTableView: UITableView {
         self.cellType = cellType
         self.viewModel = viewModel
         registerCell()
-        refreshData {
-            callback()
-        }
     }
     
     func registerCell() {
@@ -61,6 +58,7 @@ class HomeTableView: UITableView {
         self.showsHorizontalScrollIndicator = false
         self.delegate = self
         self.dataSource = self
+        self.isAccessibilityElement = false
     }
     
     func refreshData(_ callback: @escaping () -> Void) {
@@ -108,15 +106,7 @@ class HomeTableView: UITableView {
 extension HomeTableView: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch cellType {
-        case .upcoming:
-            return UITableView.automaticDimension
-        case .allmovies:
-            if cellTitle[indexPath.row] == Constants.CellTitle.topMovie {
-                return CGFloat(400)
-            }
-            return CGFloat(300)
-        }
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

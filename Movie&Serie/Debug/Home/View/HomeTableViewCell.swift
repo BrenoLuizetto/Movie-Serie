@@ -63,8 +63,9 @@ class HomeTableViewCell: UITableViewCell {
 
 extension HomeTableViewCell: BuildViewConfiguration {
     func buildViewHierarchy() {
-        self.addSubview(self.title)
-        self.addSubview(self.movieCollection)
+        self.addSubview(container)
+        self.container.addSubview(self.title)
+        self.container.addSubview(self.movieCollection)
     }
 
     func configElements() {
@@ -72,15 +73,20 @@ extension HomeTableViewCell: BuildViewConfiguration {
     }
 
     func makeConstraints() {
+        container.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         title.snp.makeConstraints { make in
-            make.left.equalTo(self.snp.left).offset(15)
-            make.top.equalTo(self.snp.top).offset(10)
-            make.right.equalTo(self.snp.right).offset(-15)
+            make.left.equalToSuperview().offset(15)
+            make.top.equalToSuperview().offset(10)
+            make.right.equalToSuperview().offset(-15)
         }
         
         movieCollection.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalTo(self.title.snp.bottom).offset(5)
+            make.height.equalTo(250)
         }
     }
     

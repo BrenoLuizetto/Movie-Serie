@@ -17,6 +17,13 @@ final class LaunchViewController: BaseViewController {
         self.view = LaunchView()
         verifyLogin()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.setListener()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        viewModel.removeListerner()
+    }
 
     func verifyLogin() {
         viewModel.validateLogin { doLogin in

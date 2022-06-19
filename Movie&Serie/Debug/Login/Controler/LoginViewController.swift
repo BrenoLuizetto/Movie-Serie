@@ -22,9 +22,16 @@ class LoginViewController: BaseViewController {
         self.view = self.loginView
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.setListener()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        viewModel.removeListerner()
+    }
+    
     func showLogin() {
         self.loginView?.didTapLogin = { userName, pass in
-            self.viewModel.showLogin(username: userName, pass: pass, { result in
+            self.viewModel.doLogin(username: userName, pass: pass, { result in
 //                self.view.showHUD()
                 if result != nil {
                     self.view.removeHUD()
@@ -41,6 +48,16 @@ class LoginViewController: BaseViewController {
             }
             self.navigationController?.present(registerVC, animated: true)
             self.loginView?.removeHUD()
+        }
+        
+        self.loginView?.didTapGoogleLogin = {
+            self.view.showHUD()
+            self.viewModel.googleLogin(controller: self, { error in
+                self.view.removeHUD()
+                if error == nil {
+                    self.pushTabBar()
+                }
+            })
         }
     }
     

@@ -13,6 +13,7 @@ class LaunchViewModel {
     
     private let userdefault = UserDefaults.standard
     private let keychain = KeychainSwift()
+    private var listener: AuthStateDidChangeListenerHandle?
     
     func validateLogin(_ completion: @escaping ((Bool?) -> Void)) {
         guard let access = try? userdefault.getObject(forKey: Constants.UserDefaults.rememberAccess,
@@ -29,8 +30,6 @@ class LaunchViewModel {
                 return
             }
             
-            Auth.auth().addStateDidChangeListener { auth, user in
-                if user != nil {
                     Auth.auth().signIn(withEmail: username, password: pass) { authResult, error in
                         if authResult != nil {
                             LoggedUser.shared.setUser(user: authResult?.user)
@@ -39,10 +38,22 @@ class LaunchViewModel {
                             completion(false)
                         }
                     }
-                }
-            }
         } else {
             completion(false)
         }
+    }
+    
+    func setListener() {
+        listener = Auth.auth().addStateDidChangeListener { _, _ in
+            // Not implemented
+        }
+    }
+    
+    func removeListerner() {
+        guard let listener = listener else {
+            return
+        }
+
+        Auth.auth().removeStateDidChangeListener(listener)
     }
 }

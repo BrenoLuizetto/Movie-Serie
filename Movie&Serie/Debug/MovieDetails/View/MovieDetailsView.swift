@@ -99,6 +99,15 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         return stack
     }()
     
+    private lazy var buttonsContainer: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 20
+        stack.alignment = .center
+        stack.distribution = .fill
+        return stack
+    }()
+    
     private lazy var favoriteButton: UIButton = {
         var filled = UIButton.Configuration.filled()
         filled.title = Constants.Labels.myList
@@ -183,13 +192,7 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
                 self.movieTrailer.removeHUD()
                 self.backgroundMovie.removeHUD()
             } else {
-                self.viewModel.getMovieBackground(callback: { result in
-                    self.buildEmptyTrailer()
-                    self.backgroundMovie.af.setImage(withURL: result)
-                    self.movieTrailer.removeHUD()
-                    self.backgroundMovie.removeHUD()
-                })
-                
+                self.buildEmptyTrailer()
             }
         }
     }
@@ -232,14 +235,30 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
     }
     
     private func buildEmptyTrailer() {
-        movieTrailer.isHidden = true
-        
-        self.addSubview(backgroundMovie)
-        backgroundMovie.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(80)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(250)
+        if let url = self.viewModel.getMovieBackground() {
+            movieTrailer.removeConstraints(movieTrailer.constraints)
+            movieTrailer.removeFromSuperview()
+            self.addSubview(backgroundMovie)
+            backgroundMovie.snp.makeConstraints { make in
+                make.top.equalTo(self.snp.top).offset(80)
+                make.left.right.equalToSuperview()
+                make.height.equalTo(250)
+            }
+            
+            mainContainer.snp.makeConstraints { make in
+                make.top.equalTo(backgroundMovie.snp.bottom)
+            }
+            self.backgroundMovie.af.setImage(withURL: url)
+            self.movieTrailer.removeHUD()
+            self.backgroundMovie.removeHUD()
+        } else {
+            movieTrailer.removeFromSuperview()
+            mainContainer.snp.makeConstraints { make in
+                make.top.edges.equalToSuperview()
+            }
         }
+        self.updateConstraints()
+        self.layoutIfNeeded()
     }
     
     func setScrollView() {
@@ -252,6 +271,9 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
         self.scrollView.alwaysBounceVertical = true
         self.scrollView.isUserInteractionEnabled = true
         verifyCollectionItens()
+        UIAccessibility.post(notification: .layoutChanged,
+                             argument: scrollView)
+        
     }
     
     private func verifyFavoriteList() {
@@ -284,8 +306,8 @@ class MovieDetailsView: UIView, UIScrollViewDelegate {
                 count += count + 1
             }
             self.hasGenre = true
-            self.removeAllViews()
-            self.buildItens()
+//            self.removeAllViews()
+//            self.buildItens()
         }
     }
     
@@ -365,20 +387,10 @@ extension MovieDetailsView: BuildViewConfiguration {
                 make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
             }
         }
-
-        favoriteButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(-75)
-            make.width.equalTo(120)
-            if hasGenre {
-                make.top.equalTo(self.genresContainer.snp.bottom).offset(15)
-            } else {
-                make.top.equalTo(self.movieDescription.snp.bottom).offset(15)
-            }
-        }
         
-        playButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(75)
-            make.width.equalTo(120)
+        buttonsContainer.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.width.equalTo(240)
             if hasGenre {
                 make.top.equalTo(self.genresContainer.snp.bottom).offset(15)
             } else {
@@ -418,11 +430,11 @@ extension MovieDetailsView: BuildViewConfiguration {
         self.detailsContainer.addSubview(releaseDate)
         self.detailsContainer.addSubview(movieDescription)
         self.detailsContainer.addSubview(genresContainer)
-        self.detailsContainer.addSubview(favoriteButton)
-        self.detailsContainer.addSubview(playButton)
+        self.detailsContainer.addSubview(buttonsContainer)
+        self.buttonsContainer.addArrangedSubview(favoriteButton)
+        self.buttonsContainer.addArrangedSubview(playButton)
         self.detailsContainer.addSubview(separator)
-        self.scrollView.addSubview(recommendationTitle
-        )
+        self.scrollView.addSubview(recommendationTitle)
         self.scrollView.addSubview(recommendationCollection)
     }
     

@@ -33,7 +33,8 @@ class HomeCollectionViewCell: UICollectionViewCell {
 
 extension HomeCollectionViewCell: BuildViewConfiguration {
     func buildViewHierarchy() {
-        self.addSubview(self.moviePoster)
+        self.addSubview(container)
+        self.container.addSubview(self.moviePoster)
         
     }
 
@@ -41,11 +42,15 @@ extension HomeCollectionViewCell: BuildViewConfiguration {
 
     func makeConstraints() {
         
+        container.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         moviePoster.snp.makeConstraints { make in
-            make.left.equalTo(self.snp.left)
-            make.top.equalTo(self.snp.top).offset(5)
-            make.right.equalTo(self.snp.right)
-            make.bottom.equalTo(self.snp.bottom).offset(-5)
+            make.left.equalToSuperview()
+            make.top.equalToSuperview().offset(5)
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-5)
         }
     }
 }

@@ -35,10 +35,14 @@ class HomeViewController: BaseViewController {
         self.tableView?.buildCell(cellType: .allmovies,
                                   viewModel: self.viewModel,
                                   delegate: MovieCollectionAction(controller: self), {
-            self.buildTableView()
         })
+        self.buildTableView()
         setRefreshControl()
         addObservers()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        refreshData()
     }
     
 }
