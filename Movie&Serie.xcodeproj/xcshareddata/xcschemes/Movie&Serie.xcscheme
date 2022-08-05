@@ -26,7 +26,18 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "BA790805268A858E006DE9AB"
+            BuildableName = "Movie&amp;Serie.app"
+            BlueprintName = "Movie&amp;Serie"
+            ReferencedContainer = "container:Movie&amp;Serie.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -35,6 +46,16 @@
                BlueprintIdentifier = "BA5803932734566C00A67835"
                BuildableName = "BRCineTest.xctest"
                BlueprintName = "BRCineTest"
+               ReferencedContainer = "container:Movie&amp;Serie.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BA9A3A28285EBDAC0008A487"
+               BuildableName = "InfoCineTest.xctest"
+               BlueprintName = "InfoCineTest"
                ReferencedContainer = "container:Movie&amp;Serie.xcodeproj">
             </BuildableReference>
          </TestableReference>

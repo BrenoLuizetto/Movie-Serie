@@ -43,7 +43,7 @@ class SearchView: UIView {
     
     private lazy var layout: UICollectionViewFlowLayout = {
        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: CGFloat(150), height: CGFloat(280))
+        layout.itemSize = CGSize(width: CGFloat(110), height: CGFloat(200))
         layout.scrollDirection = .vertical
 
         return layout
@@ -94,8 +94,7 @@ extension SearchView: BuildViewConfiguration {
         }
         
         contentView.snp.makeConstraints { make in
-            make.left.equalTo(container.snp.left).offset(30)
-            make.right.equalTo(container.snp.right).offset(-30)
+            make.left.right.equalToSuperview()
             make.top.equalTo(searchBar.snp.bottom).offset(5)
             make.bottom.equalTo(container.snp.bottom).offset(-15)
         }
@@ -112,7 +111,7 @@ extension SearchView: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if searchText != "" {
-            let formattedString = searchText.replacingOccurrences(of: " ", with: "", options: .regularExpression)
+            let formattedString = searchText.replacingOccurrences(of: " ", with: "%20", options: .regularExpression)
             showHUD()
             self.viewModel?.movieData = []
             self.viewModel?.getSearchMovies(query: formattedString, callback: {(movies, erro) in
@@ -146,7 +145,7 @@ extension SearchView {
                                             viewModel: nil)
                 self.searchCollection.reloadMovies()
                 self.contentView = self.emptyView
-                self.buildItens()
+                self.setupViewConfiguration()
             }
             self.removeHUD()
 
@@ -154,7 +153,7 @@ extension SearchView {
             if self.currentState != .search {
                 self.currentState = state
                 self.contentView = self.searchCollection
-                self.buildItens()
+                self.setupViewConfiguration()
             }
             self.removeHUD()
 
@@ -167,7 +166,7 @@ extension SearchView {
                                                 viewModel: nil)
                     self.searchCollection.reloadMovies()
                     self.contentView = self.searchCollection
-                    self.buildItens()
+                    self.setupViewConfiguration()
                     self.removeHUD()
                 }
             })

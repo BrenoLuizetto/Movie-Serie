@@ -79,7 +79,7 @@ final class PreLoginView: UIView {
         
     init() {
         super.init(frame: .zero)
-        buildItens()
+        setupViewConfiguration()
         setGradientBackground()
     }
     

@@ -29,7 +29,7 @@ final class ProfilePhotoViewController: BaseViewController {
     override func viewDidLoad() {
         self.profileImageView.image = profilePicture
         self.configNavBar()
-        self.buildItens()
+        self.setupViewConfiguration()
     }
     
     private func configNavBar() {

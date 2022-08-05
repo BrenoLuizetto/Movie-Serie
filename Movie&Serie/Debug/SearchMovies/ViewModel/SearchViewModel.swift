@@ -18,16 +18,14 @@ class SearchViewModel: MovieViewModel {
             "\(Constants.OPKeys.movieOPKey)&query=\(query)\(Constants.Url.language)"
         
         guard let url = URL(string: link) else {return}
-        service.getMovie(url) { movie, erro  in
+        service.getMovie(url) { (movie: Movie?, erro)  in
             if erro != nil {
                 callback(nil, erro)
             }
             if let results = movie?.results {
                 self.movieData = []
                 for movies in results {
-                    if movies.mediaType?.rawValue != "tv" {
-                        self.movieData.append(MovieViewData(model: movies))
-                    }
+                    self.movieData.append(MovieViewData(model: movies))
                 }
             }
             callback(self.movieData, nil)
@@ -40,7 +38,7 @@ class SearchViewModel: MovieViewModel {
             "\(Constants.OPKeys.movieOPKey)\(Constants.Url.language)"
         
         guard let url = URL(string: link) else {return}
-        service.getMovie(url) { movie, erro  in
+        service.getMovie(url) { (movie: Movie?, erro)  in
             if erro != nil {
                 callback(nil, erro)
             }

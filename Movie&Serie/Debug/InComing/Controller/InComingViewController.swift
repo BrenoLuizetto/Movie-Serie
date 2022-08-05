@@ -42,6 +42,7 @@ class InComingViewController: BaseViewController {
     }
     
     func configNavBar() {
+        self.title = Constants.Labels.appName
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
                                                                  target: self,
                                                                  action: #selector(search(sender:)))

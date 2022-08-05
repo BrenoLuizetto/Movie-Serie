@@ -13,13 +13,11 @@ class MovieDetailsViewController: BaseViewController {
     
     private var viewModel: MovieDetailsViewModel
     private var movieDetailsView: MovieDetailsView?
+    private var tableView = MovieDetailsTableView()
     
     init(viewModel: MovieDetailsViewModel) {
         self.viewModel = viewModel
-
         super.init(nibName: nil, bundle: nil)
-        self.view.showHUD()
-
     }
     
     required init?(coder: NSCoder) {
@@ -27,21 +25,22 @@ class MovieDetailsViewController: BaseViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.view.frame = CGRect(x: 0, y: 0,
-                                 width: self.view.frame.size.width,
-                                 height: self.view.frame.size.height + 1000)
+
     }
     
     override func viewDidLoad() {
-        movieDetailsView = MovieDetailsView(self.viewModel, delegate: MovieCollectionAction(controller: self))
         self.configNavBar()
+        self.setupViewConfiguration()
+        self.bindViewModel()
+        self.tableView.setiItens(viewModel: viewModel)
+        self.tableView.reloadData()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        self.view = movieDetailsView
-        movieDetailsView?.setScrollView()
-        self.view.removeHUD()
-    }
+//    override func loadView() {
+//        movieDetailsView = MovieDetailsView(self.viewModel, delegate: MovieCollectionAction(controller: self))
+//        self.view = movieDetailsView
+//        movieDetailsView?.setScrollView()
+//    }
 
 }
 
@@ -58,4 +57,32 @@ extension MovieDetailsViewController {
     func backAction(sender: UIBarButtonItem) {
     navigationController?.popViewController(animated: true)
     }
+    
+    private func bindViewModel() {
+        viewModel.refreshView = { data in
+            self.tableView.refreshData(cellData: data ?? nil)
+        }
+        
+        viewModel.showHUD = {
+            self.view.showHUD()
+        }
+        
+        viewModel.hideHUD = {
+            self.view.removeHUD()
+        }
+    }
+}
+
+extension MovieDetailsViewController: BuildViewConfiguration {
+    func buildViewHierarchy() {
+        self.view.addSubview(tableView)
+    }
+    
+    func makeConstraints() {
+        tableView.snp.makeConstraints({ make in
+            make.edges.equalToSuperview()
+        })
+    }
+    
+    
 }

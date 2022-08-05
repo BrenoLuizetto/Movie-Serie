@@ -12,7 +12,7 @@ class MovieService: NSObject {
     let headerMovie = "https://api.themoviedb.org/3/"
     let opkey = Constants.OPKeys.movieOPKey
     
-    func getMovie(_ url: URL, with callback: @escaping (Movie?, Error?) -> Void) {
+    func getMovie<T: Decodable>(_ url: URL, with callback: @escaping (T?, Error?) -> Void) {
         let request = AF.request(url, method: .get)
         
         request.responseJSON { response in
@@ -21,7 +21,7 @@ class MovieService: NSObject {
             case .success:
                 do {
                     guard let data = response.data else {return}
-                    let movieObject = try JSONDecoder().decode(Movie.self, from: data)
+                    let movieObject = try JSONDecoder().decode(T.self, from: data)
                     callback(movieObject, nil)
                 } catch let erro {
                     callback(nil, erro)
@@ -31,68 +31,4 @@ class MovieService: NSObject {
             }
         }
     }
-    
-    func getGenres(_ url: URL, with callback: @escaping (Genre?) -> Void) {
-        let request = AF.request(url, method: .get)
-        
-        request.responseJSON { response in
-            switch response.result {
-                
-            case .success:
-                do {
-                    guard let data = response.data else {return}
-                    let movieObject = try JSONDecoder().decode(Genre.self, from: data)
-                    callback(movieObject)
-                } catch let erro {
-                    print(erro)
-                }
-            case .failure(let error):
-                print(error)
-                callback(nil)
-            }
-        }
-    }
-    
-    func getMovieTrailers(_ url: URL, with callback: @escaping (MovieTrailer) -> Void) {
-        let request = AF.request(url, method: .get)
-        
-        request.responseJSON { response in
-            switch response.result {
-                
-            case .success:
-                do {
-                    guard let data = response.data else {return}
-                    let movieObject = try JSONDecoder().decode(MovieTrailer.self, from: data)
-                    callback(movieObject)
-                } catch let erro {
-                    print(erro)
-                }
-            case .failure:
-            print(response.error!)
-            }
-        }
-    }
-    
-    func getDetails(_ url: URL, with callback: @escaping (MovieDetails?) -> Void) {
-        let request = AF.request(url, method: .get)
-        
-        request.responseJSON { response in
-            switch response.result {
-                
-            case .success:
-                do {
-                    guard let data = response.data else {return}
-                    let movieObject = try JSONDecoder().decode(MovieDetails.self, from: data)
-                    callback(movieObject)
-                } catch let erro {
-                    callback(nil)
-                    print(erro)
-                }
-            case .failure:
-            callback(nil)
-            print(response.error!)
-            }
-        }
-    }
-
 }

@@ -32,7 +32,7 @@ class UserOptionViewCell: UITableViewCell {
     }()
     
     func setupCell(title: String, icon: String) {
-        buildItens()
+        setupViewConfiguration()
         self.titleLabel.text = title
         self.icon.image = UIImage(systemName: icon)
     }

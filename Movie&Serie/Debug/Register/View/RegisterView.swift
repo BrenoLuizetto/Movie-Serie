@@ -85,7 +85,7 @@ final class RegisterView: UIView {
     init(viewModel: RegisterViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
-        self.buildItens()
+        self.setupViewConfiguration()
         self.validateFields()
     }
     

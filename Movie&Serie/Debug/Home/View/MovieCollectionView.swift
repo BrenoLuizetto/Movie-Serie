@@ -10,7 +10,6 @@ import UIKit
 import SwiftUI
 
 enum CollectionType {
-    case recommendation
     case homeMovies
     case searchMovies
 }
@@ -35,16 +34,8 @@ class MovieCollectionView: UICollectionView,
         case .homeMovies:
             if let movies = movie {
                 self.movie = movies
-                self.itemsInSection = movies.count
             }
-            reloadWithTransition()
-        case .recommendation:
-            if let model = viewModel {
-                self.viewModel = model
-                self.getReccomendations(viewModel: model)
-                self.isScrollEnabled = false
-                
-            }
+            reloadMovies()
         case .searchMovies:
             guard let movies = movie else { return }
             self.movie = movies
@@ -64,21 +55,15 @@ class MovieCollectionView: UICollectionView,
 
     }
     
-    private func getReccomendations(viewModel: MovieDetailsViewModel) {
-        viewModel.getRecommendationMovies { [weak self] movies in
-            guard let self = self else { return }
-            self.movie = movies
-            self.itemsInSection = movies.count
-            self.reloadWithTransition()
-        }
+    func setupReccomedation(movies: [MovieViewData]) {
+        self.movie = movies
+        reloadMovies()
     }
     
     func reloadMovies() {
         self.itemsInSection = movie.count
         reloadWithTransition()
     }
-    
-    
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -106,10 +91,6 @@ class MovieCollectionView: UICollectionView,
         cell.isAccessibilityElement = true
         cell.accessibilityValue = movies.title
         cell.accessibilityTraits = .adjustable
-
-        if collectionType == .recommendation {
-            detailsProtocol?.CollectionContentDidChange()
-        }
         
         return cell
     }

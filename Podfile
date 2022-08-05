@@ -18,5 +18,11 @@ target 'Movie&Serie' do
   pod 'Gifu'
   pod 'KeychainSwift', '~> 19.0'
   pod 'SwiftLint'
-
+  
+  target 'InfoCineTest' do
+    pod 'Quick', '5.0.1'
+    pod 'Nimble', '10.0.0'
+      inherit! :search_paths
+  end
+  
 end

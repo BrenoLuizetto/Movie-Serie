@@ -21,7 +21,7 @@ class EmptyView: UIView {
         let lbl = UILabel(frame: .zero)
         lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 18)
         lbl.textColor = .white
-        lbl.text = "Opss"
+        lbl.text = "Ops"
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.textAlignment = .center
         return lbl

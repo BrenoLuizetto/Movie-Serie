@@ -1,122 +1,128 @@
 PODS:
-  - Alamofire (5.4.3)
+  - Alamofire (5.6.1)
   - AlamofireImage (4.2.0):
     - Alamofire (~> 5.4)
-  - AppAuth (1.4.0):
-    - AppAuth/Core (= 1.4.0)
-    - AppAuth/ExternalUserAgent (= 1.4.0)
-  - AppAuth/Core (1.4.0)
-  - AppAuth/ExternalUserAgent (1.4.0)
-  - Firebase/Analytics (8.9.1):
+  - AppAuth (1.5.0):
+    - AppAuth/Core (= 1.5.0)
+    - AppAuth/ExternalUserAgent (= 1.5.0)
+  - AppAuth/Core (1.5.0)
+  - AppAuth/ExternalUserAgent (1.5.0):
+    - AppAuth/Core
+  - Firebase/Analytics (9.2.0):
     - Firebase/Core
-  - Firebase/Auth (8.9.1):
+  - Firebase/Auth (9.2.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 8.9.0)
-  - Firebase/Core (8.9.1):
+    - FirebaseAuth (~> 9.2.0)
+  - Firebase/Core (9.2.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics (~> 8.9.1)
-  - Firebase/CoreOnly (8.9.1):
-    - FirebaseCore (= 8.9.1)
-  - FirebaseAnalytics (8.9.1):
-    - FirebaseAnalytics/AdIdSupport (= 8.9.1)
-    - FirebaseCore (~> 8.0)
-    - FirebaseInstallations (~> 8.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
-    - GoogleUtilities/MethodSwizzler (~> 7.6)
-    - GoogleUtilities/Network (~> 7.6)
-    - "GoogleUtilities/NSData+zlib (~> 7.6)"
-    - nanopb (~> 2.30908.0)
-  - FirebaseAnalytics/AdIdSupport (8.9.1):
-    - FirebaseCore (~> 8.0)
-    - FirebaseInstallations (~> 8.0)
-    - GoogleAppMeasurement (= 8.9.1)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
-    - GoogleUtilities/MethodSwizzler (~> 7.6)
-    - GoogleUtilities/Network (~> 7.6)
-    - "GoogleUtilities/NSData+zlib (~> 7.6)"
-    - nanopb (~> 2.30908.0)
-  - FirebaseAuth (8.9.0):
-    - FirebaseCore (~> 8.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GTMSessionFetcher/Core (~> 1.5)
-  - FirebaseCore (8.9.1):
-    - FirebaseCoreDiagnostics (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/Logger (~> 7.6)
-  - FirebaseCoreDiagnostics (8.9.0):
-    - GoogleDataTransport (~> 9.1)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/Logger (~> 7.6)
-    - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.9.0):
-    - FirebaseCore (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/UserDefaults (~> 7.6)
-    - PromisesObjC (< 3.0, >= 1.2)
+    - FirebaseAnalytics (~> 9.2.0)
+  - Firebase/CoreOnly (9.2.0):
+    - FirebaseCore (= 9.2.0)
+  - FirebaseAnalytics (9.2.0):
+    - FirebaseAnalytics/AdIdSupport (= 9.2.0)
+    - FirebaseCore (~> 9.0)
+    - FirebaseInstallations (~> 9.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/MethodSwizzler (~> 7.7)
+    - GoogleUtilities/Network (~> 7.7)
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseAnalytics/AdIdSupport (9.2.0):
+    - FirebaseCore (~> 9.0)
+    - FirebaseInstallations (~> 9.0)
+    - GoogleAppMeasurement (= 9.2.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/MethodSwizzler (~> 7.7)
+    - GoogleUtilities/Network (~> 7.7)
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseAuth (9.2.0):
+    - FirebaseCore (~> 9.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GTMSessionFetcher/Core (< 3.0, >= 1.7)
+  - FirebaseCore (9.2.0):
+    - FirebaseCoreDiagnostics (~> 9.0)
+    - FirebaseCoreInternal (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Logger (~> 7.7)
+  - FirebaseCoreDiagnostics (9.2.0):
+    - GoogleDataTransport (< 10.0.0, >= 9.1.4)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Logger (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseCoreInternal (9.2.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+  - FirebaseInstallations (9.2.0):
+    - FirebaseCore (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
+    - PromisesObjC (~> 2.1)
   - Gifu (3.3.1)
-  - GoogleAppMeasurement (8.9.1):
-    - GoogleAppMeasurement/AdIdSupport (= 8.9.1)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
-    - GoogleUtilities/MethodSwizzler (~> 7.6)
-    - GoogleUtilities/Network (~> 7.6)
-    - "GoogleUtilities/NSData+zlib (~> 7.6)"
-    - nanopb (~> 2.30908.0)
-  - GoogleAppMeasurement/AdIdSupport (8.9.1):
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 8.9.1)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
-    - GoogleUtilities/MethodSwizzler (~> 7.6)
-    - GoogleUtilities/Network (~> 7.6)
-    - "GoogleUtilities/NSData+zlib (~> 7.6)"
-    - nanopb (~> 2.30908.0)
-  - GoogleAppMeasurement/WithoutAdIdSupport (8.9.1):
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
-    - GoogleUtilities/MethodSwizzler (~> 7.6)
-    - GoogleUtilities/Network (~> 7.6)
-    - "GoogleUtilities/NSData+zlib (~> 7.6)"
-    - nanopb (~> 2.30908.0)
-  - GoogleDataTransport (9.1.2):
-    - GoogleUtilities/Environment (~> 7.2)
-    - nanopb (~> 2.30908.0)
+  - GoogleAppMeasurement (9.2.0):
+    - GoogleAppMeasurement/AdIdSupport (= 9.2.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/MethodSwizzler (~> 7.7)
+    - GoogleUtilities/Network (~> 7.7)
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleAppMeasurement/AdIdSupport (9.2.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 9.2.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/MethodSwizzler (~> 7.7)
+    - GoogleUtilities/Network (~> 7.7)
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleAppMeasurement/WithoutAdIdSupport (9.2.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/MethodSwizzler (~> 7.7)
+    - GoogleUtilities/Network (~> 7.7)
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleDataTransport (9.1.4):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleSignIn (6.0.2):
-    - AppAuth (~> 1.4)
-    - GTMAppAuth (~> 1.0)
+  - GoogleSignIn (6.2.2):
+    - AppAuth (~> 1.5)
+    - GTMAppAuth (~> 1.3)
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleUtilities/AppDelegateSwizzler (7.6.0):
+  - GoogleUtilities/AppDelegateSwizzler (7.7.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.6.0):
+  - GoogleUtilities/Environment (7.7.0):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.6.0):
+  - GoogleUtilities/Logger (7.7.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (7.6.0):
+  - GoogleUtilities/MethodSwizzler (7.7.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/Network (7.6.0):
+  - GoogleUtilities/Network (7.7.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.6.0)"
-  - GoogleUtilities/Reachability (7.6.0):
+  - "GoogleUtilities/NSData+zlib (7.7.0)"
+  - GoogleUtilities/Reachability (7.7.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.6.0):
+  - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
-  - GTMAppAuth (1.2.2):
+  - GTMAppAuth (1.3.0):
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher/Core (~> 1.5)
-  - GTMSessionFetcher/Core (1.6.1)
+  - GTMSessionFetcher/Core (1.7.2)
   - KeychainSwift (19.0.0)
   - MBProgressHUD (1.2.0)
-  - nanopb (2.30908.0):
-    - nanopb/decode (= 2.30908.0)
-    - nanopb/encode (= 2.30908.0)
-  - nanopb/decode (2.30908.0)
-  - nanopb/encode (2.30908.0)
-  - PromisesObjC (2.0.0)
+  - nanopb (2.30909.0):
+    - nanopb/decode (= 2.30909.0)
+    - nanopb/encode (= 2.30909.0)
+  - nanopb/decode (2.30909.0)
+  - nanopb/encode (2.30909.0)
+  - Nimble (10.0.0)
+  - PromisesObjC (2.1.1)
+  - Quick (5.0.1)
   - SnapKit (5.0.1)
-  - SwiftLint (0.43.1)
-  - youtube-ios-player-helper (1.0.3)
+  - SwiftLint (0.47.1)
+  - youtube-ios-player-helper (1.0.4)
 
 DEPENDENCIES:
   - Alamofire (~> 5.2)
@@ -127,6 +133,8 @@ DEPENDENCIES:
   - GoogleSignIn
   - KeychainSwift (~> 19.0)
   - MBProgressHUD
+  - Nimble (= 10.0.0)
+  - Quick (= 5.0.1)
   - SnapKit (~> 5.0.0)
   - SwiftLint
   - youtube-ios-player-helper
@@ -141,6 +149,7 @@ SPEC REPOS:
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseCoreInternal
     - FirebaseInstallations
     - Gifu
     - GoogleAppMeasurement
@@ -152,36 +161,41 @@ SPEC REPOS:
     - KeychainSwift
     - MBProgressHUD
     - nanopb
+    - Nimble
     - PromisesObjC
+    - Quick
     - SnapKit
     - SwiftLint
     - youtube-ios-player-helper
 
 SPEC CHECKSUMS:
-  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  Alamofire: 87bd8c952f9a4454320fce00d9cc3de57bcadaf5
   AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
-  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  Firebase: fb5114cd2bf96e2ff7bcb01d0d9a156cf5fd2f07
-  FirebaseAnalytics: 4ab446ce08a3fe52e8a4303dd997cf26276bf968
-  FirebaseAuth: 2b78b2a32c07b3ecfa4970bdf1d3632b8304099b
-  FirebaseCore: c5aab092d9c4b8efea894946166b04c9d9ef0e68
-  FirebaseCoreDiagnostics: 5daa63f1c1409d981a2d5007daa100b36eac6a34
-  FirebaseInstallations: caa7c8e0d3e2345b8829d2fa9ca1b4dfbf2fcc85
+  AppAuth: 80317d99ac7ff2801a2f18ff86b48cd315ed465d
+  Firebase: 4ba896cb8e5105d4b9e247e1c1b6222b548df55a
+  FirebaseAnalytics: af5a03a8dff7648c7b8486f6a78b1368e0268dd3
+  FirebaseAuth: 1c574ab64a051dd86dbe7fd5a3f86b58155b3482
+  FirebaseCore: 0e27f2a15d8f7b7ef11e7d93e23b1cbab55d748c
+  FirebaseCoreDiagnostics: ad3f6c68b7c5b63b7cf15b0785d7137f05f32268
+  FirebaseCoreInternal: cb966328b6985dbd6f535e1461291063e1c4a00f
+  FirebaseInstallations: 21186f0ca7849f90f4a3219fa31a5eca2e30f113
   Gifu: 416d4e38c4c2fed012f019e0a1d3ffcb58e5b842
-  GoogleAppMeasurement: 837649ad3987936c232f6717c5680216f6243d24
-  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
-  GoogleSignIn: fd381840dbe7c1137aa6dc30849a5c3e070c034a
-  GoogleUtilities: 684ee790a24f73ebb2d1d966e9711c203f2a4237
-  GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
-  GTMSessionFetcher: 36689134877faeb055b27dfa4ccc9ceaa42e029e
+  GoogleAppMeasurement: 7a33224321f975d58c166657260526775d9c6b1a
+  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
+  GoogleSignIn: 3c68388ac221f379676e8f1cb115df3aaf73b93f
+  GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  GTMAppAuth: 4d8f864896f3646f0c33baf38a28362f4c601e15
+  GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   KeychainSwift: a06190cf933ad46b1e0abc3d77d29c06331715c7
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
-  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
+  PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  SwiftLint: 99f82d07b837b942dd563c668de129a03fc3fb52
-  youtube-ios-player-helper: 0185c57db23c80d63d6ca11251d110abb8a4ca61
+  SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
+  youtube-ios-player-helper: e9b97535e816db3152179d84d999bc1807ecd689
 
-PODFILE CHECKSUM: bed27ed8d936b81a6849a48f7f496f671f39dec7
+PODFILE CHECKSUM: 5811703de717520d4f434eedeeac954acb3937ca
 
 COCOAPODS: 1.11.2

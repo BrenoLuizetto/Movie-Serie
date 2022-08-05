@@ -32,26 +32,26 @@ class MovieModalViewController: UIViewController {
     override func viewDidLoad() {
         self.DetailsView.buildInfo(viewModel, controller: self)
         
-        buildItens()
+        setupViewConfiguration()
         let Viewtap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.view.addGestureRecognizer(Viewtap)
-        
+
         let Detailstap = UITapGestureRecognizer(target: self, action: #selector(self.didTapOnDetailsView(_:)))
         self.DetailsView.addGestureRecognizer(Detailstap)
-        
     }
-
 }
 
 extension MovieModalViewController {
     
     @objc func didTapOnDetailsView(_ sender: UITapGestureRecognizer? = nil) {
         self.viewModel.delegate?.hiddenTabBar(hidden: false, animated: true)
+        self.viewModel.delegate?.setBlur(hasBlur: false)
         self.dismiss(animated: true, completion: nil)
         self.viewModel.delegate?.showDetailsScreen(movie: self.viewModel.movie)
     }
 
     @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        self.viewModel.delegate?.setBlur(hasBlur: false)
         self.viewModel.delegate?.hiddenTabBar(hidden: false, animated: true)
         self.dismiss(animated: true, completion: nil)
     }

@@ -39,7 +39,7 @@ class InputView: UIView {
     var callback: ((_ isInput: Bool) -> Void)?
     
     func setInputType(_ type: InputType) {
-        buildItens()
+        setupViewConfiguration()
         self.type = type
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.gray]
         
@@ -118,11 +118,11 @@ extension InputView: UITextFieldDelegate {
                 self.hasError = false
                 self.removeAllViews()
                 self.inputSeparator.backgroundColor = .green
-                self.buildItens()
+                self.setupViewConfiguration()
             } else {
                 self.hasError = true
                 self.inputSeparator.backgroundColor = .red
-                self.buildItens()
+                self.setupViewConfiguration()
             }
         }
         self.inputSeparator.backgroundColor = .gray

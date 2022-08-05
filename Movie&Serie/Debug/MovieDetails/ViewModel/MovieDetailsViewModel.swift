@@ -8,18 +8,36 @@
 import Foundation
 import UIKit
 
+class DetailsCell<T> {
+    var reuseIdentifier: String
+    var cellType: AnyClass
+    var data: T
+    
+    init(reuseIdentifier: String,
+         cellType: AnyClass,
+         data: T) {
+        self.reuseIdentifier = reuseIdentifier
+        self.cellType = cellType
+        self.data = data
+    }
+}
+
 class MovieDetailsViewModel: MovieViewModel {
     
     let movie: MovieViewData
     var movieDetails: MovieDetails?
-    var recommendationMovieData: Array<MovieViewData> = []
     weak var delegate: MovieCollectionProtocol?
     private let service = MovieService()
-    private var detailsData: DetailsViewData?
+    var cellData: [DetailsCell<Any>] = []
+    
+    var refreshView: ((DetailsCell<Any>?) -> Void)?
+    var showHUD: (() -> Void)?
+    var hideHUD: (() -> Void)?
     
     init(_ movie: MovieViewData, with delegate: MovieCollectionProtocol) {
         self.movie = movie
         self.delegate = delegate
+        super.init()
     }
     
     func getMovieBackground() -> URL? {
@@ -38,25 +56,28 @@ class MovieDetailsViewModel: MovieViewModel {
     func getTrailer(callback: @escaping (MovieTrailer) -> Void) {
         guard let url = URL(string: "\(Constants.Url.movieHeader)\(movie.mediaType.rawValue)/\(movie.id)" + "/videos?\(Constants.OPKeys.movieOPKey)\(Constants.Url.language)") else {return}
         
-        service.getMovieTrailers(url) { result in
-            callback(result)
+        service.getMovie(url) { (result: MovieTrailer?, error) in
+            if let result = result {
+                callback(result)
+            }
         }
     }
     
     func getRecommendationMovies(_ callback: @escaping ([MovieViewData]) -> Void) {
         let id = String(movie.id)
+        var recommendationMovieData: [MovieViewData] = []
         guard let url = URL(string: "\(Constants.Url.movieHeader)\(movie.mediaType.rawValue)/" +
                             "\(id)/recommendations?\(Constants.OPKeys.movieOPKey)" +
                             "\(Constants.Url.language)") else {return}
-        service.getMovie(url) { recommendation, error  in
+        service.getMovie(url) { (recommendation: Movie?, error) in
             if let recommendationList = recommendation?.results {
-                self.recommendationMovieData = []
+                recommendationMovieData = []
                 for movies in recommendationList {
-                    self.recommendationMovieData.append(MovieViewData(model: movies))
+                    recommendationMovieData.append(MovieViewData(model: movies))
                 }
                 
             }
-            callback(self.recommendationMovieData)
+            callback(recommendationMovieData)
         }
     }
     
@@ -64,7 +85,7 @@ class MovieDetailsViewModel: MovieViewModel {
         if movieDetails == nil {
             guard let url = URL(string: "\(Constants.Url.movieHeader)\(movie.mediaType)/" +
                                 "\(movie.id)?\(Constants.OPKeys.movieOPKey)\(Constants.Url.language)") else { return }
-            service.getDetails(url) { MovieDetails in
+            service.getMovie(url) { (MovieDetails: MovieDetails?, error) in
                 if MovieDetails != nil {
                     self.movieDetails = MovieDetails
                 }
@@ -83,7 +104,7 @@ class MovieDetailsViewModel: MovieViewModel {
         }
     }
     
-    func addFavorite(with callback: @escaping () -> Void) {
+    func addFavorite() {
         let us = UserDefaults.standard
         do {
             do {
@@ -92,20 +113,20 @@ class MovieDetailsViewModel: MovieViewModel {
                 if !validateUserDefault(movieArray: movieArray) {
                     movieArray.append(self.movie)
                     try us.setObject(movieArray, forKey: Constants.UserDefaults.favoriteMovies)
-                    callback()
+                    return
                 } else {
                     movieArray.removeAll(where: {$0.id == movie.id})
                     try? us.setObject(movieArray, forKey: Constants.UserDefaults.favoriteMovies)
-                    callback()
+                    return
                 }
             } catch {
                 let movieArray = [self.movie]
                 try us.setObject(movieArray, forKey: Constants.UserDefaults.favoriteMovies)
-                callback()
+                return
             }
         } catch {
             print(error.localizedDescription)
-            callback()
+            return
         }
     }
     
@@ -136,5 +157,78 @@ class MovieDetailsViewModel: MovieViewModel {
     func DidListChange() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateFavoriteMovies"),
                                         object: nil)
+    }
+    
+}
+
+extension MovieDetailsViewModel {
+    
+    func setDataSource() {
+        getTrailerCell()
+        cellData.append(getInfoCell())
+        getRecommedationCell()
+    }
+    
+    private func getInfoCell() -> DetailsCell<Any> {
+        let movieRating = Int(movie.voteAverage * 10)
+        let rating = movieRating == 0 ? Constants.Labels.inComing : String("\(movieRating)% relevante")
+        
+        let data = InfoCellData(title: movie.title,
+                                rating: rating,
+                                release: movie.releaseDate.getYear(),
+                                description: movie.overview,
+                                isFavorite: validateFavoriteList(),
+                                delegate: self)
+        
+        return DetailsCell(reuseIdentifier: "\(InfoContainerViewCell.self)",
+                               cellType: InfoContainerViewCell.self,
+                               data: data)
+    }
+    
+    private func getTrailerCell() {
+        getTrailer { trailer in
+            var data = TrailerViewData()
+            if let results = trailer.results.first {
+                data.key = results.key
+            } else {
+                data.url = self.getMovieBackground()
+            }
+            
+            let cell: DetailsCell<Any> = DetailsCell(reuseIdentifier: "\(TrailerViewCell.self)",
+                                   cellType: TrailerViewCell.self,
+                                   data: data)
+            if data.key != nil || data.url != nil {
+                self.cellData.insert(cell, at: 0)
+                self.refreshView?(cell)
+            }
+        }
+    }
+    
+    private func getRecommedationCell() {
+        getRecommendationMovies { recommendationMovies in
+            let data = RecommendatioViewData(movies: recommendationMovies,
+                                                 collectionProtocol: self.delegate)
+            let cell: DetailsCell<Any> = DetailsCell(reuseIdentifier: "\(RecommendationViewCell.self)",
+                        cellType: RecommendationViewCell.self,
+                        data: data)
+            
+            self.cellData.append(cell)
+            self.refreshView?(cell)
+        }
+    }
+}
+
+extension MovieDetailsViewModel: InfoContainerProtocol {
+    func didTapWatch() {
+        showHUD?()
+        getDetailsMovie {
+            self.openMovieStream()
+            self.hideHUD?()
+        }
+    }
+    
+    func didTapFavorite(callback: ((Bool) -> Void)) {
+        self.addFavorite()
+        callback(self.validateFavoriteList())
     }
 }

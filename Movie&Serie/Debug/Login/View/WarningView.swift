@@ -41,7 +41,7 @@ class WarningView: UIView {
     
     init() {
         super.init(frame: .zero)
-        buildItens()
+        setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {

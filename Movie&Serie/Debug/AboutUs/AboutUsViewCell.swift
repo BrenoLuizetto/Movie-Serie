@@ -46,7 +46,7 @@ class AboutUsViewCell: UITableViewCell {
             icon.setImage(UIImage(systemName: "chevron.up"), for: .normal)
         }
         
-        self.buildItens()
+        self.setupViewConfiguration()
     }
 }
 
@@ -85,8 +85,6 @@ extension AboutUsViewCell: BuildViewConfiguration {
                 make.top.equalTo(container.snp.top).offset(16)
             }
         }
-        
-        
         
     }
     

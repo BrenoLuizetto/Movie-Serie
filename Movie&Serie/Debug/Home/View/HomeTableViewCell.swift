@@ -38,7 +38,7 @@ class HomeTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = UITableViewCell.SelectionStyle.none
-        buildItens()
+        setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -50,20 +50,21 @@ class HomeTableViewCell: UITableViewCell {
                        section: Int,
                        delegate: MovieCollectionProtocol?) {
         movieCollection.tag = section
+        movieCollection.accessibilityScroll(.right)
         movieCollection.registerCell()
         movieCollection.setup(movie: movie, collectionType: .homeMovies, viewModel: nil)
         movieCollection.collectionProtocol = delegate
         
         self.title.text = sectionTitle
         self.backgroundColor = .black
-        buildItens()
+        setupViewConfiguration()
         
     }    
 }
 
 extension HomeTableViewCell: BuildViewConfiguration {
     func buildViewHierarchy() {
-        self.addSubview(container)
+        self.contentView.addSubview(container)
         self.container.addSubview(self.title)
         self.container.addSubview(self.movieCollection)
     }

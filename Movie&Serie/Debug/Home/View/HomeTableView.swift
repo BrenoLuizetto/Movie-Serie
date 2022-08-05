@@ -59,6 +59,7 @@ class HomeTableView: UITableView {
         self.delegate = self
         self.dataSource = self
         self.isAccessibilityElement = false
+        self.separatorStyle = .none
     }
     
     func refreshData(_ callback: @escaping () -> Void) {

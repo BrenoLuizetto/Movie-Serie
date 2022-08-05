@@ -13,10 +13,10 @@ import FirebaseAuth
 
 class HomeViewController: BaseViewController {
     
-    private var tableView: HomeTableView?
+    private(set) var tableView: HomeTableView?
     private var errorView: ErrorView?
     private var detailsView: MovieDetailsView?
-    private let refreshControl = UIRefreshControl()
+    let refreshControl = UIRefreshControl()
     
     private let viewModel = MovieViewModel()
     
@@ -51,11 +51,6 @@ extension HomeViewController {
     func configNavBar() {
         self.navigationController?.isNavigationBarHidden = false
         navigationController?.navigationBar.barStyle = .black
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
-        
-        self.navigationController?.isNavigationBarHidden = false
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
@@ -67,7 +62,7 @@ extension HomeViewController {
                                         action: #selector(userMenu))
         
         self.navigationItem.leftBarButtonItem = barButton
-        self.title = "InfoCine"
+        self.title = Constants.Labels.appName
     }
     
     private func setRefreshControl() {
@@ -132,18 +127,18 @@ extension HomeViewController {
         self.view.backgroundColor = .black
     }
     
-    func buildTableView() {
+    private func buildTableView() {
         tableView?.snp.makeConstraints { make in
             make.top.equalTo(self.view.snp.top).offset(20)
             make.left.equalTo(self.view.snp.left)
             make.right.equalTo(self.view.snp.right)
-            make.bottom.equalTo(self.view.snp.bottom).offset(-15)
+            make.bottom.equalTo(self.view.snp.bottom)
             
             self.view.addSubview(tableView ?? UITableView())
         }
     }
     
-    func buildErrorView() {
+    private func buildErrorView() {
         errorView?.snp.makeConstraints { make in
             make.top.equalTo(self.view.snp.top).offset(20)
             make.left.equalTo(self.view.snp.left).offset(15)

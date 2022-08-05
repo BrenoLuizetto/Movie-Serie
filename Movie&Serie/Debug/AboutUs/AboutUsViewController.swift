@@ -15,7 +15,7 @@ class AboutUsViewController: UIViewController {
     let viewModel: AboutUsViewModel = AboutUsViewModel()
     
     override func viewDidLoad() {
-        buildItens()
+        setupViewConfiguration()
         tableView.registerTableView(with: viewModel)
         tableView.reloadData()
     }

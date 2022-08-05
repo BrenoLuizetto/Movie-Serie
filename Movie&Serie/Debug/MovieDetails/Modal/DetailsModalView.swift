@@ -68,7 +68,7 @@ class DetailsModalView: UIView {
         self.viewModel = viewModel
         self.controller = controller
         setValues()
-        buildItens()
+        setupViewConfiguration()
     }
     
     @objc func didTapMoreInformation(sender: UIButton!) {

@@ -69,7 +69,7 @@ class UpcomingViewCell: UITableViewCell {
         let release = movie.releaseDate.buildReleaseDate()
         self.releaseDate.text = release
         self.movieDescription.text = movie.overview
-        self.buildItens()
+        self.setupViewConfiguration()
     }
     
     private func buildReleaseDate(with datevalue: String) -> String {

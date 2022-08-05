@@ -28,7 +28,7 @@ class MovieViewModel {
             callback(self.movieData)
         } else {
             guard let url = URL(string: link) else {return}
-            service.getMovie(url) { movie, error  in
+            service.getMovie(url) { (movie: Movie?, error)  in
                 if let results = movie?.results {
                         self.movieData = []
                         for movies in results {
@@ -74,7 +74,7 @@ class MovieViewModel {
        let link = "\(Constants.Url.movieHeader)\(Constants.MovieType.genreList)" +
                     "\(Constants.OPKeys.movieOPKey)\(Constants.Url.language)"
         guard let url = URL(string: link) else {return}
-        service.getGenres(url) { result in
+        service.getMovie(url) { (result: Genre?, error) in
             guard let genreResult = result?.genres else {
                 callback(0)
                 return

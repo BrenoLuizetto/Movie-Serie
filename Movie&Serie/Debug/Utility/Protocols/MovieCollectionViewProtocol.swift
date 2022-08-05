@@ -18,6 +18,7 @@ protocol MovieCollectionProtocol: AnyObject {
     func showErrorMessage(_ title: String,
                           _ message: String)
     func didScroll()
+    func setBlur(hasBlur: Bool)
 }
 
 class MovieCollectionAction: NSObject, MovieCollectionProtocol {
@@ -39,6 +40,7 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
         vc.modalPresentationStyle = .overCurrentContext
         vc.transitioningDelegate = detailsTransitioningDelegate
         vc.definesPresentationContext = true
+        setBlur(hasBlur: true)
         self.hiddenTabBar(hidden: true, animated: true)
         self.controller.present(vc, animated: true, completion: nil)
     }
@@ -70,5 +72,13 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
     
     func didScroll() {
         self.controller.view.endEditing(true)
+    }
+    
+    func setBlur(hasBlur: Bool) {
+        if hasBlur {
+            controller.view.setBlurView()
+        } else {
+            controller.view.removeBlurView()
+        }
     }
 }

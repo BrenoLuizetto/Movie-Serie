@@ -9,9 +9,10 @@ import Foundation
 import UIKit
 
 extension UIButton {
-    func setButtonState(isEnabled: Bool) {
+    func setButtonState(isEnabled: Bool,
+                        enabledColor: UIColor = UIColor(rgb: 0x0044FF)) {
         if isEnabled {
-            self.backgroundColor = UIColor(rgb: 0x0044FF)
+            self.backgroundColor = enabledColor
             self.setTitleColor(.white, for: .normal)
             self.isEnabled = true
         } else {

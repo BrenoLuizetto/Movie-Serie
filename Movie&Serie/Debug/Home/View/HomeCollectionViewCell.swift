@@ -26,14 +26,14 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     func setup() {
         self.layoutIfNeeded()
-        buildItens()
+        setupViewConfiguration()
     }
     
 }
 
 extension HomeCollectionViewCell: BuildViewConfiguration {
     func buildViewHierarchy() {
-        self.addSubview(container)
+        self.contentView.addSubview(container)
         self.container.addSubview(self.moviePoster)
         
     }

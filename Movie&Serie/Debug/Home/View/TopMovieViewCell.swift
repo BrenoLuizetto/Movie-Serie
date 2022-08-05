@@ -94,8 +94,8 @@ class TopMovieViewCell: UITableViewCell {
     func setup(viewModel: MovieDetailsViewModel) {
         self.viewModel = viewModel
         self.titleLabel.text = viewModel.movie.title
-        self.buildItens()
         self.setGradientBackground()
+        self.setupViewConfiguration()
         self.setGenres()
         self.verifyFavoriteList()
     }
@@ -116,7 +116,7 @@ class TopMovieViewCell: UITableViewCell {
         viewModel?.getDetailsMovie {
             guard let genres = self.viewModel?.movieDetails?.genres else { return }
             self.genresContainer.removeAllViews()
-            for genre in genres {
+            for genre in genres where self.genresContainer.arrangedSubviews.count < 3 {
                 let lbl = UILabel()
                 lbl.font = UIFont(name: Constants.Fonts.avenirHeavy, size: 16)
                 lbl.textColor = .white
@@ -138,10 +138,9 @@ class TopMovieViewCell: UITableViewCell {
     
     @objc
     func addToMyList(sender: UIButton) {
-        viewModel?.addFavorite(with: {
-            self.verifyFavoriteList()
-            self.viewModel?.DidListChange()
-        })
+        viewModel?.addFavorite()
+        self.verifyFavoriteList()
+        self.viewModel?.DidListChange()
     }
     
     @objc
@@ -218,6 +217,7 @@ extension TopMovieViewCell: BuildViewConfiguration {
     }
     
     func configElements() {
+        self.selectionStyle = .none
         self.backgroundColor = .black
     }
 

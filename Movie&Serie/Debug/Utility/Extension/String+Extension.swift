@@ -21,4 +21,8 @@ extension String {
 
         return String("Lançamento: " + day + "/" + month + "/" + year)
     }
+    
+    func getYear() -> String {
+        return String(self.prefix(4))
+    }
 }

@@ -12,9 +12,8 @@ class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.barTintColor = .black
         tabBar.barStyle = .black
-        tabBar.backgroundColor = .black
+        tabBar.isTranslucent = true
         buildView()
     }
     
@@ -38,9 +37,7 @@ class TabBarController: UITabBarController {
         let nav = UINavigationController(rootViewController: rootViewController)
         nav.isNavigationBarHidden = false
         nav.navigationBar.barStyle = .black
-        nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        nav.navigationBar.shadowImage = UIImage()
-        nav.navigationBar.isTranslucent = true
+        nav.navigationBar.inputView?.setBlurView()
         nav.navigationBar.tintColor = .white
         nav.isNavigationBarHidden = false
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]

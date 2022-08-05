@@ -12,13 +12,17 @@ protocol BuildViewConfiguration: AnyObject {
     func buildViewHierarchy()
     func makeConstraints()
     func configElements()
-    func buildItens()
+    func setupViewConfiguration()
 }
 
 extension BuildViewConfiguration {
-    func buildItens() {
+    func setupViewConfiguration() {
         buildViewHierarchy()
         makeConstraints()
         configElements()
+    }
+    
+    func configElements() {
+        // Not Implemented
     }
 }

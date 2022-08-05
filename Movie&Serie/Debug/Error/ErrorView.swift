@@ -47,7 +47,7 @@ class ErrorView: UIView {
     
     init(callback: @escaping () -> Void) {
         super.init(frame: CGRect())
-        self.buildItens()
+        self.setupViewConfiguration()
         self.buildViewHierarchy()
         self.makeConstraints()
         self.callback = callback
@@ -119,6 +119,6 @@ extension ErrorView: BuildViewConfiguration {
         
     }
     
-    func buildItens() {}
+    func setupViewConfiguration() {}
     
 }

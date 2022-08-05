@@ -61,7 +61,7 @@ class UserMenuView: UIView {
         
         super.init(frame: .zero)
         
-        self.buildItens()
+        self.setupViewConfiguration()
         userTableView.registerCell()
         userTableView.cellDelegate = delegate
         setText()

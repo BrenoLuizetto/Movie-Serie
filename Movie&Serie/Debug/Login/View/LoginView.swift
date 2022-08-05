@@ -66,9 +66,7 @@ class LoginView: UIView {
     
     private lazy var continueButton: UIButton = {
        let button = UIButton()
-        button.backgroundColor = .white
         button.setTitle(Constants.Labels.enter, for: .normal)
-        button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(doLogin), for: .touchUpInside)
         button.layer.cornerRadius = 5
         button.layer.borderWidth = 1
@@ -78,13 +76,12 @@ class LoginView: UIView {
     
     private lazy var googleButton: UIButton = {
        let button = UIButton()
-        button.backgroundColor = .white
         button.setTitle("entrar com google", for: .normal)
-        button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(doGoogleLogin), for: .touchUpInside)
         button.layer.cornerRadius = 5
         button.layer.borderWidth = 1
-        button.setButtonState(isEnabled: true)
+        button.setButtonState(isEnabled: true,
+                            enabledColor: UIColor(rgb: 0xb60000))
         return button
     }()
     
@@ -114,7 +111,7 @@ class LoginView: UIView {
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
-        self.buildItens()
+        self.setupViewConfiguration()
         validateFields()
     }
     
