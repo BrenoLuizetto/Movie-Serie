@@ -189,8 +189,9 @@ extension HomeTableView {
                                animations: {cell.moviePoster.af.setImage(withURL: url)},
                                completion: nil)
             }
-            cell.setup(viewModel: MovieDetailsViewModel(movie,
-                                                        with: delegate))
+        cell.setup(viewModel: MovieDetailsViewModel(movie,
+                                                    routerProvider: RouterProvider(),
+                                                    delegate: delegate))
             return cell
     }
     

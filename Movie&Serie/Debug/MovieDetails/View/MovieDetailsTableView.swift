@@ -10,17 +10,19 @@ import UIKit
 
 class MovieDetailsTableView: UITableView {
     
-    private var viewModel: MovieDetailsViewModel?
+    override init(frame: CGRect,
+                  style: UITableView.Style) {
+        super.init(frame: frame,
+                   style: style)
+        setup()
+    }
     
-    func setiItens(viewModel: MovieDetailsViewModel) {
-        self.viewModel = viewModel
-        self.viewModel?.setDataSource()
-        self.dataSource = self
-        self.delegate = self
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setup() {
         setStyle()
-        for cell in viewModel.cellData {
-            self.register(cell.cellType, forCellReuseIdentifier: cell.reuseIdentifier)
-        }
     }
     
     func setStyle() {
@@ -28,35 +30,12 @@ class MovieDetailsTableView: UITableView {
         separatorStyle = .none
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
-        
     }
     
-    func refreshData(cellData: DetailsCell<Any>?) {
+    func register(cellData: DetailsCell<Any>?) {
         if let cellData = cellData {
             register(cellData.cellType, forCellReuseIdentifier: cellData.reuseIdentifier)
         }
-        reloadWithTransition()
     }
     
-}
-
-extension MovieDetailsTableView: UITableViewDataSource,
-                                 UITableViewDelegate {
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cellData = viewModel?.cellData[indexPath.row],
-              let cell = tableView.dequeueReusableCell(withIdentifier: cellData.reuseIdentifier,
-                                                       for: indexPath)
-                as? DetailsViewCell else { return UITableViewCell() }
-        cell.setup(data: cellData.data)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let dataCount = viewModel?.cellData.count else { return 0 }
-        return dataCount
-    }
-        
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
 }

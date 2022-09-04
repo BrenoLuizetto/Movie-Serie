@@ -54,4 +54,47 @@ extension UIView {
             }
         }
     }
+    
+    func startShimmer() {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.bounds
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 1.0)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+        gradientLayer.colors = [UIColor.white,
+                                UIColor.lightGray,
+                                UIColor.white]
+        gradientLayer.locations = [0.0, 0.5, 1.0]
+        
+        let animation = CABasicAnimation(keyPath: "locations")
+        animation.fromValue = [-1.0, -0.5, 0.0]
+        animation.toValue = [1.0, 1.5, 2.0]
+        animation.repeatCount = .infinity
+        gradientLayer.add(animation, forKey: animation.keyPath)
+        
+        self.layer.addSublayer(gradientLayer)
+        
+    }
+    
+    func startShimmeringEffect() {
+        let light = UIColor.white.cgColor
+        let alpha = UIColor.lightGray.cgColor
+        let gradient = CAGradientLayer()
+        gradient.frame = self.bounds
+        gradient.colors = [light, alpha, light]
+        gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
+        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
+        gradient.locations = [0.0, 0.5, 1.0]
+        self.layer.mask = gradient
+        let animation = CABasicAnimation(keyPath: "locations")
+        animation.fromValue = [-1.0, -0.5, 0.0]
+        animation.toValue = [1.0, 1.5, 2.0]
+        animation.duration = 1.5
+        animation.repeatCount = HUGE
+        gradient.add(animation, forKey: "shimmer")
+    }
+    
+    func stopShimmeringEffect() {
+        self.layer.mask = nil
+    }
+                        
 }

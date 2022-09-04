@@ -116,9 +116,7 @@ extension SearchView: UISearchBarDelegate {
             self.viewModel?.movieData = []
             self.viewModel?.getSearchMovies(query: formattedString, callback: {(movies, erro) in
                 if let moviesArray = movies, !moviesArray.isEmpty {
-                    self.searchCollection.setup(movie: moviesArray,
-                                                collectionType: .searchMovies,
-                                                viewModel: nil)
+                    self.searchCollection.setup(movie: moviesArray)
                     self.searchCollection.reloadMovies()
 
                     self.setContetState(state: .search)
@@ -140,9 +138,7 @@ extension SearchView {
         case .empty:
             if self.currentState != .empty {
                 self.currentState = state
-                self.searchCollection.setup(movie: [],
-                                            collectionType: .searchMovies,
-                                            viewModel: nil)
+                self.searchCollection.setup(movie: [])
                 self.searchCollection.reloadMovies()
                 self.contentView = self.emptyView
                 self.setupViewConfiguration()
@@ -158,12 +154,10 @@ extension SearchView {
             self.removeHUD()
 
         case .popMovies:
-            self.searchCollection.movie = []
+            self.searchCollection.setup(movie: [])
             self.viewModel?.getPopularMovies(callback: { result, error in
                 if let movie = result {
-                    self.searchCollection.setup(movie: movie,
-                                                collectionType: .searchMovies,
-                                                viewModel: nil)
+                    self.searchCollection.setup(movie: movie)
                     self.searchCollection.reloadMovies()
                     self.contentView = self.searchCollection
                     self.setupViewConfiguration()

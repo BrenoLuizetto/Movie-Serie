@@ -34,15 +34,12 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
     }
     
     func didSelectItem(movie: MovieViewData) {
-        let viewModel = MovieDetailsViewModel(movie, with: self)
-        let vc = MovieModalViewController(viewModel: viewModel)
-        let detailsTransitioningDelegate = InteractiveModalTransitioningDelegate(from: self.controller, to: vc)
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.transitioningDelegate = detailsTransitioningDelegate
-        vc.definesPresentationContext = true
+        let coordinator = MovieModalCoordinator(navigationController: controller.navigationController ?? UINavigationController(),
+                                                movieViewData: movie,
+                                                movieCollectionAction: self)        
         setBlur(hasBlur: true)
         self.hiddenTabBar(hidden: true, animated: true)
-        self.controller.present(vc, animated: true, completion: nil)
+        coordinator.start()
     }
     
     func hiddenTabBar(hidden: Bool, animated: Bool) {
@@ -57,9 +54,11 @@ class MovieCollectionAction: NSObject, MovieCollectionProtocol {
     }
     
     func showDetailsScreen(movie: MovieViewData) {
-        let viewModel = MovieDetailsViewModel(movie, with: self)
-        let vc = MovieDetailsViewController(viewModel: viewModel)
-        self.controller.navigationController?.pushViewController(vc, animated: true)
+        guard let navigationController = controller.navigationController else { return }
+        let coordinator = MovieDetailsCoordinator(navigationController: navigationController,
+                                                  movieViewData: movie,
+                                                  movieCollectionAction: self)
+        coordinator.start()
     }
     
     func showErrorMessage(_ title: String, _ message: String) {

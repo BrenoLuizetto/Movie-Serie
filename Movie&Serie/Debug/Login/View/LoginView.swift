@@ -258,7 +258,6 @@ extension LoginView: BuildViewConfiguration {
             make.height.equalTo(50)
         }
         
-        
         registerLabel.snp.makeConstraints { make in
             make.left.equalTo(container.snp.left).offset(15)
             make.right.equalTo(container.snp.right).offset(-15)

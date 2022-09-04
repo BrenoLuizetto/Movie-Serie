@@ -79,6 +79,8 @@ class Constants {
         static let choosePicture = "Escolher Foto"
         static let showPicture = "Ver Foto"
         static let cancel = "cancelar"
+        static let errorTitle = "Desculpe, tente novamente"
+        static let errorText = "Não foi possível realizar a operação"
     }
     
     struct UserDefaults {

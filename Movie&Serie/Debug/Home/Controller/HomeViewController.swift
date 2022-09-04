@@ -15,7 +15,6 @@ class HomeViewController: BaseViewController {
     
     private(set) var tableView: HomeTableView?
     private var errorView: ErrorView?
-    private var detailsView: MovieDetailsView?
     let refreshControl = UIRefreshControl()
     
     private let viewModel = MovieViewModel()

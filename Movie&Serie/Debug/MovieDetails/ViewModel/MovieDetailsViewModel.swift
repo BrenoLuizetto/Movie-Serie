@@ -29,13 +29,17 @@ class MovieDetailsViewModel: MovieViewModel {
     weak var delegate: MovieCollectionProtocol?
     private let service = MovieService()
     var cellData: [DetailsCell<Any>] = []
+    let routerProvider: RouterProvider
     
     var refreshView: ((DetailsCell<Any>?) -> Void)?
     var showHUD: (() -> Void)?
     var hideHUD: (() -> Void)?
     
-    init(_ movie: MovieViewData, with delegate: MovieCollectionProtocol) {
+    init(_ movie: MovieViewData,
+         routerProvider: RouterProvider,
+         delegate: MovieCollectionProtocol?) {
         self.movie = movie
+        self.routerProvider = routerProvider
         self.delegate = delegate
         super.init()
     }
@@ -96,11 +100,19 @@ class MovieDetailsViewModel: MovieViewModel {
         }
     }
     
-    func openMovieStream() {
+    func openMovieStream(controller: UIViewController) {
         if let url = URL(string: self.movieDetails?.homepage ?? "") {
             UIApplication.shared.open(url)
         } else {
-            delegate?.showErrorMessage("erro", "Não foi possível abrir a página")
+            let alert = UIAlertController(title: Constants.Labels.errorTitle,
+                                          message: Constants.Labels.errorText,
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .destructive, handler: nil))
+            routerProvider.goTo(route: "alert",
+                                from: controller,
+                                with: ["alert": alert],
+                                completion: nil,
+                                callback: nil)
         }
     }
     
@@ -163,13 +175,13 @@ class MovieDetailsViewModel: MovieViewModel {
 
 extension MovieDetailsViewModel {
     
-    func setDataSource() {
+    func setDataSource(infoContainerProtocol: InfoContainerProtocol) {
         getTrailerCell()
-        cellData.append(getInfoCell())
+        cellData.append(getInfoCell(infoContainerProtocol: infoContainerProtocol))
         getRecommedationCell()
     }
     
-    private func getInfoCell() -> DetailsCell<Any> {
+    private func getInfoCell(infoContainerProtocol: InfoContainerProtocol) -> DetailsCell<Any> {
         let movieRating = Int(movie.voteAverage * 10)
         let rating = movieRating == 0 ? Constants.Labels.inComing : String("\(movieRating)% relevante")
         
@@ -178,7 +190,7 @@ extension MovieDetailsViewModel {
                                 release: movie.releaseDate.getYear(),
                                 description: movie.overview,
                                 isFavorite: validateFavoriteList(),
-                                delegate: self)
+                                delegate: infoContainerProtocol)
         
         return DetailsCell(reuseIdentifier: "\(InfoContainerViewCell.self)",
                                cellType: InfoContainerViewCell.self,
@@ -206,29 +218,16 @@ extension MovieDetailsViewModel {
     
     private func getRecommedationCell() {
         getRecommendationMovies { recommendationMovies in
-            let data = RecommendatioViewData(movies: recommendationMovies,
-                                                 collectionProtocol: self.delegate)
-            let cell: DetailsCell<Any> = DetailsCell(reuseIdentifier: "\(RecommendationViewCell.self)",
-                        cellType: RecommendationViewCell.self,
-                        data: data)
-            
-            self.cellData.append(cell)
-            self.refreshView?(cell)
+            if !recommendationMovies.isEmpty {
+                let data = RecommendatioViewData(movies: recommendationMovies,
+                                                     collectionProtocol: self.delegate)
+                let cell: DetailsCell<Any> = DetailsCell(reuseIdentifier: "\(RecommendationViewCell.self)",
+                            cellType: RecommendationViewCell.self,
+                            data: data)
+                
+                self.cellData.append(cell)
+                self.refreshView?(cell)
+            }
         }
-    }
-}
-
-extension MovieDetailsViewModel: InfoContainerProtocol {
-    func didTapWatch() {
-        showHUD?()
-        getDetailsMovie {
-            self.openMovieStream()
-            self.hideHUD?()
-        }
-    }
-    
-    func didTapFavorite(callback: ((Bool) -> Void)) {
-        self.addFavorite()
-        callback(self.validateFavoriteList())
     }
 }

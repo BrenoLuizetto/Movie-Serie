@@ -41,9 +41,11 @@ class RecommendationViewCell: DetailsViewCell {
     lazy var recommendationCollection = MovieCollectionView(frame: CGRect(), collectionViewLayout: layout)
     
     private func configRecommendationCollection() {
-        self.recommendationCollection.registerCell()
-        self.recommendationCollection.collectionProtocol = viewData?.collectionProtocol
-        self.recommendationCollection.setupReccomedation(movies: viewData?.movies ?? [])
+        if let viewData = viewData {
+            self.recommendationCollection.registerCell()
+            self.recommendationCollection.collectionProtocol = viewData.collectionProtocol
+            self.recommendationCollection.setup(movie: viewData.movies)
+        }
     }
 }
 
@@ -70,6 +72,7 @@ extension RecommendationViewCell: BuildViewConfiguration {
     
     func configElements() {
         self.backgroundColor = .clear
+        self.selectionStyle = .none
     }
     
 }

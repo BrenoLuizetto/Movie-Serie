@@ -59,7 +59,6 @@ class InComingViewController: BaseViewController {
 
     }
     
-    
     @objc
     private func refreshWeatherData(_ sender: Any) {
         self.view.showHUD()

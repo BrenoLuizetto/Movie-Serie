@@ -14,33 +14,19 @@ enum CollectionType {
     case searchMovies
 }
 
-class MovieCollectionView: UICollectionView,
-                           UICollectionViewDataSource,
-                           UICollectionViewDelegate,
-                           UICollectionViewDelegateFlowLayout {
-    var movie: [MovieViewData] = []
-    private var images: [UIImage] = []
+class MovieCollectionView: UICollectionView {
+    private var movie: [MovieViewData] = []
     private var itemsInSection = 0
-    private var collectionType: CollectionType?
-    private var viewModel: MovieDetailsViewModel?
     public var collectionProtocol: MovieCollectionProtocol?
     public weak var detailsProtocol: MovieDetailsProtocol?
     
-    func setup(movie: [MovieViewData]?,
-               collectionType: CollectionType,
-               viewModel: MovieDetailsViewModel?) {
-        self.collectionType = collectionType
-        switch collectionType {
-        case .homeMovies:
-            if let movies = movie {
-                self.movie = movies
-            }
-            reloadMovies()
-        case .searchMovies:
-            guard let movies = movie else { return }
-            self.movie = movies
-            self.reloadMovies()
+    func setup(movie: [MovieViewData]?) {
+        guard let movie = movie else {
+            return
         }
+
+        self.movie = movie
+        self.reloadMovies()
         
     }
     
@@ -55,15 +41,20 @@ class MovieCollectionView: UICollectionView,
 
     }
     
-    func setupReccomedation(movies: [MovieViewData]) {
-        self.movie = movies
-        reloadMovies()
-    }
-    
     func reloadMovies() {
         self.itemsInSection = movie.count
         reloadWithTransition()
     }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.collectionProtocol?.didScroll()
+    }
+
+}
+
+extension MovieCollectionView: UICollectionViewDataSource,
+                               UICollectionViewDelegate,
+                               UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -101,8 +92,4 @@ class MovieCollectionView: UICollectionView,
         
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.collectionProtocol?.didScroll()
-    }
-
 }

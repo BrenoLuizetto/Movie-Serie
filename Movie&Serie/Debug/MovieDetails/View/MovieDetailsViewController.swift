@@ -12,7 +12,6 @@ import MBProgressHUD
 class MovieDetailsViewController: BaseViewController {
     
     private var viewModel: MovieDetailsViewModel
-    private var movieDetailsView: MovieDetailsView?
     private var tableView = MovieDetailsTableView()
     
     init(viewModel: MovieDetailsViewModel) {
@@ -29,18 +28,11 @@ class MovieDetailsViewController: BaseViewController {
     }
     
     override func viewDidLoad() {
-        self.configNavBar()
-        self.setupViewConfiguration()
-        self.bindViewModel()
-        self.tableView.setiItens(viewModel: viewModel)
-        self.tableView.reloadData()
+        configNavBar()
+        setupViewConfiguration()
+        bindViewModel()
+        setupTableView()
     }
-    
-//    override func loadView() {
-//        movieDetailsView = MovieDetailsView(self.viewModel, delegate: MovieCollectionAction(controller: self))
-//        self.view = movieDetailsView
-//        movieDetailsView?.setScrollView()
-//    }
 
 }
 
@@ -60,7 +52,8 @@ extension MovieDetailsViewController {
     
     private func bindViewModel() {
         viewModel.refreshView = { data in
-            self.tableView.refreshData(cellData: data ?? nil)
+            self.tableView.register(cellData: data ?? nil)
+            self.tableView.reloadWithTransition()
         }
         
         viewModel.showHUD = {
@@ -70,6 +63,50 @@ extension MovieDetailsViewController {
         viewModel.hideHUD = {
             self.view.removeHUD()
         }
+    }
+    
+    private func setupTableView() {
+        viewModel.setDataSource(infoContainerProtocol: self)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.reloadWithTransition()
+    }
+}
+
+extension MovieDetailsViewController: InfoContainerProtocol {
+    func didTapWatch() {
+        view.showHUD()
+        viewModel.getDetailsMovie {
+            self.viewModel.openMovieStream(controller: self)
+            self.view.removeHUD()
+        }
+    }
+    
+    func didTapFavorite(callback: ((Bool) -> Void)) {
+        viewModel.addFavorite()
+        callback(viewModel.validateFavoriteList())
+    }
+}
+
+extension MovieDetailsViewController: UITableViewDataSource,
+                                      UITableViewDelegate {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cellData = viewModel.cellData[indexPath.row]
+        self.tableView.register(cellData: cellData)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellData.reuseIdentifier,
+                                                       for: indexPath)
+                as? DetailsViewCell else { return UITableViewCell() }
+        
+        cell.setup(data: cellData.data)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.cellData.count
+    }
+        
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
 }
 
@@ -83,6 +120,4 @@ extension MovieDetailsViewController: BuildViewConfiguration {
             make.edges.equalToSuperview()
         })
     }
-    
-    
 }

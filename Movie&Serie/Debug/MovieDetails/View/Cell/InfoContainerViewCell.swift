@@ -68,6 +68,7 @@ final class InfoContainerViewCell: DetailsViewCell {
         lbl.font = UIFont(name: Constants.Fonts.avenirMedium, size: 18)
         lbl.textColor = .white
         lbl.textAlignment = .left
+        lbl.text = "aaaaaaaaa"
         return lbl
     }()
     
