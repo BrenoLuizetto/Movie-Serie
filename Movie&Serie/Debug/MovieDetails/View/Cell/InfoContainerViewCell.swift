@@ -160,6 +160,7 @@ final class InfoContainerViewCell: DetailsViewCell {
         self.releaseDate.text = release
         self.movieDescription.text = description
         setFavoriteImage(isFavorite: isFavorite)
+        removeAllShimer()
     }
     
     func separatorIsHidden(_ value: Bool) {
@@ -176,6 +177,13 @@ final class InfoContainerViewCell: DetailsViewCell {
     @objc
     private func streamMovie(sender: UIButton) {
         self.delegate?.didTapWatch()
+    }
+    
+    func removeAllShimer() {
+        DispatchQueue.main.async {
+            self.movieDescription.removeShimmer()
+            self.releaseDate.removeShimmer()
+        }
     }
     
 }
@@ -252,5 +260,10 @@ extension InfoContainerViewCell: BuildViewConfiguration {
     func configElements() {
         self.backgroundColor = .clear
         self.selectionStyle = .none
+        
+        DispatchQueue.main.async {
+            self.movieDescription.startAnimatingShimmer()
+            self.releaseDate.startAnimatingShimmer()
+        }
     }
 }

@@ -76,7 +76,10 @@ extension MovieCollectionView: UICollectionViewDataSource,
         let moviePoster = movies.posterPath
         let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(moviePoster)")
         if let url = imageUrl {
-            cell.moviePoster.af.setImage(withURL: url)
+            let placeholder = UIImage(named: "placeholder_image")
+            cell.moviePoster.af.setImage(withURL: url,
+                                         placeholderImage: placeholder,
+                                         imageTransition: .crossDissolve(.pi))
         }
         cell.setup()
         cell.isAccessibilityElement = true

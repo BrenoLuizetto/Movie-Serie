@@ -54,6 +54,7 @@ final class TrailerViewCell: DetailsViewCell {
         } else {
             setupPoster()
         }
+        removeAllShimmer()
     }
     
     func setupPoster() {
@@ -66,6 +67,18 @@ final class TrailerViewCell: DetailsViewCell {
                 make.height.equalTo(contentHeight)
             }
             self.backgroundMovie.af.setImage(withURL: url)
+        }
+    }
+    
+    func startAllShimmer() {
+        DispatchQueue.main.async {
+            self.movieTrailer.startAnimatingShimmer()
+        }
+    }
+    
+    func removeAllShimmer() {
+        DispatchQueue.main.async {
+            self.movieTrailer.removeShimmer()
         }
     }
     
@@ -84,6 +97,7 @@ extension TrailerViewCell: BuildViewConfiguration {
     }
     
     func configElements() {
+        startAllShimmer()
         self.backgroundColor = .clear
     }
 }

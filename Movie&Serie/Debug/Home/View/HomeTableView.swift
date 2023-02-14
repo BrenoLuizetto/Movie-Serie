@@ -176,23 +176,27 @@ extension HomeTableView {
     
     func buildTopCell(_ tableView: UITableView,
                       _ indexPath: IndexPath ) -> UITableViewCell {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellIdentifier.topMovie,
-                                                     for: indexPath) as? TopMovieViewCell,
-                  let movie = movieData[indexPath.row].first,
-                  let delegate = homeDelegate
-            else { return UITableViewCell() }
-            
-            let backdropPath = movie.backdropPath
-            let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(backdropPath ?? "")")
-            if let url = imageUrl {
-                UIView.animate(withDuration: 0.5,
-                               animations: {cell.moviePoster.af.setImage(withURL: url)},
-                               completion: nil)
-            }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellIdentifier.topMovie,
+                                                       for: indexPath) as? TopMovieViewCell,
+              let movie = movieData[indexPath.row].first,
+              let delegate = homeDelegate
+        else { return UITableViewCell() }
+        
+        let backdropPath = movie.backdropPath
+        let imageUrl = URL(string: "\(Constants.Url.imageOriginal)\(backdropPath ?? "")")
+        if let url = imageUrl {
+            UIView.animate(withDuration: 0.5,
+                           animations: {
+                let placeholder = UIImage(named: "placeholder_image")
+                cell.moviePoster.af.setImage(withURL: url,
+                                             placeholderImage: placeholder)
+            },
+                           completion: nil)
+        }
         cell.setup(viewModel: MovieDetailsViewModel(movie,
                                                     routerProvider: RouterProvider(),
                                                     delegate: delegate))
-            return cell
+        return cell
     }
     
     func buildUpcomingCell(_ tableView: UITableView,
